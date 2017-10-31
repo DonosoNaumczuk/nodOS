@@ -7,13 +7,4 @@ void * memset(void * destination, int32_t character, uint64_t length);
 void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpuVendor(char *result);
-
-//Assembly RTC getter 
-
-uint64_t 	getHour();
-uint64_t	getMinutes();
-uint64_t	getSeconds();
-uint64_t	getDay();
-uint64_t	getMonth();
-uint64_t	getYear();
 #endif
