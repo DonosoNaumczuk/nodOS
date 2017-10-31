@@ -8,6 +8,8 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpuVendor(char *result);
 
+//Assembly RTC getter 
+
 uint64_t 	getHour();
 uint64_t	getMinutes();
 uint64_t	getSeconds();

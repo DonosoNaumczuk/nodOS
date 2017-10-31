@@ -1,5 +1,10 @@
+clean:
+	cd Bootloader; make clean
+	cd Image; make clean
+	cd Kernel; make clean
+	cd Userland; make clean
 
-all:  clean bootloader kernel userland image run
+all:  bootloader kernel userland image
 
 bootloader:
 	cd Bootloader; make all
@@ -18,7 +23,5 @@ clean:
 	cd Image; make clean
 	cd Kernel; make clean
 	cd Userland; make clean
-run:
-	./run.sh
 
-.PHONY: bootloader image run collections kernel userland all clean
+.PHONY: bootloader image collections kernel userland all clean

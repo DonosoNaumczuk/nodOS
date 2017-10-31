@@ -98,7 +98,23 @@ int main()
 	ncPrint("  Sample data module contents: ");
 	ncPrint((char*)sampleDataModuleAddress);
 	ncNewline();
-
+	ncPrint("  Actual Time: ");
+	ncPrintHex((uint64_t)getHour());
+	ncPrint(":");
+	ncPrintHex(getMinutes());
+	ncPrint(":");
+	ncPrintHex(getSeconds());
+	ncNewline();
+	ncPrint("  Date: ");
+	ncPrintHex(getDay());
+	ncPrint("/");
+	ncPrintHex(getMonth());
+	ncPrint("/20");
+	ncPrintHex(getYear());
+	ncNewline();
 	ncPrint("[Finished]");
 	return 0;
 }
+
+
+
