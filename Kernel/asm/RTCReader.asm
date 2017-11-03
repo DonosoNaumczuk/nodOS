@@ -5,7 +5,7 @@ GLOBAL	_getDay
 GLOBAL	_getMonth
 GLOBAL	_getYear
 
-section.text
+section .text
 
 _getHour:
 	push	rbp
@@ -78,4 +78,3 @@ _getYear:
 
 	leave
 	ret
-
