@@ -1,13 +1,13 @@
-GLOBAL	getHour
-GLOBAL	getMinutes
-GLOBAL	getSeconds
-GLOBAL	getDay
-GLOBAL	getMonth
-GLOBAL	getYear
+GLOBAL	_getHour
+GLOBAL	_getMinutes
+GLOBAL	_getSeconds
+GLOBAL	_getDay
+GLOBAL	_getMonth
+GLOBAL	_getYear
 
 section.text
 
-getHour:
+_getHour:
 	push	rbp
 	mov		rbp, rsp
 
@@ -19,7 +19,7 @@ getHour:
 	leave
 	ret
 
-getMinutes:
+_getMinutes:
 	push	rbp
 	mov		rbp, rsp
 
@@ -31,7 +31,7 @@ getMinutes:
 	leave
 	ret
 
-getSeconds:
+_getSeconds:
 	push	rbp
 	mov		rbp, rsp
 
@@ -43,7 +43,7 @@ getSeconds:
 	leave
 	ret
 
-getDay:
+_getDay:
 	push	rbp
 	mov		rbp, rsp
 
@@ -55,7 +55,7 @@ getDay:
 	leave
 	ret
 
-getMonth:
+_getMonth:
 	push	rbp
 	mov		rbp, rsp
 
@@ -67,7 +67,7 @@ getMonth:
 	leave
 	ret
 
-getYear:
+_getYear:
 	push	rbp
 	mov		rbp, rsp
 

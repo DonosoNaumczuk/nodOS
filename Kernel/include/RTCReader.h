@@ -1,11 +1,11 @@
 #ifndef RTC_Reader
 #define	RTC_Reader
 
-uint64_t 	getHour(void);
-uint64_t	getMinutes(void);
-uint64_t	getSeconds(void);
-uint64_t	getDay(void);
-uint64_t	getMonth(void);
-uint64_t	getYear(void);
+uint64_t 	_getHour(void);
+uint64_t	_getMinutes(void);
+uint64_t	_getSeconds(void);
+uint64_t	_getDay(void);
+uint64_t	_getMonth(void);
+uint64_t	_getYear(void);
 
 #endif 
