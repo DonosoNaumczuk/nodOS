@@ -2,9 +2,10 @@
 #include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h>
+#include <naiveConsole.h> //deprecate later
 #include <RTCReader.h>
 #include <idtLoader.h>
+#include <videoDriver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -82,16 +83,6 @@ void * initializeKernelBinary() {
 int main() {
 	ncPrint("[Kernel.c - Main]");
 	load_idt();
-
-	/* ------ BEGIN testing screen video mode ------- */
-	static char * screen = 0xA0000;
-	int pixelQty = 5000;
-	for(int i = 0; i < pixelQty; i++) {
-		*screen = 0xFF;
-		screen++;
-	}
-	/* ------ END testing screen video mode ------- */
-
 	while(1);
 	return 0;
 }

@@ -1,5 +1,5 @@
 #include <keyboard.h>
-#include <naiveConsole.h> //only for test.
+#include <naiveConsole.h> //Change to videoDriver when finished
 
 unsigned char keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
@@ -30,5 +30,5 @@ void keyboard_handler() {
 
     /* Brake keycodes are < 0 */
     if(keycode >= 0)
-        ncPrintChar(keycode_map[keycode]);
+        ncPrintChar(keycode_map[keycode]); //Change to videoDriver when finished
 }
