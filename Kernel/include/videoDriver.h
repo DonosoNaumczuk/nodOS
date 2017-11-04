@@ -4,12 +4,12 @@
 #include <stdint.h>
 
 void initializeVideoDriver();
-void printCharWithColor(char character, char font, char background);
+void printCharWithColor(char character, char color);
 void moveUP();
-void printWithColor(char * string, char font, char background);
+void printWithColor(char * string, char color);
 void newLine();
 void clear();
-void printRainbow(char * string);
+void deleteCurrent();
 
 #pragma pack(push)
 #pragma pack (1)
