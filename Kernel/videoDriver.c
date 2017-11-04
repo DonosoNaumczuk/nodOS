@@ -3,10 +3,10 @@
 
 static const vbe_mode_info * vbeInfo = 0x5C00;
 static uint8_t * framebuffer_start_address;
+static uint16_t width;
+static uint16_t height;
 static uint8_t currentVideo_x = 0;
 static uint8_t currentVideo_y = 0;
-static const uint32_t width = 640;
-static const uint32_t height = 400;
 static const uint32_t width_letters = 80;
 static const uint32_t height_letters = 25;
 
@@ -14,6 +14,8 @@ void initializeVideoDriver() {
 	static int initialized = 0;
 	if(!initialized) {
 		framebuffer_start_address = vbeInfo->framebuffer;
+		width = vbeInfo->width;
+		height = vbeInfo->height;
 		initialized = 1;
 	}
 }
