@@ -81,6 +81,7 @@ void * initializeKernelBinary() {
 }
 
 int main() {
+	initializeVideoDriver();
 	ncPrint("[Kernel.c - Main]");
 	load_idt();
 	while(1);

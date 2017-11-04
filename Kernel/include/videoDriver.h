@@ -3,12 +3,13 @@
 
 #include <stdint.h>
 
-// void printCharWithColor(char character, char font, char background);
-// void moveUP();
-// void printWithColor(char * string, char font, char background);
-// void newLine();
-// void clear();
-// void printRainbow(char * string);
+void initializeVideoDriver();
+void printCharWithColor(char character, char font, char background);
+void moveUP();
+void printWithColor(char * string, char font, char background);
+void newLine();
+void clear();
+void printRainbow(char * string);
 
 #pragma pack(push)
 #pragma pack (1)
