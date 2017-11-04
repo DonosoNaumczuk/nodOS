@@ -1,18 +1,23 @@
 #include <keyboard.h>
-#include <naiveConsole.h> //Change to videoDriver when finished
+#include <videoDriver.h>
 
-unsigned char keycode_map[128] = {
+unsigned int keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
-    '9','0', '-', '=', '\b' /* Backspace */, '\t' /* Tab */,'q', 'w', 'e', 'r',	/* INDEX: 10 - 19 */
-  't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n'/* Enter key */, 0 /* Control */, /* INDEX: 20 - 29 */
+    '9','0', '-', '=', BACKSPACE, '\t' /* Tab */,'q', 'w', 'e', 'r',	/* INDEX: 10 - 19 */
+  't', 'y', 'u', 'i', 'o', 'p', '[', ']', ENTER, 0 /* Control */, /* INDEX: 20 - 29 */
   'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',	/* INDEX: 30 - 39 */
- '\'', '`',   0/* Left shift */,'\\', 'z', 'x', 'c', 'v', 'b', 'n', /* INDEX: 40 - 49 */
-  'm', ',', '.', '/', 0/* Right shift */,'*',0/* Alt */,' '/* Space bar */, 0/* Caps lock */, 0 /* F1 */, /* INDEX: 50 - 59 */
+ '\'', '`',  LEFT_SHIFT,'\\', 'z', 'x', 'c', 'v', 'b', 'n', /* INDEX: 40 - 49 */
+  'm', ',', '.', '/', LEFT_SHIFT,'*',0/* Alt */,' '/* Space bar */, CAPS_LOCK, 0 /* F1 */, /* INDEX: 50 - 59 */
     0/* F2 */,   0/* F3 */,   0/* F4 */,   0/* F5 */,   0/* F6 */,   0/* F7 */,   0/* F8 */,   0/* F9 */, 0 /*F10 */, 0/*Num lock*/, /* INDEX: 60 - 69 */
     0 /* Scroll Lock */,0 /* Home key */, 0 /* Up Arrow */, 0 /* Page Up */, '-', 0/* Left Arrow */, 0, 0/* Right Arrow */,'+', 0/*End key*/, /* INDEX: 70 - 79 */
     0/* Down Arrow */,0/* Page Down */, 0/* Insert Key */, 0/* Delete Key */, 0,   0,   0,  0/* F11 Key */, 0/* F12 Key */,
     0,	/* All other keys are undefined */
 };
+
+unsigned char caps_lock = FALSE;
+unsigned char left_shift = FALSE;
+unsigned char right_shift = FALSE;
+#define ISLOWERCASE (caps_lock && (left_shift || right_shift)) || (!caps_lock && !left_shift && !right_shift)
 
 void keyboard_handler() {
 	unsigned char status;
@@ -26,9 +31,24 @@ void keyboard_handler() {
 	/* We want to read from data port only if lowest bit of status is 1 */
 	if(status & 0x01) {
 		keycode = read_port(KEYBOARD_DATA_PORT);
-	}
 
-    /* Brake keycodes are < 0 */
-    if(keycode >= 0)
-        ncPrintChar(keycode_map[keycode]); //Change to videoDriver when finished
+        if(keycode == RIGHT_SHIFT)
+            right_shift = TRUE;
+        else if(keycode == LEFT_SHIFT)
+            left_shift = TRUE;
+        else if(keycode == RIGHT_SHIFT_BRAKE)
+            right_shift = FALSE;
+        else if(keycode == LEFT_SHIFT_BRAKE)
+            left_shift = FALSE;
+        else if(keycode == CAPS_LOCK_BRAKE)
+            caps_lock = caps_lock == TRUE? FALSE : TRUE;
+        else if(keycode == BACKSPACE)
+            deleteCurrent();
+        else if(keycode >= 0) { /* Brake keycodes are < 0 */
+            if(ISLOWERCASE)
+                printChar(keycode_map[keycode]);
+            else
+                printChar(keycode_map[keycode] - 32);
+        }
+	}
 }

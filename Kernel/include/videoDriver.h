@@ -2,12 +2,28 @@
 #define _VIDEO_DRIVER_H_
 
 #include <stdint.h>
+#define WHITE 100
 
+#define BACKSPACE 258
+#define ENTER 259
+#define LEFT_SHIFT 260
+#define RIGHT_SHIFT 261
+#define CAPS_LOCK 262
+#define LEFT_SHIFT_BRAKE 0xAA
+#define RIGHT_SHIFT_BRAKE 0xB6
+#define CAPS_LOCK_BRAKE 0xBA
+#define TRUE 1
+#define FALSE 0
+
+void printChar(char c);
 void initializeVideoDriver();
 void printCharWithColor(char character, char color);
 void moveUP();
 void printWithColor(char * string, char color);
 void newLine();
+void newLines(int lines);
+void println(char * string);
+void print(char * string);
 void clear();
 void deleteCurrent();
 

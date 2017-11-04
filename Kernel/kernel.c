@@ -2,7 +2,6 @@
 #include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h> //deprecate later
 #include <RTCReader.h>
 #include <idtLoader.h>
 #include <videoDriver.h>
@@ -37,52 +36,51 @@ void * getStackBase() {
 void * initializeKernelBinary() {
 	char buffer[10];
 
-	ncPrint("[x64BareBones]");
-	ncNewline();
+	initializeVideoDriver();
 
-	ncPrint("CPU Vendor:");
-	ncPrint(cpuVendor(buffer));
-	ncNewline();
+	println("[x64ARQ_Kernel]");
 
-	ncPrint("[Loading modules]");
-	ncNewline();
+	println("[Dammiano - Donoso Naumczuk - Negro Caino]");
+
+	println("CPU Vendor:");
+	print(cpuVendor(buffer));
+
+	println("[Loading modules]");
+
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
 	};
 
 	loadModules(&endOfKernelBinary, moduleAddresses);
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
+	println("[Done]");
 
-	ncPrint("[Initializing kernel's binary]");
-	ncNewline();
+	println("[Initializing kernel's binary]");
 
 	clearBSS(&bss, &endOfKernel - &bss);
 
-	ncPrint("  text: 0x");
-	ncPrintHex((uint64_t)&text);
-	ncNewline();
-	ncPrint("  rodata: 0x");
-	ncPrintHex((uint64_t)&rodata);
-	ncNewline();
-	ncPrint("  data: 0x");
-	ncPrintHex((uint64_t)&data);
-	ncNewline();
-	ncPrint("  bss: 0x");
-	ncPrintHex((uint64_t)&bss);
-	ncNewline();
+	// print("  text: 0x");
+	// ncPrintHex((uint64_t)&text);
+	// ncNewline();
+	// print("  rodata: 0x");
+	// ncPrintHex((uint64_t)&rodata);
+	// ncNewline();
+	// print("  data: 0x");
+	// ncPrintHex((uint64_t)&data);
+	// ncNewline();
+	// print("  bss: 0x");
+	// ncPrintHex((uint64_t)&bss);
+	// ncNewline();
 
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
+	println("[Done]");
+
 	return getStackBase();
 }
 
 int main() {
 	initializeVideoDriver();
-	ncPrint("[Kernel.c - Main]");
+	println("[Kernel.c - Main]");
+	newLines(2);
 	load_idt();
 	while(1);
 	return 0;
