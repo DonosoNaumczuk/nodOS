@@ -82,11 +82,16 @@ void * initializeKernelBinary() {
 int main() {
 	ncPrint("[Kernel.c - Main]");
 	load_idt();
-	ncNewline();
-	ncNewline();
-	ncPrint("Hi b*tches! Now keyboard interrupt is enable, so... try to write something");
-	ncNewline();
-	ncNewline();
+
+	/* ------ BEGIN testing screen video mode ------- */
+	static char * screen = 0xA0000;
+	int pixelQty = 5000;
+	for(int i = 0; i < pixelQty; i++) {
+		*screen = 0xFF;
+		screen++;
+	}
+	/* ------ END testing screen video mode ------- */
+
 	while(1);
 	return 0;
 }
