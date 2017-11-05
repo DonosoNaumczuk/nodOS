@@ -35,30 +35,13 @@ void * getStackBase() {
 
 void * initializeKernelBinary() {
 	char buffer[10];
-
-	initializeVideoDriver();
-
-	println("[x64ARQ_Kernel]");
-
-	println("[Dammiano - Donoso Naumczuk - Negro Caino]");
-
-	println("CPU Vendor:");
-	print(cpuVendor(buffer));
-
-	println("[Loading modules]");
-
+	(cpuVendor(buffer));
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
 	};
-
 	loadModules(&endOfKernelBinary, moduleAddresses);
-	println("[Done]");
-
-	println("[Initializing kernel's binary]");
-
 	clearBSS(&bss, &endOfKernel - &bss);
-
 	// print("  text: 0x");
 	// ncPrintHex((uint64_t)&text);
 	// ncNewline();
@@ -71,17 +54,21 @@ void * initializeKernelBinary() {
 	// print("  bss: 0x");
 	// ncPrintHex((uint64_t)&bss);
 	// ncNewline();
-
-	println("[Done]");
-
 	return getStackBase();
+}
+
+void initialPrint() {
+	printWithColor("x64-ARQ_Kernel", 49);
+	newLine();
+	printWithColor("Dammiano Donoso_Naumczuk Negro_Caino", 22);
+	newLines(2);
 }
 
 int main() {
 	initializeVideoDriver();
-	println("[Kernel.c - Main]");
-	newLines(2);
+	initialPrint();
 	load_idt();
+	print("ARQ_Kernel@Kernel:~$ ");
 	while(1);
 	return 0;
 }
