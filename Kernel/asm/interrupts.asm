@@ -134,6 +134,9 @@ _irq04Handler:
 _irq05Handler:
 	irqHandlerMaster 5
 
+_irq80Handler:
+	irqHandlerMaster 80
+
 
 ;Zero Division Exception
 _exception0Handler:

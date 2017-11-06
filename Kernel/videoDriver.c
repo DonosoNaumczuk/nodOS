@@ -3,40 +3,43 @@
 
 static const vbe_mode_info * vbeInfo = 0x5C00;
 static uint8_t * framebuffer_start_address;
-static uint16_t width;
-static uint16_t height;
-static uint8_t currentVideo_x = 0;
-static uint8_t currentVideo_y = 0;
-static const uint32_t width_letters = 80;
-static const uint32_t height_letters = 25;
+static uint32_t x_resolution;
+static uint32_t y_resolution;
+static uint32_t currentVideo_x;
+static uint32_t currentVideo_y;
+static uint32_t max_word_x;
+static uint32_t max_word_y;
 
 void initializeVideoDriver() {
 	framebuffer_start_address = vbeInfo->framebuffer;
-	width = vbeInfo->width;
-	height = vbeInfo->height;
+	x_resolution = vbeInfo->width;
+	y_resolution = vbeInfo->height;
+	max_word_x = x_resolution/CHAR_WIDTH;
+	max_word_y = y_resolution/CHAR_HEIGHT;
+	currentVideo_x = 0;
+	currentVideo_y = 0;
 }
 
-void printChar(char c) {
-	printCharWithColor(c, WHITE);
+uint32_t getXResolution(){
+	return x_resolution;
+} 
+
+uint32_t getYResolution(){
+	return y_resolution;
 }
 
-void println(char * string) {
-	newLine();
-	print(string);
-}
-
-void print(char * string) {
-	printWithColor(string, WHITE);
+void printPixel(uint32_t x, uint32_t y, char color){
+	*(framebuffer_start_address+y*x_resolution+x) = color;
 }
 
 void printCharWithColor(char character, char color) {
 	char * character_font = pixel_map(character);
 	for (int i = 0; i < 16; ++i) {
-		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*width,*(character_font+i), color);
+		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,*(character_font+i), color);
 	}
-	if(currentVideo_x == width_letters-1) {
+	if(currentVideo_x == max_word_x-1) {
 		currentVideo_x = 0;
-		if(currentVideo_y == height_letters-1) {
+		if(currentVideo_y == max_word_y-1) {
 			moveup();
 		} else{
 			currentVideo_y++;
@@ -49,13 +52,13 @@ void printCharWithColor(char character, char color) {
 void deleteCurrent() {
 	if(currentVideo_x != 0 || currentVideo_y != 0) {
 		if(currentVideo_x == 0) {
-			currentVideo_x = width_letters-1;
+			currentVideo_x = max_word_x-1;
 			currentVideo_y--;
 		} else{
 			currentVideo_x--;
 		}
 		for (int i = 0; i < 16; ++i) {
-			printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*width,XXXXXXXX,0xFF);
+			printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,XXXXXXXX,0xFF);
 		}
 	}
 
@@ -70,40 +73,33 @@ void printFont(uint8_t * address, char font, char color) {
 	}
 }
 
-void printWithColor(char * string, char color) {
-	for (int i = 0; string[i] != 0; ++i) {
-		printCharWithColor(string[i],color);
-	}
-}
-
 void moveup() {
-	for (int i = CHAR_HEIGHT; i < height; ++i) {
-		for (int j = 0; j < width; ++j) {
-			*(framebuffer_start_address+(i-CHAR_HEIGHT)*width+j) = *(framebuffer_start_address+i*width+j);
+	for (int i = CHAR_HEIGHT; i < y_resolution; ++i) {
+		for (int j = 0; j < x_resolution; ++j) {
+			*(framebuffer_start_address+(i-CHAR_HEIGHT)*x_resolution+j) = *(framebuffer_start_address+i*x_resolution+j);
 		}
 	}
-	for (int i = (height_letters-1)*CHAR_HEIGHT; i < height; ++i) {
-		for (int j = 0; j < width; ++j) {
-			*(framebuffer_start_address+i*width+j) = 0x00;
+	for (int i = (max_word_y-1)*CHAR_HEIGHT; i < y_resolution; ++i) {
+		for (int j = 0; j < x_resolution; ++j) {
+			*(framebuffer_start_address+i*x_resolution+j) = 0x00;
 		}
 	}
 }
 
 void newLine() {
-	currentVideo_x = 0;
-	currentVideo_y++;
-}
-
-void newLines(int lines) {
-	for(int i = 0; i < lines; i++) {
-		newLine();
+	if(currentVideo_y!=max_word_y-1) {
+		currentVideo_x = 0;
+		currentVideo_y++;
+	} else {
+		currentVideo_x = 0;
+		moveup();
 	}
 }
 
 void clear() {
-	for (int i = 0; i < height; ++i) {
-		for (int j = 0; j < width; ++j) {
-			*(framebuffer_start_address+i*width+j) = 0x00;
+	for (int i = 0; i < y_resolution; ++i) {
+		for (int j = 0; j < x_resolution; ++j) {
+			*(framebuffer_start_address+i*x_resolution+j) = 0x00;
 		}
 	}
 }

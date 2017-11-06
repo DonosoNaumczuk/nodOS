@@ -17,6 +17,9 @@ void load_idt() {
     /* Keyboard */
     setup_IDT_entry(0x21, (uint64_t)&_irq01Handler);
 
+    /* Syste mCall */
+    setup_IDT_entry(0x80, (uint64_t)&_irq80Handler);
+
     picMasterMask(0xFC);
     picSlaveMask(0xFF);
 
