@@ -54,6 +54,11 @@ void * initializeKernelBinary() {
 	// print("  bss: 0x");
 	// ncPrintHex((uint64_t)&bss);
 	// ncNewline();
+	initializeVideoDriver();
+	initialPrint();
+	load_idt();
+	printWithColor("ARQ_Kernel@Kernel:~$ ",21,0x0F);
+	((EntryPoint)sampleCodeModuleAddress)();
 	return getStackBase();
 }
 
@@ -66,11 +71,5 @@ void initialPrint() {
 }
 
 int main() {
-	initializeVideoDriver();
-	initialPrint();
-	load_idt();
-	printWithColor("ARQ_Kernel@Kernel:~$ ",21,0x0F);
-	((EntryPoint)sampleCodeModuleAddress)();
-
 	return 0;
 }
