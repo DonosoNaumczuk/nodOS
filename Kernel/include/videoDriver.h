@@ -2,19 +2,16 @@
 #define _VIDEO_DRIVER_H_
 
 #include <stdint.h>
-#define WHITE 15u
 
-void printChar(char c);
 void initializeVideoDriver();
 void printCharWithColor(char character, char color);
 void moveUP();
-void printWithColor(char * string, char color);
+void printWithColor(char * string, uint64_t length, char color);
 void newLine();
-void newLines(int lines);
-void println(char * string);
-void print(char * string);
 void clear();
 void deleteCurrent();
+uint32_t getXResolution();
+uint32_t getYResolution();
 
 #pragma pack(push)
 #pragma pack (1)

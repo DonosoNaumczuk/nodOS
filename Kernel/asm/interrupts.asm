@@ -11,11 +11,13 @@ GLOBAL _irq02Handler
 GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
+GLOBAL _systemCallHandler
 
 GLOBAL _exception0Handler
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
+EXTERN syscall_dispatcher
 
 SECTION .text
 
@@ -134,8 +136,8 @@ _irq04Handler:
 _irq05Handler:
 	irqHandlerMaster 5
 
-_irq80Handler:
-	irqHandlerMaster 80
+_systemCallHandler:
+	call syscall_dispatcher
 
 
 ;Zero Division Exception

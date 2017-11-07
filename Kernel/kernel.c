@@ -58,17 +58,19 @@ void * initializeKernelBinary() {
 }
 
 void initialPrint() {
-	printWithColor("x64-ARQ_Kernel", 49);
+	printWithColor("x64-ARQ_Kernel", 14, 49);
 	newLine();
-	printWithColor("Dammiano Donoso_Naumczuk Negro_Caino", 22);
-	newLines(2);
+	printWithColor("Dammiano Donoso_Naumczuk Negro_Caino", 36, 22);
+	newLine();
+	newLine();
 }
 
 int main() {
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
-	print("ARQ_Kernel@Kernel:~$ ");
-	while(1);
+	printWithColor("ARQ_Kernel@Kernel:~$ ",21,0x0F);
+	((EntryPoint)sampleCodeModuleAddress)();
+
 	return 0;
 }
