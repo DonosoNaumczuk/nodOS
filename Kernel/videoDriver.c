@@ -28,8 +28,8 @@ uint32_t getYResolution() {
 	return y_resolution;
 }
 
-void printPixel(uint32_t x, uint32_t y, char color) {
-	*(framebuffer_start_address+y*x_resolution+x) = color;
+void printPixel(int x, int y, char color) {
+		*(framebuffer_start_address+(-y+y_resolution/2)*x_resolution+x+x_resolution/2) = color;
 }
 
 void printCharWithColor(char character, char color) {

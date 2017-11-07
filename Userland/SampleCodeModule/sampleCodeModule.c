@@ -1,6 +1,8 @@
 #include <syscall.h>
+#include <cuadraticGraficator.h>
 
 int main() {
-	write("anda la systemcall",18,0x0F);
+	graphInit();
+	graphCuadratic(2,1,0);
 	while(1);
 }
