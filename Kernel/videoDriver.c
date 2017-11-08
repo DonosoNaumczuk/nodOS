@@ -20,19 +20,23 @@ void initializeVideoDriver() {
 	currentVideo_y = 0;
 }
 
-uint32_t getXResolution(){
+uint32_t getXResolution() {
 	return x_resolution;
 } 
 
-uint32_t getYResolution(){
+uint32_t getYResolution() {
 	return y_resolution;
 }
 
-void printPixel(uint32_t x, uint32_t y, char color){
-	*(framebuffer_start_address+y*x_resolution+x) = color;
+void printPixel(int x, int y, char color) {
+		*(framebuffer_start_address+(-y+y_resolution/2)*x_resolution+x+x_resolution/2) = color;
 }
 
 void printCharWithColor(char character, char color) {
+	if (character == '\n') {
+		newLine();
+		return;
+	}
 	char * character_font = pixel_map(character);
 	for (int i = 0; i < 16; ++i) {
 		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,*(character_font+i), color);
@@ -41,11 +45,17 @@ void printCharWithColor(char character, char color) {
 		currentVideo_x = 0;
 		if(currentVideo_y == max_word_y-1) {
 			moveup();
-		} else{
+		} else {
 			currentVideo_y++;
 		}
-	} else{
+	} else {
 		currentVideo_x++;
+	}
+}
+
+void printWithColor(char * string, uint64_t length, char color) {
+	for (int i = 0; i < length; ++i) {
+		printCharWithColor(string[i],color);
 	}
 }
 
@@ -54,7 +64,7 @@ void deleteCurrent() {
 		if(currentVideo_x == 0) {
 			currentVideo_x = max_word_x-1;
 			currentVideo_y--;
-		} else{
+		} else {
 			currentVideo_x--;
 		}
 		for (int i = 0; i < 16; ++i) {

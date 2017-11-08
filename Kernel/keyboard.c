@@ -48,9 +48,9 @@ void keyboard_handler() {
             newLine();
         else if(keycode >= 0) { /* Brake keycodes are < 0 */
             if(ISLOWERCASE)
-                printChar(keycode_map[keycode]);
+                printCharWithColor(keycode_map[keycode],0x0F);
             else
-                printChar(keycode_map[keycode] - 32);
+                printCharWithColor(keycode_map[keycode] - 32,0x0F);
         }
 	}
 }

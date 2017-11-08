@@ -54,21 +54,22 @@ void * initializeKernelBinary() {
 	// print("  bss: 0x");
 	// ncPrintHex((uint64_t)&bss);
 	// ncNewline();
+	initializeVideoDriver();
+	initialPrint();
+	load_idt();
+	printWithColor("ARQ_Kernel@Kernel:~$ ",21,0x0F);
+	((EntryPoint)sampleCodeModuleAddress)();
 	return getStackBase();
 }
 
 void initialPrint() {
-	printWithColor("x64-ARQ_Kernel", 49);
+	printWithColor("x64-ARQ_Kernel", 14, 49);
 	newLine();
-	printWithColor("Dammiano Donoso_Naumczuk Negro_Caino", 22);
-	newLines(2);
+	printWithColor("Dammiano Donoso_Naumczuk Negro_Caino", 36, 22);
+	newLine();
+	newLine();
 }
 
 int main() {
-	initializeVideoDriver();
-	initialPrint();
-	load_idt();
-	print("ARQ_Kernel@Kernel:~$ ");
-	while(1);
 	return 0;
 }
