@@ -6,6 +6,8 @@
 #define GET_RESOLUTION_X 3
 #define GET_RESOLUTION_Y 4
 #define TIME 5
+#define RESERVE 6
+#define FREE 7
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx) {
 	switch(rdi){
@@ -22,6 +24,11 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		case GET_RESOLUTION_Y:
 			return getYResolution();
 		case TIME:
-			return ;//nose para mi recibe un parametro que filtre entre segondos, horas, etc.
+			return timeHandler(rdi);
+		case RESERVE:
+			return reserve(rdi);
+		case FREE:
+			free();
+			return 0;
 	}
 }

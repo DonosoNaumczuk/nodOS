@@ -2,4 +2,4 @@
 #include <stdint.h>
 
 void graphInit();
-void graphPoli(int a, int b, int c);
+void graphPoli(float a, float b, float c);
