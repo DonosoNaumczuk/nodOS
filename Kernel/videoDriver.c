@@ -112,4 +112,6 @@ void clear() {
 			*(framebuffer_start_address+i*x_resolution+j) = 0x00;
 		}
 	}
+	currentVideo_x = 0;
+	currentVideo_y = 0;
 }

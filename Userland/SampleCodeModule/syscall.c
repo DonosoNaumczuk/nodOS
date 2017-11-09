@@ -11,21 +11,25 @@ void printPixel(uint32_t x, uint32_t y, char color){
 }
 
 uint64_t getResolutionX(){
-	_int_80(3,0,0,0);
+	return _int_80(3,0,0,0);
 }
 
 uint64_t getResolutionY(){
-	_int_80(4,0,0,0);
+	return _int_80(4,0,0,0);
 }
 
 uint64_t getTime(int time){
-	_int_80(5,time,0,0);
+	return _int_80(5,time,0,0);
 }
 
 void* malloc(int size){
-	_int_80(6,size,0,0);
+	return _int_80(6,size,0,0);
 }
 
 void free(){
 	_int_80(7,0,0,0);
+}
+
+void cleanScreen(){
+	_int_80(8,0,0,0);
 }

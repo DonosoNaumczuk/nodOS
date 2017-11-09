@@ -8,6 +8,7 @@
 #define TIME 5
 #define RESERVE 6
 #define FREE 7
+#define CLEAR 8
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx) {
 	switch(rdi){
@@ -29,6 +30,9 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return reserve(rdi);
 		case FREE:
 			free();
+			return 0;
+		case CLEAR:
+			clear();
 			return 0;
 	}
 }

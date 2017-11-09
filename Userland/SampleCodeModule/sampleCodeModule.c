@@ -3,9 +3,9 @@
 #include <lib.h>
 
 int main() {
-	printf("el numero es:%s\n","sissssssss");
+	printf("el numero es:%%d %s\n",20,"sabelo %dperro");
 	write("hola\n",5,0x0F);
 	graphInit();
-	graphCuadratic(2,1,0);
+	graphCuadratic(20,4,1000);
 	while(1);
 }

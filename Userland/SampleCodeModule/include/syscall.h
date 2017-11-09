@@ -9,3 +9,4 @@ uint64_t getResolutionY();
 uint64_t getTime(int time);
 void* malloc(int size);
 void free();
+void cleanScreen();

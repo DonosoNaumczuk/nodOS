@@ -41,6 +41,7 @@ int printf(const char* c, ...){
 					aux[j] = 's';
 					j++;
 				}
+				break;
 			default:
 				aux[j] = c[i];
 				j++;
