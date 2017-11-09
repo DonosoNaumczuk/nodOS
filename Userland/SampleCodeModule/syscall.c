@@ -8,7 +8,6 @@ void read(int in_id, char * buffer, int qty_to_read) {
 	_int_80(READ, in_id, buffer, qty_to_read);
 }
 
-
 void printPixel(uint32_t x, uint32_t y, char color){
 	_int_80(WRITE_PIXEL,x,y,color);
 }

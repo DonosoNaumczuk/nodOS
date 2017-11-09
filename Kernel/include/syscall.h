@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <lib.h>
-#include <read.c>
+#include <read.h>
 
 #define WRITE 0
 #define READ 1

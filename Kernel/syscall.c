@@ -7,7 +7,7 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return 0;
 		case READ:
 			read((int)rsi, (char*)rdx, (int)rcx);
-			return;
+			return 0;
 		case WRITE_PIXEL:
 			printPixel((uint32_t)rsi,(uint32_t)rdx,(char)rcx);
 			return 0;

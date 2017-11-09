@@ -1,5 +1,4 @@
 #include <keyboard.h>
-#include <videoDriver.h>
 
 unsigned int keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
@@ -145,6 +144,7 @@ int isNumber(char c) {
 }
 
 int getchar() {
+    _sti();
     while (bufferIsEmpty);
 
     int c = buffer[current_index];
