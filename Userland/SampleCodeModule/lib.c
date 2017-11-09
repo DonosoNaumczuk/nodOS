@@ -2,6 +2,12 @@
 
 #define block 10
 
+int getchar() {
+	char c;
+	read(0, &c, 1);
+	return c;
+}
+
 int printf(const char* c, ...){
 	va_list args;
 	va_start(args,c);
