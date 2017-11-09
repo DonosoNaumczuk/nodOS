@@ -64,6 +64,12 @@ void keyboard_handler() {
             else
                 add(mapped_key);
         }
+        else if(mapped_key != 0) {
+            if(SHIFT_PRESSED)
+                add(shiftedChar(mapped_key));
+            else
+                add(mapped_key);
+        }
     }
 }
 
