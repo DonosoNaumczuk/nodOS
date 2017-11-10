@@ -42,6 +42,7 @@ void keyboard_handler() {
         }
 
         unsigned int mapped_key = keycode_map[keycode];
+
         if(mapped_key == RIGHT_SHIFT)
             right_shift = TRUE;
         else if(mapped_key == LEFT_SHIFT)
@@ -59,14 +60,14 @@ void keyboard_handler() {
                 add(shiftedChar(mapped_key));
         }
         else if(isNumber(mapped_key)) {
-            if(SHIFT_PRESSED)
-                add(shiftedChar(mapped_key));
+            if(SHIFT_PRESSED && ((mapped_key = shiftedChar(mapped_key)) != 0) )
+                add(mapped_key);
             else
                 add(mapped_key);
         }
         else if(mapped_key != 0) {
-            if(SHIFT_PRESSED)
-                add(shiftedChar(mapped_key));
+            if(SHIFT_PRESSED && ((mapped_key = shiftedChar(mapped_key)) != 0) )
+                add(mapped_key);
             else
                 add(mapped_key);
         }
@@ -75,7 +76,7 @@ void keyboard_handler() {
 
 char shiftedChar(char c) {
     char shifted;
-    if(isAlpha)
+    if(isAlpha(c))
         return c - 32;
     switch (c) {
         case '1':
@@ -123,6 +124,9 @@ char shiftedChar(char c) {
         case '\'':
             shifted = '"';
             break;
+        case '`':
+            shifted = '~';
+            break;
         case ';':
             shifted = ':';
             break;
@@ -134,6 +138,9 @@ char shiftedChar(char c) {
             break;
         case '.':
             shifted = '>';
+            break;
+        case '\\':
+            shifted = '|';
             break;
         default:
             shifted = 0;
