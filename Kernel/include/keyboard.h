@@ -8,12 +8,17 @@
 #define LEFT_SHIFT 260
 #define RIGHT_SHIFT 261
 #define CAPS_LOCK 262
+#define UP_ARROW 263
+#define DOWN_ARROW 264
+#define LEFT_ARROW 265
+#define RIGHT_ARROW 266
 #define TRUE 1
 #define FALSE 0
 #define MAXCODE 128
 #define IS_LOWERCASE ((caps_lock && (left_shift || right_shift)) || (!caps_lock && !left_shift && !right_shift))
 #define SHIFT_PRESSED (left_shift || right_shift)
-#define MAX_BUFF_SIZE 256
+#define IS_ARROW(k) (k == UP_ARROW || k == DOWN_ARROW || k == RIGHT_ARROW || k == LEFT_ARROW)
+#define MAX_BUFF_SIZE 512
 #define EOF -1
 
 void keyboard_handler();

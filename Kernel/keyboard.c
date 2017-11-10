@@ -8,8 +8,8 @@ unsigned int keycode_map[128] = {
  '\'', '`',  LEFT_SHIFT,'\\', 'z', 'x', 'c', 'v', 'b', 'n', /* INDEX: 40 - 49 */
   'm', ',', '.', '/', LEFT_SHIFT,'*',0/* Alt */,' '/* Space bar */, CAPS_LOCK, 0 /* F1 */, /* INDEX: 50 - 59 */
     0/* F2 */,   0/* F3 */,   0/* F4 */,   0/* F5 */,   0/* F6 */,   0/* F7 */,   0/* F8 */,   0/* F9 */, 0 /*F10 */, 0/*Num lock*/, /* INDEX: 60 - 69 */
-    0 /* Scroll Lock */,0 /* Home key */, 0 /* Up Arrow */, 0 /* Page Up */, '-', 0/* Left Arrow */, 0, 0/* Right Arrow */,'+', 0/*End key*/, /* INDEX: 70 - 79 */
-    0/* Down Arrow */,0/* Page Down */, 0/* Insert Key */, 0/* Delete Key */, 0,   0,   0,  0/* F11 Key */, 0/* F12 Key */,
+    0 /* Scroll Lock */,0 /* Home key */, UP_ARROW /* Up Arrow */, 0 /* Page Up */, '-', LEFT_ARROW/* Left Arrow */, 0, RIGHT_ARROW/* Right Arrow */,'+', 0/*End key*/, /* INDEX: 70 - 79 */
+    DOWN_ARROW/* Down Arrow */,0/* Page Down */, 0/* Insert Key */, 0/* Delete Key */, 0,   0,   0,  0/* F11 Key */, 0/* F12 Key */,
     0,	/* All other keys are undefined */
 };
 
@@ -53,6 +53,8 @@ void keyboard_handler() {
             add('\b');
         else if(mapped_key == ENTER_KEY)
             add('\n');
+        else if(IS_ARROW(mapped_key))
+            add(mapped_key);
         else if(isAlpha(mapped_key)) {
             if(IS_LOWERCASE)
                 add(mapped_key);
