@@ -22,7 +22,7 @@ void initializeVideoDriver() {
 
 uint32_t getXResolution() {
 	return x_resolution;
-} 
+}
 
 uint32_t getYResolution() {
 	return y_resolution;
@@ -35,6 +35,10 @@ void printPixel(int x, int y, char color) {
 void printCharWithColor(char character, char color) {
 	if (character == '\n') {
 		newLine();
+		return;
+	}
+	if(character == '\b') {
+		deleteCurrent();
 		return;
 	}
 	char * character_font = pixel_map(character);

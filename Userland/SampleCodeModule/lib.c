@@ -2,6 +2,17 @@
 
 #define block 10
 
+char putChar(char c){
+	write(&c,1,0x0F);
+	return c;
+}
+
+int getchar() {
+	char c;
+	read(0, &c, 1);
+	return c;
+}
+
 int printf(const char* c, ...){
 	va_list args;
 	va_start(args,c);
