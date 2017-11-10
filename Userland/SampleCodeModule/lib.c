@@ -2,12 +2,10 @@
 
 #define block 10
 
-int putChar(char c){
+char putChar(char c){
 	write(&c,1,0x0F);
 	return c;
 }
-
-
 
 int getchar() {
 	char c;

@@ -25,8 +25,8 @@ int shell(){
 				}
 			}else{
 				if(index < MAX_CMD_LONG){
-					buffer[++index]	= currentChar;
-					printf("%s",buffer);
+					buffer[index++]	= currentChar;
+					putChar(currentChar);
 				}
 			}
 		}
