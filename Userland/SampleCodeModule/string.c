@@ -1,5 +1,3 @@
-
-
 void strcpy(char* s1, char* s2){
 	while(*s2 != 0){
 		*s1 = *s2;

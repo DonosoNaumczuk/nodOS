@@ -20,7 +20,7 @@ int  commandInterpreter(char buffer[],	unsigned int size){
 	cmdID = readCommand(buffer,&argumentsStart);
 
 	switch(cmdID){
-		case TIME:	printf("%s\n",getTimeDateString());	return 0;
+		case TIME:	printTime();	return 0;
 		case EXIT:	return -1;
 	}
 	return 1;
@@ -49,3 +49,8 @@ int readCommand(char buffer[],int * argumentsStart){
 	return INVALID;
 }
 
+void printTime(){
+	char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
+	getTimeDateString(timeDate);
+	printf("%s\n",timeDate);
+}
