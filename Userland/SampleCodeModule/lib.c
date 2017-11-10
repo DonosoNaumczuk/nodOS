@@ -132,14 +132,10 @@ int scanf(const char* c, ...){
 				}
 				break;
 			default:
-				if(buffer[j]!=c[i]){
+				if(buffer[j]!=c[i])
 					ret = -1;
-					printf("no\n");
-				}
-				else {
-					printf("si\n");
+				else 
 					j++;
-				}
 		}
 		i++;
 	}
