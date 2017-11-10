@@ -3,15 +3,15 @@
 
 #define KEYBOARD_STATUS_PORT 0x64
 #define KEYBOARD_DATA_PORT 0x60
-#define BACKSPACE 258
-#define ENTER_KEY 259
-#define LEFT_SHIFT 260
-#define RIGHT_SHIFT 261
-#define CAPS_LOCK 262
-#define UP_ARROW 263
-#define DOWN_ARROW 264
-#define LEFT_ARROW 265
-#define RIGHT_ARROW 266
+#define BACKSPACE 128
+#define ENTER_KEY 129
+#define LEFT_SHIFT 130
+#define RIGHT_SHIFT 140
+#define CAPS_LOCK 150
+#define UP_ARROW 160
+#define DOWN_ARROW 170
+#define LEFT_ARROW 180
+#define RIGHT_ARROW 190
 #define TRUE 1
 #define FALSE 0
 #define MAXCODE 128
@@ -26,6 +26,6 @@ char shiftedChar(char c);
 int isAlpha(char c);
 int isNumber(char c);
 int getchar();
-void add(unsigned int c);
+void add(char c);
 
 #endif

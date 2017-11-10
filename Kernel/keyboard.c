@@ -1,22 +1,22 @@
 #include <keyboard.h>
 
-unsigned int keycode_map[128] = {
+char keycode_map[256] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
     '9','0', '-', '=', BACKSPACE, '\t' /* Tab */,'q', 'w', 'e', 'r',	/* INDEX: 10 - 19 */
   't', 'y', 'u', 'i', 'o', 'p', '[', ']', ENTER_KEY, 0 /* Control */, /* INDEX: 20 - 29 */
   'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',	/* INDEX: 30 - 39 */
  '\'', '`',  LEFT_SHIFT,'\\', 'z', 'x', 'c', 'v', 'b', 'n', /* INDEX: 40 - 49 */
-  'm', ',', '.', '/', LEFT_SHIFT,'*',0/* Alt */,' '/* Space bar */, CAPS_LOCK, 0 /* F1 */, /* INDEX: 50 - 59 */
+  'm', ',', '.', '/', RIGHT_SHIFT,'*',0/* Alt */,' '/* Space bar */, CAPS_LOCK, 0 /* F1 */, /* INDEX: 50 - 59 */
     0/* F2 */,   0/* F3 */,   0/* F4 */,   0/* F5 */,   0/* F6 */,   0/* F7 */,   0/* F8 */,   0/* F9 */, 0 /*F10 */, 0/*Num lock*/, /* INDEX: 60 - 69 */
     0 /* Scroll Lock */,0 /* Home key */, UP_ARROW /* Up Arrow */, 0 /* Page Up */, '-', LEFT_ARROW/* Left Arrow */, 0, RIGHT_ARROW/* Right Arrow */,'+', 0/*End key*/, /* INDEX: 70 - 79 */
     DOWN_ARROW/* Down Arrow */,0/* Page Down */, 0/* Insert Key */, 0/* Delete Key */, 0,   0,   0,  0/* F11 Key */, 0/* F12 Key */,
     0,	/* All other keys are undefined */
 };
 
-unsigned static char caps_lock = FALSE;
-unsigned static char left_shift = FALSE;
-unsigned static char right_shift = FALSE;
-static int buffer[MAX_BUFF_SIZE];
+static int caps_lock = FALSE;
+static int left_shift = FALSE;
+static int right_shift = FALSE;
+static char buffer[MAX_BUFF_SIZE];
 static int current_index;
 static int end_index;
 static int bufferIsEmpty = TRUE;
@@ -41,7 +41,7 @@ void keyboard_handler() {
             return;
         }
 
-        unsigned int mapped_key = keycode_map[keycode];
+        char mapped_key = keycode_map[keycode];
 
         if(mapped_key == RIGHT_SHIFT)
             right_shift = TRUE;
@@ -162,7 +162,7 @@ int getchar() {
     _sti();
     while (bufferIsEmpty);
 
-    int c = buffer[current_index];
+    char c = buffer[current_index];
 
     if(++current_index > end_index) {
         bufferIsEmpty = TRUE;
@@ -171,7 +171,7 @@ int getchar() {
     return c;
 }
 
-void add(unsigned int c) {
+void add(char c) {
     if(bufferIsEmpty) {
         current_index = 0;
         end_index = 0;
