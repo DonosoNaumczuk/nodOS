@@ -3,11 +3,12 @@
 #include <lib.h>
 
 int main() {
-	int n1;
+	int a=0,b=0,c=0;
 	char string[100];
+	graphInit();
 	while(1){
-		printf("La cantidad leida es: %d\n",scanf("el numero es %d y el string es %s",&n1,string));
-		printf("El numero es: %d\n",n1);
-		printf("El string es: %s\n",string);
+		if(3==scanf("%d %d %d",&a,&b,&c))
+			graph(a,b,c);
+		else printf("NO\n");
 	}
 }

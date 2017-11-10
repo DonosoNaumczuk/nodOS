@@ -7,30 +7,29 @@ static uint32_t y_resolution;
 #define DOM x_resolution*escale_factor_x
 #define IMG y_resolution*escale_factor_y
 
-void graphInit(){
+void graphInit() {
 	x_resolution = getResolutionX();
 	y_resolution = getResolutionY();
 }
 
-void graphCuadratic(int a, int b, int c){
-	cleanScreen();
+void graph(int long a, int long b, int long c) {
 	int long escale_factor_x = b+100;
 	int long escale_factor_y = b+100;
 
 	if(a!=0) {
-		int critic_point_x = -b/(2*a);
-		int critic_point_y = a*critic_point_x*critic_point_x+b*critic_point_x+c;
-		int point_x = x_resolution/4;
-		int point_y = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
+		int long critic_point_x = -b/(2*a);
+		int long critic_point_y = a*critic_point_x*critic_point_x+b*critic_point_x+c;
+		int long point_x = x_resolution/4;
+		int long point_y = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
 		point_x++;
-		int point_y2 = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
-		int dist = point_y - point_y2;
+		int long point_y2 = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
+		int long dist = point_y - point_y2;
 		point_x--;
 
 		while(critic_point_x>(DOM*0.2)||critic_point_x<DOM*-(0.2)){
 			escale_factor_x+=100;
 		}
-		while(critic_point_y>(IMG*0.2)||critic_point_y<(IMG*-0.2)||dist>2||dist<-2){
+		while(critic_point_y>(IMG*0.2)||critic_point_y<(IMG*-0.2)||dist>5||dist<-5){
 			escale_factor_y+=100;
 			point_y = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
 			point_x++;
@@ -39,11 +38,12 @@ void graphCuadratic(int a, int b, int c){
 			point_x--;
 		}
 	}
-	graphCuadraticWithScale(a,b,c,escale_factor_x,escale_factor_y);
+	graphWithScale(a,b,c,escale_factor_x,escale_factor_y);
 }
 
-void graphCuadraticWithScale(int a, int b, int c, int long escale_factor_x, int long escale_factor_y){
-	int y1, y2;
+void graphWithScale(int long a, int long b, int long c, int long escale_factor_x, int long escale_factor_y){
+	cleanScreen();
+	int long y1, y2;
 	printAxiX();
 	printAxiY();
 	for (int i = 0; i < x_resolution/2; i++) {
