@@ -7,5 +7,6 @@
 
 int printf(const char* c, ...);
 int getchar();
+char putChar(char c);
 
 #endif
