@@ -14,6 +14,7 @@
 #define TIME 5
 #define RESERVE 6
 #define FREE 7
+#define CLEAR 8
 
 uint64_t syscall_dispatcher(uint64_t rax, uint64_t rbx, uint64_t rcx, uint64_t rdx);
 
