@@ -16,7 +16,7 @@ unsigned int keycode_map[128] = {
 unsigned static char caps_lock = FALSE;
 unsigned static char left_shift = FALSE;
 unsigned static char right_shift = FALSE;
-static char buffer[MAX_BUFF_SIZE];
+static int buffer[MAX_BUFF_SIZE];
 static int current_index;
 static int end_index;
 static int bufferIsEmpty = TRUE;
@@ -171,7 +171,7 @@ int getchar() {
     return c;
 }
 
-void add(char c) {
+void add(unsigned int c) {
     if(bufferIsEmpty) {
         current_index = 0;
         end_index = 0;

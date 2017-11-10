@@ -26,6 +26,6 @@ char shiftedChar(char c);
 int isAlpha(char c);
 int isNumber(char c);
 int getchar();
-void add(char c);
+void add(unsigned int c);
 
 #endif
