@@ -17,10 +17,6 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return getYResolution();
 		case TIME:
 			return timeHandler(rsi);
-		case RESERVE:
-			return reserve(rdi);
-		case FREE:
-			free();
 		case CLEAR:
 			clear();
 			return 0;
