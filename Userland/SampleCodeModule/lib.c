@@ -1,6 +1,7 @@
 #include <lib.h>
 
 #define block 10
+#define MAX 100
 
 char putChar(char c){
 	write(&c,1,0x0F);
@@ -18,14 +19,11 @@ int printf(const char* c, ...){
 	va_start(args,c);
 
 	int ret = 0; // return
-	char* aux = malloc(block*sizeof(char));
+	char aux[MAX];
 	int j = 0;
 	int flag = 0;
 	int i = 0;
 	while(c[i]!=0){
-		if(!(j%(10))) {
-			malloc(block*sizeof(char));
-		}
 		switch(c[i]) {
 			case '%':
 				if(flag) {
@@ -57,11 +55,20 @@ int printf(const char* c, ...){
 				aux[j] = c[i];
 				j++;
 		}
+		if(j==MAX){
+			aux[j];
+			write(aux,MAX,0x0F);
+			j = 0;
+		}
 		i++;
 	}
 	va_end(args);
-	free();
 	write(aux,j,0x0F);
+}
+
+int scanf(const char* c, ...){
+	va_list args;
+	va_start(args,c);
 }
 
 int toBase(int n, char* pnt, int base){

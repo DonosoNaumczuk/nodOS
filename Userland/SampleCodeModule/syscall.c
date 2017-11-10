@@ -24,14 +24,6 @@ uint64_t getTime(int time){
 	_int_80(TIME,time,0,0);
 }
 
-void* malloc(int size){
-	_int_80(RESERVE,size,0,0);
-}
-
-void free(){
-	_int_80(FREE,0,0,0);
-}
-
 void cleanScreen(){
 	_int_80(CLEAR,0,0,0);
 }
