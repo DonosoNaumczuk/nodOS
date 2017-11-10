@@ -13,14 +13,14 @@
 #define	ECHO		5	
 
 
-int  commandInterpreter(char buffer[],	unsigned int size){
+int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	unsigned int argumentsStart;
 	int cmdID;
 
 	cmdID = readCommand(buffer,&argumentsStart);
 
 	switch(cmdID){
-		case TIME:	printf("%s\n",getTimeDateString());	return 0;
+		case TIME:	printTime();	return 0;
 		case EXIT:	return -1;
 	}
 	return 1;
@@ -28,8 +28,8 @@ int  commandInterpreter(char buffer[],	unsigned int size){
 
 
 
-int readCommand(char buffer[],int * argumentsStart){
-	char cmd[MAX_CMD_LONG];
+int readCommand(unsigned char buffer[],int * argumentsStart){
+	unsigned char cmd[MAX_CMD_LONG];
 	int i = 0;
 
 	while((i < MAX_CMD_LONG) && (buffer[i] != 0) && (buffer[i] != " ")){
@@ -49,3 +49,8 @@ int readCommand(char buffer[],int * argumentsStart){
 	return INVALID;
 }
 
+void printTime(){
+	unsigned char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
+	getTimeDateString(timeDate);
+	printf("%s\n",timeDate);
+}

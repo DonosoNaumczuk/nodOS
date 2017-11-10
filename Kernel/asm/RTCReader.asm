@@ -4,8 +4,23 @@ GLOBAL	_getSeconds
 GLOBAL	_getDay
 GLOBAL	_getMonth
 GLOBAL	_getYear
+GLOBAL	_setBinaryTime
 
 section .text
+
+_setBinaryTime:
+	push	rbp
+	mov		rbp, rsp
+
+	mov rax,0
+	mov al,0Bh
+	out 70h,al
+	in al,71h
+	or al,4
+	out 71h,al
+	
+	leave
+	ret
 
 _getHour:
 	push	rbp

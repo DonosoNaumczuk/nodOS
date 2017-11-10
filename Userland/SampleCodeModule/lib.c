@@ -3,13 +3,13 @@
 #define block 10
 #define MAX 100
 
-char putChar(char c){
+unsigned char putChar(unsigned char c){
 	write(&c,1,0x0F);
 	return c;
 }
 
 int getchar() {
-	char c;
+	unsigned char c;
 	read(0, &c, 1);
 	return c;
 }
@@ -115,7 +115,7 @@ int scanf(const char* c, ...){
 				} else {
 					if(buffer[j]!='d')
 						ret = -1;
-					else 
+					else
 						j++;
 				}
 				break;
@@ -134,7 +134,7 @@ int scanf(const char* c, ...){
 			default:
 				if(buffer[j]!=c[i])
 					ret = -1;
-				else 
+				else
 					j++;
 		}
 		i++;

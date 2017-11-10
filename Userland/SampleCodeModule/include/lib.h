@@ -7,7 +7,7 @@
 
 int printf(const char* c, ...);
 int getchar();
-char putChar(char c);
+unsigned char putChar(unsigned char c);
 int scanf(const char* c, ...);
 
 #endif
