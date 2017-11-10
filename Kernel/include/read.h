@@ -6,6 +6,6 @@
 #define KEYBOARD_IN_ID 0
 #define SCREEN_IN_ID 1
 
-void read(int in_id, char * buffer, int buffer_size);
+void read(int in_id, unsigned char * buffer, int buffer_size);
 
 #endif

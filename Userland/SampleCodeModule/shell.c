@@ -5,14 +5,14 @@
 #define	MAX_CMD_LONG	100
 #define	HIST_LONG		100
 
-#define UP_ARROW 		160
-#define DOWN_ARROW		170
-#define LEFT_ARROW		180
-#define RIGHT_ARROW		190
+#define UP_ARROW 		133
+#define DOWN_ARROW 		134
+#define LEFT_ARROW 		135
+#define RIGHT_ARROW 	136
 
 #define INVALID_CMD		1
 #define	ERROR_CMD		2
-#define	EXIT_CMD		-1
+#define	EXIT_CMD	   -1
 #define	VALID_CMD 		0
 
 void clearLine(unsigned int lineLong){
@@ -20,12 +20,12 @@ void clearLine(unsigned int lineLong){
 	for(i = 0;i < lineLong; i++) printf("\b");
 }
 
-void clearBuffer(char buffer[]){
+void clearBuffer(unsigned char buffer[]){
 	int i;
 	for(i = 0; i < MAX_CMD_LONG; i++) buffer[i] = 0;
 }
 
-void clearHist(char hist[HIST_LONG][MAX_CMD_LONG]){
+void clearHist(unsigned char hist[HIST_LONG][MAX_CMD_LONG]){
 	int i,j;
 	i = j = 0;
 	for(j = 0; j < HIST_LONG; j++){
@@ -35,10 +35,10 @@ void clearHist(char hist[HIST_LONG][MAX_CMD_LONG]){
 
 int shell(){
 	unsigned int exitFlag = 0;
-	char buffer[MAX_CMD_LONG];
-	char currentChar;
+	unsigned char buffer[MAX_CMD_LONG];
+	unsigned char currentChar;
 	unsigned int index = 0;
-	char hist[HIST_LONG][MAX_CMD_LONG];
+	unsigned char hist[HIST_LONG][MAX_CMD_LONG];
 	unsigned int histCurrentIndex = 0;
 	unsigned int histSize = 0;
 
@@ -63,7 +63,7 @@ int shell(){
 					index = 0;
 					while(hist[histCurrentIndex][index] != 0)	index++;
 					strcpy(buffer,hist[histCurrentIndex]);
-					printf("%s",buffer);	
+					printf("%s",buffer);
 				}
 			}else{
 				if(index < MAX_CMD_LONG){

@@ -1,6 +1,6 @@
 #include <keyboard.h>
 
-char keycode_map[256] = {
+unsigned char keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
     '9','0', '-', '=', BACKSPACE, '\t' /* Tab */,'q', 'w', 'e', 'r',	/* INDEX: 10 - 19 */
   't', 'y', 'u', 'i', 'o', 'p', '[', ']', ENTER_KEY, 0 /* Control */, /* INDEX: 20 - 29 */
@@ -16,13 +16,13 @@ char keycode_map[256] = {
 static int caps_lock = FALSE;
 static int left_shift = FALSE;
 static int right_shift = FALSE;
-static char buffer[MAX_BUFF_SIZE];
-static int current_index;
-static int end_index;
+static unsigned char buffer[MAX_BUFF_SIZE];
+static unsigned int current_index;
+static unsigned int end_index;
 static int bufferIsEmpty = TRUE;
 
 void keyboard_handler() {
-	unsigned char status;
+	char status;
 	char keycode;
 
 	status = read_port(KEYBOARD_STATUS_PORT);
@@ -41,7 +41,7 @@ void keyboard_handler() {
             return;
         }
 
-        char mapped_key = keycode_map[keycode];
+        unsigned char mapped_key = keycode_map[keycode];
 
         if(mapped_key == RIGHT_SHIFT)
             right_shift = TRUE;
@@ -76,8 +76,8 @@ void keyboard_handler() {
     }
 }
 
-char shiftedChar(char c) {
-    char shifted;
+unsigned char shiftedChar(unsigned char c) {
+    unsigned char shifted;
     if(isAlpha(c))
         return c - 32;
     switch (c) {
@@ -150,11 +150,11 @@ char shiftedChar(char c) {
     return shifted;
 }
 
-int isAlpha(char c) {
+int isAlpha(unsigned char c) {
     return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
 
-int isNumber(char c) {
+int isNumber(unsigned char c) {
     return (c >= '0' && c <= '9');
 }
 
@@ -162,7 +162,7 @@ int getchar() {
     _sti();
     while (bufferIsEmpty);
 
-    char c = buffer[current_index];
+    unsigned char c = buffer[current_index];
 
     if(++current_index > end_index) {
         bufferIsEmpty = TRUE;
@@ -171,7 +171,7 @@ int getchar() {
     return c;
 }
 
-void add(char c) {
+void add(unsigned char c) {
     if(bufferIsEmpty) {
         current_index = 0;
         end_index = 0;
