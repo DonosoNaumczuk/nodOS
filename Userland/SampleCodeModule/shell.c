@@ -5,10 +5,10 @@
 #define	MAX_CMD_LONG	100
 #define	HIST_LONG		100
 
-#define UP_ARROW		263
-#define DOWN_ARROW		264
-#define LEFT_ARROW		265
-#define RIGHT_ARROW		266
+#define UP_ARROW 		160
+#define DOWN_ARROW		170
+#define LEFT_ARROW		180
+#define RIGHT_ARROW		190
 
 #define INVALID_CMD		1
 #define	ERROR_CMD		2
@@ -54,6 +54,7 @@ int shell(){
 					printf("\b");
 				}
 			}else if(currentChar == UP_ARROW || currentChar == DOWN_ARROW){
+				printf("ARROW");
 				if(currentChar == UP_ARROW){
 					if(histCurrentIndex > 0)	histCurrentIndex--;
 					else if(histSize > 0)	histCurrentIndex = histSize - 1;
@@ -78,6 +79,10 @@ int shell(){
 			case EXIT_CMD:		exitFlag = 1;	break;
 			case VALID_CMD:		break;
 		}
+		if(histCurrentIndex < HIST_LONG){
+			strcpy(hist[histCurrentIndex++],buffer);
+			if(histSize != HIST_LONG)	histSize++;
+		}else	histCurrentIndex = 0;
 		clearBuffer(buffer);
 		index = 0;
 	}
