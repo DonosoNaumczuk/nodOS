@@ -3,14 +3,10 @@
 #include <lib.h>
 
 int main() {
-	int i = 20;
-	while(i > 0) {
-		char c = getchar();
-		write(&c,1,0x0F);
-		i--;
+	char c;
+	while( (c = getchar()) != '\n' ) {
+		write(&c, 1, 0x0F);
 	}
-	write("finish", 6, 0x0F);
-	// graphInit();
-	// graphCuadratic(2,1,0);
+	write("Finish", 6, 0x0F);
 	while(1);
 }
