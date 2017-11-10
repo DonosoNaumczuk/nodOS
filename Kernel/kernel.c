@@ -57,6 +57,7 @@ void * initializeKernelBinary() {
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
+	_setBinaryTime();
 	printWithColor("ARQ_Kernel@Kernel:~$ ",21,0x0F);
 	((EntryPoint)sampleCodeModuleAddress)();
 	return getStackBase();

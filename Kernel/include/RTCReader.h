@@ -1,6 +1,7 @@
 #ifndef RTC_Reader
 #define	RTC_Reader
 
+void 		_setBinaryTime(void);
 uint64_t 	_getHour(void);
 uint64_t	_getMinutes(void);
 uint64_t	_getSeconds(void);

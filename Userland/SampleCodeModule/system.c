@@ -3,9 +3,9 @@
 #include <system.h>
 
 void	getTimeString(char *time){
-	int hour =	(getTime(2)*60)/100;
-	int min = 	(getTime(1)*60)/100;
-	int sec =	(getTime(0)*60)/100;
+	int hour =	getTime(2);
+	int min = 	getTime(1);
+	int sec =	getTime(0);
 	time[0] = (unsigned char)('0' + (int)hour/10);
 	time[1] = (unsigned char)('0' + (int)hour%10);
 	time[2] = ':';
