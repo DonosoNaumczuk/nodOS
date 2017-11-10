@@ -11,6 +11,7 @@
 #define TIME 5
 #define RESERVE 6
 #define FREE 7
+#define CLEAR 8
 
 #define KEYBOARD_IN_ID 0
 #define SCREEN_IN_ID 1
@@ -23,5 +24,6 @@ uint64_t getResolutionY();
 uint64_t getTime(int time);
 void* malloc(int size);
 void free();
+void cleanScreen();
 
 #endif

@@ -31,3 +31,7 @@ void* malloc(int size){
 void free(){
 	_int_80(FREE,0,0,0);
 }
+
+void cleanScreen(){
+	_int_80(CLEAR,0,0,0);
+}
