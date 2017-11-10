@@ -1,5 +1,6 @@
 #include <syscall.h>
 #include <stdint.h>
+#include <lib.h>
 
 void graphInit();
-void graphPoli(float a, float b, float c);
+void graphPoli(int a, int b, int c);

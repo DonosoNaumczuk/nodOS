@@ -9,8 +9,7 @@
 #define GET_RESOLUTION_X 3
 #define GET_RESOLUTION_Y 4
 #define TIME 5
-#define RESERVE 6
-#define FREE 7
+#define CLEAR 6
 
 #define KEYBOARD_IN_ID 0
 #define SCREEN_IN_ID 1
@@ -21,7 +20,6 @@ void printPixel(uint32_t x, uint32_t y, char color);
 uint64_t getResolutionX();
 uint64_t getResolutionY();
 uint64_t getTime(int time);
-void* malloc(int size);
-void free();
+void cleanScreen();
 
 #endif
