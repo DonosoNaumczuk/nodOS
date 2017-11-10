@@ -1,4 +1,4 @@
-void strcpy(char* s1, char* s2){
+void strcpy(unsigned char* s1,unsigned char* s2){
 	while(*s2 != 0){
 		*s1 = *s2;
 		s1++;
@@ -8,7 +8,7 @@ void strcpy(char* s1, char* s2){
 }
 
 
-int strcmp(char* s1, char* s2){
+int strcmp(unsigned char* s1,unsigned char* s2){
 	int res;
 	res = 0;
 	

@@ -5,10 +5,10 @@
 #define	MAX_CMD_LONG	100
 #define	HIST_LONG		100
 
-#define UP_ARROW 		133
-#define DOWN_ARROW 		134
-#define LEFT_ARROW 		135
-#define RIGHT_ARROW 	136
+#define UP_ARROW		133
+#define DOWN_ARROW		134
+#define LEFT_ARROW		135
+#define RIGHT_ARROW		136
 
 #define INVALID_CMD		1
 #define	ERROR_CMD		2

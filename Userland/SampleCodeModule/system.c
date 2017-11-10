@@ -2,7 +2,7 @@
 #include <string.h>
 #include <system.h>
 
-void	getTimeString(char *time){
+void	getTimeString(unsigned char *time){
 	int hour =	getTime(2);
 	int min = 	getTime(1);
 	int sec =	getTime(0);
@@ -17,7 +17,7 @@ void	getTimeString(char *time){
 	time[TIME_FMT_LONG - 1] = (unsigned char)0;
 }
 
-void	getDateString(char *date){
+void	getDateString(unsigned char *date){
 	int day = getTime(3);
 	int month = getTime(4);
 	int year = getTime(5);
@@ -32,7 +32,7 @@ void	getDateString(char *date){
 	date[DATE_FMT_LONG - 1] = 0; 
 }
 
-void	getTimeDateString(char* timeDate){
+void	getTimeDateString(unsigned char* timeDate){
 	getTimeString(timeDate);
 	timeDate[TIME_FMT_LONG - 1] = ' ';
 	getDateString(timeDate + TIME_FMT_LONG);

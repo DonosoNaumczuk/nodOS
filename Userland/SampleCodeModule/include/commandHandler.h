@@ -1,3 +1,3 @@
 
 
-int  commandInterpreter(char buffer[],	unsigned int size);
+int  commandInterpreter(unsigned char buffer[],	unsigned int size);
