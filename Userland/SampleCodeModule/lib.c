@@ -209,3 +209,27 @@ int copyString(char* string, char* to){
 	to[i] = 0;
 	return i;
 }
+
+int pow(int base,unsigned int exponent){
+	if(exponent == 0)	return	1;
+	while(exponent > 1){
+		base*=base;
+		exponent--;
+	} 
+	return base;
+}
+
+int	charToInt(char* string,int*	res){
+	unsigned int digits = 0;
+	*res = 0;
+	int aux = 0;
+	while(string[digits] != 0 || string[digits] != ' ')	digits++;
+	while(digits > 0)	*res += (string[digits - aux] - '0') * pow(10,aux++);
+	if(string[0] == '-')	*res = -1*(*res);
+	else	*res +=  (string[0] - '0') * pow(10,aux);
+	if(string[digits + 1] == ' ')	return	1;
+	else	return 0;
+}
+
+
+
