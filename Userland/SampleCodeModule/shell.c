@@ -47,7 +47,7 @@ int shell(){
 	clearHist(hist);
 
 	while(!exitFlag){
-		printf("ARQ_PW\\Userland\\~    ");
+		printf("ARQ_Kernel@itba:~/Userland$    ");
 		while((currentChar = getchar()) != '\n'){
 			if(currentChar == '\b'){	//BACKSPACE
 				if(index>0){
@@ -55,7 +55,7 @@ int shell(){
 					printf("\b");
 				}
 			}else if(currentChar == UP_ARROW || currentChar == DOWN_ARROW){		//ANY ARROW
-				
+
 				if(currentChar == UP_ARROW){
 					if(histCurrentIndex > 0)	histCurrentIndex--;
 					else if(histSize > 0)	histCurrentIndex = histSize - 1;

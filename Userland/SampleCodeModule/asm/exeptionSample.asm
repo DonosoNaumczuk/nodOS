@@ -14,6 +14,5 @@ divide0:
 	ret
 
 overflow:
-	inc ax
-	jmp overflow
+	mov ax, 0xFFFFFF
 	ret

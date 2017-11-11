@@ -26,6 +26,7 @@ EXTERN syscall_dispatcher
 EXTERN printWithColor
 EXTERN printHexa
 EXTERN newLine
+EXTERN clear
 
 SECTION .text
 
@@ -110,6 +111,8 @@ haltCycle:
 	jmp haltCycle
 
 %macro printRegisters 0
+	call clear
+
 	pushState
 	mov rdi,register17
 	mov rsi,0x00000005
@@ -118,7 +121,7 @@ haltCycle:
 	popState
 
 	pushState
-	mov rdi, [rsp + 16 * 4] ;15 [64 bit] registers backuped, read return adress (RIP register)
+	mov rdi, [rsp + 15 * 4] ;15 [64 bit] registers backuped, read return adress (RIP register)
 	call printHexa
 	call newLine
 	popState
