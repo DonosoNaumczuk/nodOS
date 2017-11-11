@@ -51,8 +51,8 @@ void graphWithScale(int long a, int long b, int long c, unsigned int long escale
 	for (int i = 0; i < x_resolution/2; i++) {
 		y1 = ((a*i*i)+b*i+c)/escale_factor_y;
 		y2 = ((a*i*i)-b*i+c)/escale_factor_y;
-		printPixel(i,y1,0x01);
-		printPixel(-i,y2,0x01);
+		printPixel(i,y1,0x0A);
+		printPixel(-i,y2,0x0A);
 	}
 	printf("Cada linea en el eje X son %d valores\n",escale_factor_x*10);
 	printf("Cada linea en el eje Y son %d valores\n",escale_factor_y*10);
