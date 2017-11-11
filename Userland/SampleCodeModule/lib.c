@@ -178,6 +178,10 @@ int toBase(int n, char* pnt, int base){
 	char *p1, *p2;
 	int digits = 0;
 
+	if(n<0){
+		*p++='-';
+		digits++;
+	}
 	do
 	{
 		int remainder = n % base;

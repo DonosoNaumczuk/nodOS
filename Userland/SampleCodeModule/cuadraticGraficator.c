@@ -14,18 +14,18 @@ void graphInit() {
 	y_resolution = getResolutionY();
 }
 
-void graph(int long a, int long b, int long c) {
-	unsigned int long escale_factor_x = b+100;
-	unsigned int long escale_factor_y = b+100;
+void graph(int a, int b, int c) {
+	unsigned int escale_factor_x = 100;
+	unsigned int escale_factor_y = 100;
 
 	if(a!=0) {
-		int long critic_point_x = -b/(2*a);
-		int long critic_point_y = a*critic_point_x*critic_point_x+b*critic_point_x+c;
-		int long point_x = x_resolution/4;
-		int long point_y = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
+		int critic_point_x = -b/(2*a);
+		int critic_point_y = a*critic_point_x*critic_point_x+b*critic_point_x+c;
+		int point_x = x_resolution/4;
+		int point_y = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
 		point_x++;
-		int long point_y2 = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
-		int long dist = point_y - point_y2;
+		int point_y2 = (a*point_x*point_x+b*point_x+c)/escale_factor_y;
+		int dist = point_y - point_y2;
 		point_x--;
 
 		while(critic_point_x>(DOM*0.2)||critic_point_x<DOM*-(0.2)){
@@ -39,13 +39,21 @@ void graph(int long a, int long b, int long c) {
 			dist = point_y - point_y2;
 			point_x--;
 		}
+	} else {
+		int j;
+		if(b<0)
+			j = -b;
+		else
+			j = b;
+		escale_factor_x = (b==0)?(c/2)+1:j;
+		escale_factor_y = (b==0)?(c/2)+1:j;
 	}
 	graphWithScale(a,b,c,escale_factor_x,escale_factor_y);
 }
 
-void graphWithScale(int long a, int long b, int long c, unsigned int long escale_factor_x, unsigned int long escale_factor_y){
+void graphWithScale(int a, int b, int c, int escale_factor_x, int escale_factor_y){
 	cleanScreen();
-	int long y1, y2;
+	int y1, y2;
 	printAxiX();
 	printAxiY();
 	for (int i = 0; i < x_resolution/2; i++) {
