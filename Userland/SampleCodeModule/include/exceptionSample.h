@@ -1,5 +1,5 @@
-#ifndef _EXEPTION_SAMPLE_H
-#define _EXEPTION_SAMPLE_H
+#ifndef _EXCEPTION_SAMPLE_H
+#define _EXCEPTION_SAMPLE_H
 
 void invalidop();
 void divide0();

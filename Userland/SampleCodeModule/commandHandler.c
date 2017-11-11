@@ -3,6 +3,7 @@
 #include	<system.h>
 #include	<cuadraticGraficator.h>
 #include	<shell.h>
+#include	<exceptionSample.h>
 
 #define	MAX_CMD_LONG	15	
 
@@ -12,7 +13,8 @@
 #define	CUADRATIC	2
 #define	LINEAR		3
 #define	HELP		4
-#define	ECHO		5	
+#define	ECHO		5
+#define	TEST 		6	
 
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size){
@@ -26,6 +28,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case CUADRATIC:	return	graphCuadratic(buffer + argumentsStart);
 		case LINEAR:	return	graphLinear(buffer + argumentsStart);
 		case HELP:	return	printHelp();
+		case TEST:	return	test(buffer + argumentsStart);
 	}
 	return 1;
 }
@@ -49,6 +52,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart){
 	if(strncmp("linear",cmd,11) == 0)	return	LINEAR;
 	if(strncmp("echo",cmd,4) == 0)	return	ECHO;
 	if(strcmp("exit",cmd) == 0)	return	EXIT;
+	if(strncmp("test",cmd,4) == 0)	return	TEST;
 	return INVALID;
 }
 
@@ -88,12 +92,24 @@ int graphLinear(unsigned char* buffer){
 	return	VALID_CMD;
 }
 
+int test(unsigned char* buffer){
+	if(*buffer != 0)	buffer++;
+	else return ARGS_ERROR;
+	printf("%s\n",buffer);
+	int cmpRes = 0;
+	if((cmpRes = strcmp("zerodiv",buffer)) == 0)	divide0();
+	else if((cmpRes = strcmp("overflow",buffer)) == 0)	overflow();
+	else if ((cmpRes = strcmp("opcode",buffer)) == 0)	invalidop();
+	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
+}
+
 int printHelp(){
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
 	printf("          * cuadratic a b c xScale yScale : print a cuadratic fuction [ax^2 + bx + c]\n");
-	printf("          * linear a b xScale yScale : print a linear function[ax + b]\n");
+	printf("          * linear a b xScale yScale : print a linear function [ax + b]\n");
 	printf("          * exit : exit \n");
+	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
 	return VALID_CMD;
 }
 

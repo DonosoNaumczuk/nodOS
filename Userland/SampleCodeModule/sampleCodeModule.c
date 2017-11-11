@@ -1,7 +1,4 @@
-#include <syscall.h>
-#include <cuadraticGraficator.h>
-#include <lib.h>
-#include <exeptionSample.h>
+#include <shell.h>
 
 int main() {
 	return	shell();
