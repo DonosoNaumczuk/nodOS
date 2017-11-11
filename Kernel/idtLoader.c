@@ -11,6 +11,10 @@ void load_idt() {
 
     setup_IDT_entry(0x00, (uint64_t)&_exception0Handler);
 
+    setup_IDT_entry(0x04, (uint64_t)&_exception1Handler);
+
+    setup_IDT_entry(0x06, (uint64_t)&_exception2Handler);
+
     /* Timer tick */
     setup_IDT_entry(0x20, (uint64_t)&_irq00Handler);
 

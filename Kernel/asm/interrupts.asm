@@ -17,6 +17,8 @@ GLOBAL _irq05Handler
 GLOBAL _systemCallHandler
 
 GLOBAL _exception0Handler
+GLOBAL _exception1Handler
+GLOBAL _exception2Handler
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
@@ -379,6 +381,12 @@ _systemCallHandler:
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
+
+_exception1Handler:
+	exceptionHandler 1
+
+_exception2Handler:
+	exceptionHandler 2
 
 haltcpu:
 	cli
