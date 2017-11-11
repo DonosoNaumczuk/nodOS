@@ -376,8 +376,7 @@ _irq05Handler:
 
 _systemCallHandler:
 	call syscall_dispatcher
-	leave
-	ret
+	iretq
 
 ;Zero Division Exception
 _exception0Handler:
