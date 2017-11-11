@@ -4,15 +4,18 @@
 #include <interrupts.h>
 #include <naiveConsole.h>
 
-/** IDT */
+/* IDT */
 int_desc_t * idt = (int_desc_t *) 0;
 
 void load_idt() {
 
+    /* Zero Division Exception */
     setup_IDT_entry(0x00, (uint64_t)&_exception0Handler);
 
+    /* Overflow Exception */
     setup_IDT_entry(0x04, (uint64_t)&_exception1Handler);
 
+    /* Invalid Opcode Exception */
     setup_IDT_entry(0x06, (uint64_t)&_exception2Handler);
 
     /* Timer tick */
@@ -21,7 +24,7 @@ void load_idt() {
     /* Keyboard */
     setup_IDT_entry(0x21, (uint64_t)&_irq01Handler);
 
-    /* Syste mCall */
+    /* System Call */
     setup_IDT_entry(0x80, (uint64_t)&_systemCallHandler);
 
     picMasterMask(0xFC);

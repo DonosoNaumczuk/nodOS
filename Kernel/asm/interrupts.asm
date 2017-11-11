@@ -80,6 +80,8 @@ SECTION .text
 %endmacro
 
 %macro exceptionHandler 1
+	printRegisters
+
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
@@ -98,7 +100,6 @@ _cli:
 	cli
 	ret
 
-
 _sti:
 	sti
 	ret
@@ -108,7 +109,7 @@ haltCycle:
 	hlt
 	jmp haltCycle
 
-printRegisters:
+%macro printRegisters 0
 	pushState
 	mov rdi,register17
 	mov rsi,0x00000005
@@ -117,7 +118,7 @@ printRegisters:
 	popState
 
 	pushState
-	mov rdi,0			;nose como leer el rip
+	mov rdi, [rsp + 16 * 4] /* 15 [64 bit] registers backuped, read return adress (RIP register) */
 	call printHexa
 	call newLine
 	popState
@@ -329,8 +330,7 @@ printRegisters:
 	call printHexa
 	call newLine
 	popState
-	
-	ret
+%endmacro
 
 
 picMasterMask:
@@ -414,6 +414,3 @@ SECTION .data
 	register15 db "R14: "
 	register16 db "R15: "
 	register17 db "RIP: "
-
-
-
