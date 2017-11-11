@@ -177,10 +177,10 @@ int toBase(int n, char* pnt, int base){
 	char *p = pnt;
 	char *p1, *p2;
 	int digits = 0;
-
+	int flag = 0;
 	if(n<0){
-		*p++='-';
-		digits++;
+		flag = 1;
+		n = -n;
 	}
 	do
 	{
@@ -189,6 +189,11 @@ int toBase(int n, char* pnt, int base){
 		digits++;
 	}
 	while (n /= base);
+
+	if(flag){
+		*p++='-';
+		digits++;
+	}
 
 	p1 = pnt;
 	p2 = p - 1;
