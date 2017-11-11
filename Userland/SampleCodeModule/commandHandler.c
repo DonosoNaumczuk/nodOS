@@ -65,9 +65,9 @@ void printTime(){
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total){
 	unsigned int i = 0;
 	unsigned int argNum = 0;
-
 	while(argNum < total){
-		if(buffer[i] == ' ')	args[argNum]	=	charToInt(++i + buffer);
+		while(buffer[i] == ' ')	i++;
+		if(buffer[i] != 0)	args[argNum]	=	charToInt(buffer + i);
 		else	return	ARGS_ERROR;
 		while((buffer[i] != ' ') && (buffer[i] != 0))	i++;
 		argNum++;
@@ -112,4 +112,3 @@ int printHelp(){
 	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
 	return VALID_CMD;
 }
-
