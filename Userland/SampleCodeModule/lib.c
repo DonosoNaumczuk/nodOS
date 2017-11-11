@@ -1,6 +1,5 @@
 #include <lib.h>
 
-#define block 10
 #define MAX 100
 
 unsigned char putChar(unsigned char c){

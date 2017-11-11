@@ -353,30 +353,36 @@ picSlaveMask:
 ;8254 Timer (Timer Tick)
 _irq00Handler:
 	irqHandlerMaster 0
+	ret
 
 ;Keyboard
 _irq01Handler:
 	irqHandlerMaster 1
+	ret
 
 ;Cascade pic never called
 _irq02Handler:
 	irqHandlerMaster 2
+	ret
 
 ;Serial Port 2 and 4
 _irq03Handler:
 	irqHandlerMaster 3
+	ret
 
 ;Serial Port 1 and 3
 _irq04Handler:
 	irqHandlerMaster 4
+	ret
 
 ;USB
 _irq05Handler:
 	irqHandlerMaster 5
+	ret
 
 _systemCallHandler:
 	call syscall_dispatcher
-
+	ret
 
 ;Zero Division Exception
 _exception0Handler:
