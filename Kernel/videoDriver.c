@@ -78,6 +78,34 @@ void deleteCurrent() {
 
 }
 
+void printHexa(uint64_t n){
+	char buffer[100];
+	char *p = buffer;
+	char *p1, *p2;
+	uint32_t digits = 0;
+
+	do
+	{
+		uint32_t remainder = n % 16;
+		*p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+		digits++;
+	}
+	while (n /= 16);
+	*p = 0;
+
+	p1 = buffer;
+	p2 = p - 1;
+	while (p1 < p2)
+	{
+		char tmp = *p1;
+		*p1 = *p2;
+		*p2 = tmp;
+		p1++;
+		p2--;
+	}
+	printWithColor(buffer,digits,0x0F);
+}
+
 void printFont(uint8_t * address, char font, char color) {
 	char bits[] = {font&0X80,font&0X40,font&0X20,font&0X10,font&0X08,font&0X04,font&0X02,font&0X01};
 	for (int i = 0; i < 8; ++i) {

@@ -12,6 +12,7 @@ void clear();
 void deleteCurrent();
 uint32_t getXResolution();
 uint32_t getYResolution();
+void printHexa(uint64_t n);
 
 #pragma pack(push)
 #pragma pack (1)

@@ -1,3 +1,4 @@
+#include <videoDriver.h>
 
 #define ZERO_EXCEPTION_ID 0
 
@@ -9,5 +10,8 @@ void exceptionDispatcher(int exception) {
 }
 
 static void zero_division() {
-	// Exception handler
+	clear();
+	printRegisters();
+	printWithColor("Error dividir 0 por 0",21,0x0F);
+	haltCycle();
 }
