@@ -47,7 +47,7 @@ int shell(){
 	clearHist(hist);
 
 	while(!exitFlag){
-		printf("~   ");
+		printf("ARQ_PW\\Userland\\~    ");
 		while((currentChar = getchar()) != '\n'){
 			if(currentChar == '\b'){	//BACKSPACE
 				if(index>0){

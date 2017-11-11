@@ -15,6 +15,7 @@ void	getTimeString(unsigned char *time){
 	time[6] = (unsigned char)('0' + (int)sec/10);
 	time[7] = (unsigned char)('0' + (int)sec%10);
 	time[TIME_FMT_LONG - 1] = (unsigned char)0;
+	return;
 }
 
 void	getDateString(unsigned char *date){
@@ -30,10 +31,12 @@ void	getDateString(unsigned char *date){
 	date[6] = (char) '0' + year/10;
 	date[7] = (char) '0' + year%10;
 	date[DATE_FMT_LONG - 1] = 0; 
+	return;
 }
 
 void	getTimeDateString(unsigned char* timeDate){
 	getTimeString(timeDate);
 	timeDate[TIME_FMT_LONG - 1] = ' ';
 	getDateString(timeDate + TIME_FMT_LONG);
+	return;
 }

@@ -177,7 +177,11 @@ int toBase(int n, char* pnt, int base){
 	char *p = pnt;
 	char *p1, *p2;
 	int digits = 0;
-
+	int flag = 0;
+	if(n<0){
+		flag = 1;
+		n = -n;
+	}
 	do
 	{
 		int remainder = n % base;
@@ -185,6 +189,11 @@ int toBase(int n, char* pnt, int base){
 		digits++;
 	}
 	while (n /= base);
+
+	if(flag){
+		*p++='-';
+		digits++;
+	}
 
 	p1 = pnt;
 	p2 = p - 1;
@@ -218,16 +227,19 @@ int pow(int base,unsigned int exponent){
 	return base;
 }
 
-int	charToInt(char* string,int*	res){
+int	charToInt(unsigned char* string){
 	unsigned int digits = 0;
-	*res = 0;
-	int aux = 0;
-	while(string[digits] != 0 || string[digits] != ' ')	digits++;
-	while(digits > 0)	*res += (string[digits - aux] - '0') * pow(10,aux++);
-	if(string[0] == '-')	*res = -1*(*res);
-	else	*res +=  (string[0] - '0') * pow(10,aux);
-	if(string[digits + 1] == ' ')	return	1;
-	else	return 0;
+	unsigned int index  = 0;
+	int res = 0;
+	
+	while((string[digits] != 0) && (string[digits] != ' '))	digits++;
+	while(index < (digits - 1)){
+		res += (string[digits - index - 1] - '0')*pow(10,index);
+		index++;
+	}
+	if(string[digits - index - 1] == '-')	res = res*(-1);
+	else 	res +=	(string[digits - index - 1] - '0')*pow(10,index);
+	return res;
 }
 
 

@@ -18,13 +18,12 @@
 int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	unsigned int argumentsStart;
 	int cmdID;
-
 	cmdID = readCommand(buffer,&argumentsStart);
 
 	switch(cmdID){
 		case TIME:	printTime();	return 0;
 		case EXIT:	return -1;
-		case CUADRATIC:	return	graphCuadratic(buffer[13]);
+		case CUADRATIC:	return	graphCuadratic(buffer + argumentsStart);
 	}
 	return 1;
 }
@@ -40,7 +39,8 @@ int readCommand(unsigned char buffer[],int * argumentsStart){
 
 	if(i >= MAX_CMD_LONG)	return INVALID;
 	cmd[i] = 0;
-	*argumentsStart = (unsigned int) ++i;
+	*argumentsStart = (unsigned int) i;
+
 	if(strcmp("time",cmd) == 0)	return	TIME;
 	if(strcmp("help",cmd) == 0)	return	HELP;
 	if(strncmp("graphCuadratic",cmd,14) == 0)	return	CUADRATIC;
@@ -54,24 +54,27 @@ void printTime(){
 	unsigned char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
 	getTimeDateString(timeDate);
 	printf("%s\n",timeDate);
+	return;
 }
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total){
-	if(total == 0)	return	VALID_CMD;
-	if(buffer[0] == 0)	return	ARGS_ERROR;
-	unsigned int i = 1;
+	unsigned int i = 0;
 	unsigned int argNum = 0;
-	for(argNum ; argNum < total ; argNum++){
-		if(charToInt(buffer[i],args[argNum]) == 1)	while(buffer[i] != ' ')	i++;	//EL PROBLEMA ESTA POR ACA EN EL CHAR TO INT
-		else if(argNum != total - 1)	return	ARGS_ERROR;
-		printf("%d\n",args[argNum]);
-		i++;
+
+	while(argNum < total){
+		if(buffer[i] == ' ')	args[argNum]	=	charToInt(++i + buffer);
+		else	return	ARGS_ERROR;
+		while((buffer[i] != ' ') && (buffer[i] != 0))	i++;
+		printf("args[%d]=%d\n",argNum,args[argNum]);
+		argNum++;
 	}
+
 	return VALID_CMD;
 }
 
-int graphCuadratic(unsigned char buffer[]){
+int graphCuadratic(unsigned char* buffer){
 	int args[5];	// a,b,c,xScale,yScale	
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
+	graphInit();
 	graphWithScale(args[0],args[1],args[2],args[3],args[4]);
 	return VALID_CMD;
 }
