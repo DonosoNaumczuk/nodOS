@@ -5,6 +5,9 @@ GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
 
+GLOBAL haltCycle
+GLOBAL printRegisters
+
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
 GLOBAL _irq02Handler
@@ -18,6 +21,9 @@ GLOBAL _exception0Handler
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscall_dispatcher
+EXTERN printWithColor
+EXTERN printHexa
+EXTERN newLine
 
 SECTION .text
 
@@ -95,6 +101,236 @@ _sti:
 	sti
 	ret
 
+haltCycle:
+	cli
+	hlt
+	jmp haltCycle
+
+printRegisters:
+	pushState
+	mov rdi,register17
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,0			;nose como leer el rip
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register1
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rax
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register2
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rbx
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register3
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rcx
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register4
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rdx
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register5
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rsi
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register6
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rdi
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register7
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rbp
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register8
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,rsp
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register9
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r8
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register10
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r9
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register11
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r10
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register12
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r11
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register13
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r12
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register14
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r13
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register15
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r14
+	call printHexa
+	call newLine
+	popState
+
+	pushState
+	mov rdi,register16
+	mov rsi,0x00000005
+	mov rdx,0x0000000F
+	call printWithColor
+	popState
+
+	pushState
+	mov rdi,r15
+	call printHexa
+	call newLine
+	popState
+	
+	ret
+
+
 picMasterMask:
 	push rbp
     mov rbp, rsp
@@ -151,3 +387,25 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
+
+SECTION .data
+	register1 db "RAX: "
+	register2 db "RBX: "
+	register3 db "RCX: "
+	register4 db "RDX: "
+	register5 db "RSI: "
+	register6 db "RDI: "
+	register7 db "RBP: "
+	register8 db "RSP: "
+	register9 db "R8:  "
+	register10 db "R9:  "
+	register11 db "R10: "
+	register12 db "R11: "
+	register13 db "R12: "
+	register14 db "R13: "
+	register15 db "R14: "
+	register16 db "R15: "
+	register17 db "RIP: "
+
+
+

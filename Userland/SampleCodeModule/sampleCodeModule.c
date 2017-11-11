@@ -3,6 +3,6 @@
 #include <lib.h>
 
 int main() {
-	graphInit();
-	graph(2,4,10);
+	int i;
+	i = 0/0;
 }
