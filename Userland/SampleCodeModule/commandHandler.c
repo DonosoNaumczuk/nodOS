@@ -79,6 +79,10 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 int graphCuadratic(unsigned char* buffer){
 	int args[5];	// a,b,c,xScale,yScale	
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
+	if(args[3] == 0 || args [4] == 0){
+		printf("Scales must be positive\n");
+		return ERROR_CMD;
+	}	
 	graphInit();
 	graphWithScale(args[0],args[1],args[2],args[3],args[4]);
 	return VALID_CMD;
@@ -87,6 +91,10 @@ int graphCuadratic(unsigned char* buffer){
 int graphLinear(unsigned char* buffer){
 	int args[3];
 	if(getIntArguments(buffer,args,3) != VALID_CMD)	return	ARGS_ERROR;
+	if(args[2] == 0 || args [3] == 0){
+		printf("Scales must be positive\n");
+		return ERROR_CMD;
+	}
 	graphInit();
 	graphWithScale(0,args[0],args[1],args[2],args[3]);
 	return	VALID_CMD;
