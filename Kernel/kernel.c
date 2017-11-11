@@ -59,6 +59,7 @@ void * initializeKernelBinary() {
 	load_idt();
 	_setBinaryTime();
 	((EntryPoint)sampleCodeModuleAddress)();
+	clear();
 	return getStackBase();
 }
 
