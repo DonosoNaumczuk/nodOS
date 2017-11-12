@@ -121,7 +121,7 @@ haltCycle:
 	popState
 
 	pushState
-	mov rdi, [rsp + 15 * 4] ;15 [64 bit] registers backuped, read return adress (RIP register)
+	mov rdi, [rsp + 18 * 4] ;15 [64 bit] registers backuped, read return adress (RIP register)
 	call printHexa
 	call newLine
 	popState
