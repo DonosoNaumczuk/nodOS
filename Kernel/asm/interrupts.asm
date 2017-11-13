@@ -4,8 +4,6 @@ GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
-
-GLOBAL haltCycle
 GLOBAL printRegisters
 
 GLOBAL _irq00Handler
@@ -27,6 +25,7 @@ EXTERN printWithColor
 EXTERN printHexa
 EXTERN newLine
 EXTERN clear
+EXTERN goToEntryPoint
 
 SECTION .text
 
@@ -89,6 +88,8 @@ SECTION .text
 	call exceptionDispatcher
 
 	popState
+
+	mov qword [rsp], goToEntryPoint
 	iretq
 %endmacro
 
@@ -105,13 +106,7 @@ _sti:
 	sti
 	ret
 
-haltCycle:
-	cli
-	hlt
-	jmp haltCycle
-
 %macro printRegisters 0
-	call clear
 
 	pushState
 	mov rdi,register17
@@ -121,7 +116,7 @@ haltCycle:
 	popState
 
 	pushState
-	mov rdi, [rsp + 18 * 4] ;15 [64 bit] registers backuped, read return adress (RIP register)
+	mov rdi, [rsp + 15 * 8] ;15 [64 bit] registers backuped, read return adress (RIP register)
 	call printHexa
 	call newLine
 	popState

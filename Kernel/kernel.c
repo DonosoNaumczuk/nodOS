@@ -58,9 +58,13 @@ void * initializeKernelBinary() {
 	initialPrint();
 	load_idt();
 	_setBinaryTime();
-	((EntryPoint)sampleCodeModuleAddress)();
+	goToEntryPoint();
 	clear();
 	return getStackBase();
+}
+
+void goToEntryPoint() {
+		((EntryPoint)sampleCodeModuleAddress)();
 }
 
 void initialPrint() {

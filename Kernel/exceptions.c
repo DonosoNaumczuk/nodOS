@@ -19,15 +19,12 @@ void exceptionDispatcher(int exception) {
 
 static void zero_division() {
 	printWithColor("Error: Divide by zero\n",22,0x0F);
-	haltCycle();
 }
 
 static void over_flow(){
 	printWithColor("Error: Overflow\n",16,0x0F);
-	haltCycle();
 }
 
 static void invalid_operation_code(){
 	printWithColor("Error: Invalid opcode\n",23,0x0F);
-	haltCycle();
 }
