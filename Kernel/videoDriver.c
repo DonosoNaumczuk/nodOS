@@ -9,6 +9,7 @@ static uint32_t currentVideo_x;
 static uint32_t currentVideo_y;
 static uint32_t max_word_x;
 static uint32_t max_word_y;
+static uint8_t	cursor_on;
 
 void initializeVideoDriver() {
 	framebuffer_start_address = vbeInfo->framebuffer;
@@ -18,6 +19,7 @@ void initializeVideoDriver() {
 	max_word_y = y_resolution/CHAR_HEIGHT;
 	currentVideo_x = 0;
 	currentVideo_y = 0;
+	cursor_on	   = 0;
 }
 
 uint32_t getXResolution() {
@@ -146,4 +148,27 @@ void clear() {
 	}
 	currentVideo_x = 0;
 	currentVideo_y = 0;
+}
+
+void cursorBlink(){
+	char * character_font = pixel_map('|');
+	char color;
+	color = (cursor_on?0xFF:0x0F);
+	for (int i = 0; i < 16; ++i) {
+		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,*(character_font+i), color);
+	}
+	cursor_on = !cursor_on;
+	return;
+}
+
+void clearCursor(){
+	char * character_font = pixel_map('|');
+		for (int i = 0; i < 16; ++i) {
+		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,*(character_font+i), 0xFF);
+	}
+	cursor_on = 0;
+}
+
+uint8_t cursorIsOn(){
+	return	cursor_on;
 }

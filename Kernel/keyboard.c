@@ -1,4 +1,5 @@
 #include <keyboard.h>
+#include <videoDriver.h>
 
 unsigned char keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
@@ -158,16 +159,21 @@ int isNumber(unsigned char c) {
     return (c >= '0' && c <= '9');
 }
 
+static unsigned int cursorNumber;
+
 int getchar() {
     _sti();
-    while (bufferIsEmpty);
+    while (bufferIsEmpty){
+        if(cursorNumber%100000000 == 0)  cursorBlink();
+        cursorNumber++;
+    }
 
     unsigned char c = buffer[current_index];
 
     if(++current_index > end_index) {
         bufferIsEmpty = TRUE;
     }
-
+    if(cursorIsOn())    clearCursor();
     return c;
 }
 

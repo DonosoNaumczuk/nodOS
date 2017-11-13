@@ -13,6 +13,9 @@ void deleteCurrent();
 uint32_t getXResolution();
 uint32_t getYResolution();
 void printHexa(uint64_t n);
+void cursorBlink();
+void clearCursor();
+uint8_t	cursorIsOn();
 
 #pragma pack(push)
 #pragma pack (1)

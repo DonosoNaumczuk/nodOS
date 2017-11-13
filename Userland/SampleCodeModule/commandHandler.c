@@ -103,7 +103,6 @@ int graphLinear(unsigned char* buffer){
 int test(unsigned char* buffer){
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
-	printf("%s\n",buffer);
 	int cmpRes = 0;
 	if((cmpRes = strcmp("zerodiv",buffer)) == 0)	divide0();
 	else if((cmpRes = strcmp("overflow",buffer)) == 0)	overflow();
