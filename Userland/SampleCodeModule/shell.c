@@ -80,7 +80,7 @@ int shell(){
 		switch (commandInterpreter(buffer,index)){
 			case INVALID_CMD: 	printf("-------------------------INVALID COMMAND---------------------------\n");	break;
 			case ERROR_CMD: 	printf("--------------------COMMAND EXECUTED WITH ERROR--------------------\n");	break;
-			case ARGS_ERROR:	printf("-------------------TOO FEW OR TOO MANY ARGUMENTS-------------------\n");	break;
+			case ARGS_ERROR:	printf("------------COMMAND NOT EXECUTED BECUASE ARGUMENTS ERROR-------------\n");	break;
 			case EXIT_CMD:		exitFlag = 1;	break;
 			case VALID_CMD:		break;
 		}

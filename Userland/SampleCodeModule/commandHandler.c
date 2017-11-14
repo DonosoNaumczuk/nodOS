@@ -21,14 +21,15 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	unsigned int argumentsStart;
 	int cmdID;
 	cmdID = readCommand(buffer,&argumentsStart);
+	unsigned char* arguments = buffer + argumentsStart;
 
 	switch(cmdID){
-		case TIME:	printTime();	return 0;
-		case EXIT:	return -1;
-		case CUADRATIC:	return	graphCuadratic(buffer + argumentsStart);
-		case LINEAR:	return	graphLinear(buffer + argumentsStart);
-		case HELP:	return	printHelp();
-		case TEST:	return	test(buffer + argumentsStart);
+		case TIME:		return	printTime(arguments);
+		case EXIT:		return	exit_(arguments);
+		case CUADRATIC:	return	graphCuadratic(arguments);
+		case LINEAR:	return	graphLinear(arguments);
+		case HELP:		return	printHelp(arguments);
+		case TEST:		return	test(arguments);
 	}
 	return 1;
 }
@@ -46,21 +47,22 @@ int readCommand(unsigned char buffer[],int * argumentsStart){
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
 
-	if(strcmp("time",cmd) == 0)	return	TIME;
-	if(strcmp("help",cmd) == 0)	return	HELP;
+	if(strcmp("time",cmd) == 0)				return	TIME;
+	if(strcmp("help",cmd) == 0)				return	HELP;
 	if(strncmp("cuadratic",cmd,14) == 0)	return	CUADRATIC;
-	if(strncmp("linear",cmd,11) == 0)	return	LINEAR;
-	if(strncmp("echo",cmd,4) == 0)	return	ECHO;
-	if(strcmp("exit",cmd) == 0)	return	EXIT;
-	if(strncmp("test",cmd,4) == 0)	return	TEST;
+	if(strncmp("linear",cmd,11) == 0)		return	LINEAR;
+	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
+	if(strcmp("exit",cmd) == 0)				return	EXIT;
+	if(strncmp("test",cmd,4) == 0)			return	TEST;
 	return INVALID;
 }
 
-void printTime(){
+int printTime(unsigned char* arguments){
+	if(*arguments != 0)	return ARGS_ERROR;
 	unsigned char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
 	getTimeDateString(timeDate);
 	printf("%s\n",timeDate);
-	return;
+	return	VALID_CMD;
 }
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total){
 	unsigned int i = 0;
@@ -69,7 +71,9 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 		while(buffer[i] == ' ')	i++;
 		if(buffer[i] != 0)	args[argNum]	=	charToInt(buffer + i);
 		else	return	ARGS_ERROR;
-		while((buffer[i] != ' ') && (buffer[i] != 0))	i++;
+		while((buffer[i] != ' ') && (buffer[i] != 0)){
+			if(!isNumber(buffer[i++]))	return ARGS_ERROR;
+		}
 		argNum++;
 	}
 
@@ -104,13 +108,14 @@ int test(unsigned char* buffer){
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
-	if((cmpRes = strcmp("zerodiv",buffer)) == 0)	divide0();
+	if((cmpRes = strcmp("zerodiv",buffer)) == 0)		divide0();
 	else if((cmpRes = strcmp("overflow",buffer)) == 0)	overflow();
 	else if ((cmpRes = strcmp("opcode",buffer)) == 0)	invalidop();
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
-int printHelp(){
+int printHelp(unsigned char* arguments){
+	if(*arguments != 0)	return	ARGS_ERROR;
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
 	printf("          * cuadratic a b c xScale yScale : print a cuadratic fuction [ax^2 + bx + c]\n");
@@ -118,4 +123,9 @@ int printHelp(){
 	printf("          * exit : exit \n");
 	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
 	return VALID_CMD;
+}
+
+int exit_(unsigned char* arguments){
+	if(*arguments == 0)	return	-1;
+	else 	return	ARGS_ERROR;
 }
