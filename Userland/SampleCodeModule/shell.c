@@ -41,6 +41,7 @@ int shell(){
 	unsigned int index = 0;
 	unsigned char hist[HIST_LONG][MAX_CMD_LONG];
 	unsigned int histCurrentIndex = 0;
+	unsigned int histAccessIndex = 0;
 	unsigned int histSize = 0;
 
 	clearBuffer(buffer);
@@ -57,17 +58,17 @@ int shell(){
 			}else if(currentChar == UP_ARROW || currentChar == DOWN_ARROW){		//ANY ARROW
 
 				if(currentChar == UP_ARROW){
-					if(histCurrentIndex > 0)	histCurrentIndex--;
-					else if(histSize > 0)	histCurrentIndex = histSize - 1;
+					if(histAccessIndex > 0)	histAccessIndex--;
+					else if(histSize > 0)	histAccessIndex = histSize - 1;
 				}else{
-					if(histCurrentIndex < (histSize - 1))	histCurrentIndex++;
-					else	histCurrentIndex = 0;
+					if(histAccessIndex < (histSize - 1))	histAccessIndex++;
+					else	histAccessIndex = 0;
 				}
 				clearLine(index);
 				clearBuffer(buffer);
 				index = 0;
-				while(hist[histCurrentIndex][index] != 0)	index++;
-				strcpy(buffer,hist[histCurrentIndex]);
+				while(hist[histAccessIndex][index] != 0)	index++;
+				strcpy(buffer,hist[histAccessIndex]);
 				printf("%s",buffer);
 			}else{	//ANY CHARACTER
 				if(index < MAX_CMD_LONG){
@@ -88,6 +89,7 @@ int shell(){
 		strcpy(hist[histCurrentIndex],buffer);
 		histCurrentIndex++;
 		if(histSize != HIST_LONG)	histSize++;
+		histAccessIndex = histCurrentIndex;
 		clearBuffer(buffer);
 		index = 0;
 	}

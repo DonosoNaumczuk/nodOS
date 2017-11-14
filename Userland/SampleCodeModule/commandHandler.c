@@ -67,16 +67,19 @@ int printTime(unsigned char* arguments){
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total){
 	unsigned int i = 0;
 	unsigned int argNum = 0;
+	unsigned int negativeFlag = 0;
 	while(argNum < total){
+		negativeFlag = 0;
 		while(buffer[i] == ' ')	i++;
 		if(buffer[i] != 0)	args[argNum]	=	charToInt(buffer + i);
 		else	return	ARGS_ERROR;
 		while((buffer[i] != ' ') && (buffer[i] != 0)){
-			if(!isNumber(buffer[i++]))	return ARGS_ERROR;
+			if(buffer[i] == '-' && !negativeFlag)	negativeFlag = 1;
+			else if(!isNumber(buffer[i]))	return	ARGS_ERROR;
+			i++;
 		}
 		argNum++;
 	}
-
 	return VALID_CMD;
 }
 
