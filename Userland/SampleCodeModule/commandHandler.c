@@ -5,7 +5,7 @@
 #include	<shell.h>
 #include	<exceptionSample.h>
 
-#define	MAX_CMD_LONG	15	
+#define	MAX_CMD_LONG	15
 
 #define	INVALID		-1
 #define	EXIT		0
@@ -14,7 +14,7 @@
 #define	LINEAR		3
 #define	HELP		4
 #define	ECHO		5
-#define	TEST 		6	
+#define	TEST 		6
 
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size){
@@ -38,7 +38,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart){
 	unsigned char cmd[MAX_CMD_LONG];
 	int i = 0;
 
-	while((i < MAX_CMD_LONG) && (buffer[i] != 0) && (buffer[i] != ' ')){	
+	while((i < MAX_CMD_LONG) && (buffer[i] != 0) && (buffer[i] != ' ')){
 		cmd[i] = buffer[i];
 		i++;
 	}
@@ -64,6 +64,7 @@ int printTime(unsigned char* arguments){
 	printf("%s\n",timeDate);
 	return	VALID_CMD;
 }
+
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total){
 	unsigned int i = 0;
 	unsigned int argNum = 0;
@@ -84,12 +85,12 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 }
 
 int graphCuadratic(unsigned char* buffer){
-	int args[5];	// a,b,c,xScale,yScale	
+	int args[5];	// a,b,c,xScale,yScale
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
-	if(args[3] == 0 || args [4] == 0){
-		printf("Scales must be positive\n");
+	if(args[3] <= 0 || args [4] <= 0){
+		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
-	}	
+	}
 	graphInit();
 	graphWithScale(args[0],args[1],args[2],args[3],args[4]);
 	return VALID_CMD;
@@ -98,8 +99,8 @@ int graphCuadratic(unsigned char* buffer){
 int graphLinear(unsigned char* buffer){
 	int args[3];
 	if(getIntArguments(buffer,args,3) != VALID_CMD)	return	ARGS_ERROR;
-	if(args[2] == 0 || args [3] == 0){
-		printf("Scales must be positive\n");
+	if(args[2] <= 0 || args [3] <= 0){
+		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
 	}
 	graphInit();
