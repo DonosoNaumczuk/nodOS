@@ -1,3 +1,3 @@
-# ARQ_Kernel
+# nodOS
 
-Small Kernel, which boot loader is based on Pure64, for Computer Architecture subject practical work at ITBA.
+Operative System developed for OS ITBA Subject. Based on Computer Architecture subject practical work.
