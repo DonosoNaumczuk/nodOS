@@ -5,6 +5,7 @@
 #include <RTCReader.h>
 #include <idtLoader.h>
 #include <videoDriver.h>
+#include <memoryAllocator.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -17,6 +18,8 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
+
+static memoryAllocator_t *memoryAllocator;
 
 typedef int (*EntryPoint)();
 
@@ -42,21 +45,10 @@ void * initializeKernelBinary() {
 	};
 	loadModules(&endOfKernelBinary, moduleAddresses);
 	clearBSS(&bss, &endOfKernel - &bss);
-	// print("  text: 0x");
-	// ncPrintHex((uint64_t)&text);
-	// ncNewline();
-	// print("  rodata: 0x");
-	// ncPrintHex((uint64_t)&rodata);
-	// ncNewline();
-	// print("  data: 0x");
-	// ncPrintHex((uint64_t)&data);
-	// ncNewline();
-	// print("  bss: 0x");
-	// ncPrintHex((uint64_t)&bss);
-	// ncNewline();
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
+	memoryAllocator = initializeMemoryAllocator();
 	_setBinaryTime();
 	goToEntryPoint();
 	clear();
@@ -68,9 +60,9 @@ void goToEntryPoint() {
 }
 
 void initialPrint() {
-	printWithColor("x64-ARQ_Kernel", 14, 49);
+	printWithColor("Welcome to nodOS", 14, 49);
 	newLine();
-	printWithColor("Dammiano Donoso_Naumczuk Negro_Caino", 36, 22);
+	printWithColor("Dammiano Donoso_Naumczuk Izaguirre Negro_Caino", 46, 22);
 	newLine();
 	newLine();
 }
