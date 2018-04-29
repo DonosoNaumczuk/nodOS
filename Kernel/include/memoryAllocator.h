@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #define MiB(x) (x * (1 << 20))
-#define AVAILABLE_MEMORY_SIZE MiB(512)
+#define AVAILABLE_MEMORY_SIZE MiB(512)//Must be power of two
 #define MIN_PAGE_SIZE 4096
 #define PAGE_QUANTITY (AVAILABLE_MEMORY_SIZE / MIN_PAGE_SIZE)
 #define FREE_MEMORY 0

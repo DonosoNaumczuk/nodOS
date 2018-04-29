@@ -14,7 +14,8 @@ static uint32_t freeMemoryRecursive(uint8_t *heap,
 									uint64_t skippedPages,
 									uint64_t pageQuantityPerLevel,
 									uint32_t heapIndex,
-									uint32_t pagesSkipedAtBranch);
+									uint32_t pagesSkippedAtBranch,
+									uint64_t heapNodeQuantity);
 static int calculateNextHeapIndexToSearch(int heapIndex, uint32_t* currentLevel,
 												uint64_t *currentPageSize);
 static uint32_t getBrotherIndex(uint32_t currentIndex);
@@ -24,7 +25,7 @@ static memoryAllocator_t memoryAllocator;
 memoryAllocator_t *initializeMemoryAllocator(void * baseAddress) {
 	memoryAllocator.heapLevels = getHeapLevels();
 	memoryAllocator.heap = baseAddress;
-	memoryAllocator.memoryBaseAddress = baseAddress + getHeapNodeQuantity();
+	memoryAllocator.memoryBaseAddress = (void *)((char *)baseAddress + getHeapNodeQuantity());
 	initializeHeapValues(memoryAllocator);
 	return &memoryAllocator;
 }
@@ -170,50 +171,45 @@ uint32_t freeMemory(memoryAllocator_t *memoryAllocator, void * addressToFree) {
 
 	return freeMemoryRecursive(memoryAllocator->heap, skippedPages,
 		 					   pageQuantityPerLevel, /* heapIndex: */ 0,
-						   		/*pagesSkipedAtBranch*/ 0);
+						   		/*pagesSkipedAtBranch*/ 0, getHeapNodeQuantity());
 }
 
 static uint32_t freeMemoryRecursive(uint8_t *heap,
 									uint64_t skippedPages,
 									uint64_t pageQuantityPerLevel,
 									uint32_t heapIndex,
-									uint32_t pagesSkippedAtBranch) {
+									uint32_t pagesSkippedAtBranch,
+									uint64_t heapNodeQuantity) {
+
+	uint32_t leftChildIndex = LEFT_CHILD_INDEX(heapIndex);
+	uint32_t rightChildIndex = RIGHT_CHILD_INDEX(heapIndex);
+
+	if(heapIndex >= heapNodeQuantity) {
+		return ERROR_STATE;
+	}
 
 	if(heap[heapIndex] == USED_MEMORY) {
 		heap[heapIndex] = FREE_MEMORY;
-		if(skippedPages == pagesSkippedAtBranch) {
-			if(heap[LEFT_CHILD_INDEX(heapIndex)] == USED_MEMORY) {
-				return freeMemoryRecursive(heap, skippedPages, pageQuantityPerLevel,
-									LEFT_CHILD_INDEX(heapIndex),
-									pagesSkippedAtBranch);
-			}
+		if(leftChildIndex < heapNodeQuantity && rightChildIndex < heapNodeQuantity
+			&& heap[leftChildIndex] == FREE_MEMORY && heap[rightChildIndex] == FREE_MEMORY) {
+			return OK_STATE;
 		}
-		else {
-			if(heap[RIGHT_CHILD_INDEX(heapIndex)] == USED_MEMORY) {
-				return freeMemoryRecursive(heap, skippedPages, pageQuantityPerLevel,
-										   RIGHT_CHILD_INDEX(heapIndex),
-										   pagesSkippedAtBranch);
-			}
-		}
-		return OK_STATE;
+	}
+	pageQuantityPerLevel /= 2;
+
+	if(skippedPages < pagesSkippedAtBranch + pageQuantityPerLevel) {
+		return freeMemoryRecursive(heap, skippedPages, pageQuantityPerLevel,
+			 					   LEFT_CHILD_INDEX(heapIndex),
+								   pagesSkippedAtBranch, heapNodeQuantity);
 	}
 	else {
-		pageQuantityPerLevel /= 2;
-
-		if(skippedPages < pagesSkippedAtBranch + pageQuantityPerLevel) {
-			return freeMemoryRecursive(heap, skippedPages, pageQuantityPerLevel,
-				 					   LEFT_CHILD_INDEX(heapIndex),
-									   pagesSkippedAtBranch);
-
-		}
-		else {
-			pagesSkippedAtBranch += pageQuantityPerLevel;
-			return freeMemoryRecursive(heap, skippedPages, pageQuantityPerLevel,
-									RIGHT_CHILD_INDEX(heapIndex),
-									pagesSkippedAtBranch);
-		}
+		pagesSkippedAtBranch += pageQuantityPerLevel;
+		return freeMemoryRecursive(heap, skippedPages, pageQuantityPerLevel,
+								RIGHT_CHILD_INDEX(heapIndex),
+								pagesSkippedAtBranch, heapNodeQuantity);
 	}
 }
+
 
 
 
