@@ -48,7 +48,8 @@ void * initializeKernelBinary() {
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
-	memoryAllocator = initializeMemoryAllocator();
+	memoryAllocator = initializeMemoryAllocator(0x100000); //evans: check if this is the
+														   //base address and do the #define
 	_setBinaryTime();
 	goToEntryPoint();
 	clear();
