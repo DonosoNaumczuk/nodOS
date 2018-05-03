@@ -48,8 +48,11 @@ void * initializeKernelBinary() {
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
-	memoryAllocator = initializeMemoryAllocator(0x100000); //evans: check if this is the
-														   //base address and do the #define
+	if(initializeMemoryAllocator(0x100000) == ERROR_STATE) {
+		printWithColor("Error initializating memory allocator\n", 38, 49);
+		/* evans: We must finish all the execution here... */
+	} //evans: check if this is the
+   	  //base address and do the #define
 	_setBinaryTime();
 	goToEntryPoint();
 	clear();

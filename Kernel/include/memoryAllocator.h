@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #define MiB(x) (x * (1 << 20))
-#define AVAILABLE_MEMORY_SIZE MiB(512)//Must be power of two
+#define AVAILABLE_MEMORY_SIZE MiB(512) /* Must be power of two */
 #define MIN_PAGE_SIZE 4096
 #define PAGE_QUANTITY (AVAILABLE_MEMORY_SIZE / MIN_PAGE_SIZE)
 #define FREE_MEMORY 0
@@ -24,16 +24,8 @@
 										   (uint64_t)memoryBaseAddress) / \
 										    MIN_PAGE_SIZE)
 
-typedef struct {
-    void * memoryBaseAddress;
-	uint32_t heapLevels;
-	uint8_t *heap;
-} memoryAllocator_t;
-
-memoryAllocator_t *initializeMemoryAllocator(void * baseAddress);
-void * allocateMemory(memoryAllocator_t *memoryAllocator,
-					  uint64_t bytesToAllocate);
-uint32_t freeMemory(memoryAllocator_t *memoryAllocator, void * addressToFree);
-uint64_t getHeapNodeQuantity();
+int initializeMemoryAllocator(void * baseAddress);
+void * allocateMemory(uint64_t bytesToAllocate);
+uint32_t freeMemory(void * addressToFree);
 
 #endif
