@@ -32,7 +32,6 @@ void * schedule(void * currentProcessStackPointer) {
         else {
             nextProcess(currentProcessStackPointer);
         }
-        newLine();
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
     }
     else {
