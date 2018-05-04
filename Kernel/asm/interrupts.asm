@@ -26,6 +26,8 @@ EXTERN printHexa
 EXTERN newLine
 EXTERN clear
 EXTERN goToEntryPoint
+EXTERN schedule
+EXTERN nextProcess
 
 SECTION .text
 
@@ -63,6 +65,18 @@ SECTION .text
 	pop rcx
 	pop rbx
 	pop rax
+%endmacro
+
+%macro pushaq 0
+	pushState
+	push fs
+	push gs
+%endmacro
+
+%macro popaq 0
+	pop gs
+	pop fs
+	popState
 %endmacro
 
 %macro irqHandlerMaster 1
@@ -347,9 +361,14 @@ picSlaveMask:
     pop rbp
     retn
 
-
 ;8254 Timer (Timer Tick)
 _irq00Handler:
+	pushaq
+	mov rdi, rsp
+	mov rsp, privateStack
+	call schedule
+	mov rsp, rax
+	popaq
 	irqHandlerMaster 0
 
 ;Keyboard
@@ -393,6 +412,7 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
+	privateStack resb 4096
 
 SECTION .data
 	register1 db "RAX: "

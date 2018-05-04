@@ -51,7 +51,7 @@ static void initializeHeapValues() {
 
 void * allocateMemory(uint64_t bytesToAllocate) {
     uint64_t offset;
-	if(memoryAllocator == NULL || bytesToAllocate <= 0) {
+	if(bytesToAllocate <= 0) {
 		return NULL;
 	}
 
@@ -81,7 +81,7 @@ static uint64_t getOffsetFromBaseAddress(uint64_t bytesToAllocate) {
 
 			if(memoryRoundedUp == currentPageSize) {
 				memoryAllocator.heap[heapIndex] = USED_MEMORY;
-				markUsedNodes(memoryAllocator, heapIndex);
+				markUsedNodes(heapIndex);
 				memoryAllocated = TRUE;
 			}
 			else {
