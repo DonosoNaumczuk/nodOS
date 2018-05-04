@@ -60,20 +60,20 @@ void * initializeKernelBinary() {
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
-	if(initializeMemoryAllocator(0x100000) == ERROR_STATE) {
+	if(initializeMemoryAllocator(getStackBase()) == ERROR_STATE) {
 		printWithColor("Error initializating memory allocator\n", 38, 49);
 		/* evans: We must finish all the execution here... */
 	} //evans: check if this is the
    	  //base address and do the #define
-	initialPrint(); //evan debug with print
 	_setBinaryTime();
-	initializeScheduler();
 	/*evans beging scheduler test*/
 	createProcess(NULL, &test1, 0, NULL);
 	createProcess(NULL, &test2, 0, NULL);
 	/*evans end of scheduler test*/
 	startScheduler();
-	while(1); //evans need for test
+	while(1){ //evans need for test
+		//rintWithColor("Fuck\n", 4, 49);
+	}
 	goToEntryPoint();
 	clear();
 	return getStackBase();

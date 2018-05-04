@@ -8,6 +8,7 @@ typedef struct scheduler_t {
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
 static isInitialize = FALSE; //evans: se podria cambiar por un mutex
+static isFirst = TRUE;
 
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
@@ -16,28 +17,50 @@ void initializeScheduler() {
 
 void startScheduler() {
     isInitialize = TRUE;
+    printWithColor("start\n", 5, 15); //evans
 }
 
 void * schedule(void * currentProcessStackPointer) {
+    if(ticksPassed == 0 && isInitialize) {
+        printWithColor("EEEE\n", 4, 15); //evans
+    }
+    printWithColor("scheduleando\n", 12, 15); // evans
+    newLine();
 	ticksPassed ++;
     void * aux;
-	if(ticksPassed == QUANTUM && isInitialize) {
-		ticksPassed = 0;
-        aux = nextProcess(currentProcessStackPointer);
-	}
+    printHexa(currentProcessStackPointer); // evans
+    newLine();
+	if(ticksPassed == QUANTUM)  {
+        ticksPassed = 0;
+    }
+    if(ticksPassed == 0 && isInitialize) {
+        printWithColor("Chau\n", 4, 15); //evans
+        if(isFirst){
+            isFirst = FALSE;
+        }
+        else {
+            nextProcess(currentProcessStackPointer);
+        }
+        printWithColor("Chau\n", 4, 15); //evans
+            newLine();
+        aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
+    }
     else {
         aux = currentProcessStackPointer;
     }
+    printHexa(aux); // evans
+    newLine();
+    newLine();
+
 	return aux;
 }
 
-void * nextProcess(void * currentProcessStackPointer) {
+void nextProcess(void * currentProcessStackPointer) {
     processControlBlockPtr_t pcb = removeFirstPCBFromList(scheduler.ready);
     setStackPointer(pcb, currentProcessStackPointer);
     if(!isTerminate(pcb)) {
         addPCBToList(scheduler.ready, pcb);
     }
-    return getStackPointer(consultFirstPCBFromList(scheduler.ready));
 }
 
 void addProcessToScheduler(processControlBlockPtr_t pcb) {
