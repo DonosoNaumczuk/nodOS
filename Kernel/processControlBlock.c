@@ -51,8 +51,6 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->state = PROCESS_READY;
 
     newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer + SIZE_OF_STACK, argsQuantity, processArgs);
-	printHexa(newPCB->stackPointer); // evans
-	newLine();
     addProcessToScheduler(newPCB);
 
     return newPCB;
@@ -87,10 +85,10 @@ void setState(processControlBlockPtr_t pcb, int state) {
 }
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
-	printWithColor("Ejecutando\n", 10, 10); //evans
     ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
 
     //terminate process
+	// evans need fix
 	terminateCurrentProcess();
 	//syscall terminate process
 }

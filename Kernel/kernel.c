@@ -36,16 +36,24 @@ void * getStackBase() {
 
 /*evans test process 1*/
 void test1(int cant, void ** args) {
-	while(1) {
-		printWithColor("Welcome to nodOS", 16, 49);
+	int i = 0;
+	while(i != 100) {
+		printWithColor("Soy proceso 1", 13, 49);
+		newLine();
+		i++;
 	}
+	while (1);
 }
 
 /*evans test process 2*/
 void test2(int cant, void ** args) {
-	while(1) {
-		printWithColor("Dammiano Donoso_Naumczuk Izaguirre Negro_Caino", 46, 22);
+	int i = 0;
+	while(i != 100) {
+		printWithColor("Soy proceso 2", 13, 22);
+		newLine();
+		i++;
 	}
+	while (1);
 }
 
 void * initializeKernelBinary() {
@@ -60,19 +68,21 @@ void * initializeKernelBinary() {
 	initializeVideoDriver();
 	initialPrint();
 	load_idt();
+	_setBinaryTime();
 	if(initializeMemoryAllocator(getStackBase()) == ERROR_STATE) {
 		printWithColor("Error initializating memory allocator\n", 38, 49);
 		/* evans: We must finish all the execution here... */
 	} //evans: check if this is the
    	  //base address and do the #define
-	_setBinaryTime();
+	initializeScheduler();
 	/*evans beging scheduler test*/
 	createProcess(NULL, &test1, 0, NULL);
 	createProcess(NULL, &test2, 0, NULL);
 	/*evans end of scheduler test*/
 	startScheduler();
 	while(1){ //evans need for test
-		//rintWithColor("Fuck\n", 4, 49);
+		//printWithColor("Fuck\n", 4, 49);
+		//newLine();
 	}
 	goToEntryPoint();
 	clear();

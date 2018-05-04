@@ -18,6 +18,7 @@ processControlBlockListPtr_t initializePCBList() {
     aux->first = NULL;
     aux->last = NULL;
     aux->quantity = NULL;
+
     return aux;
 }
 

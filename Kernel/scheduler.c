@@ -17,40 +17,27 @@ void initializeScheduler() {
 
 void startScheduler() {
     isInitialize = TRUE;
-    printWithColor("start\n", 5, 15); //evans
 }
 
 void * schedule(void * currentProcessStackPointer) {
-    if(ticksPassed == 0 && isInitialize) {
-        printWithColor("EEEE\n", 4, 15); //evans
-    }
-    printWithColor("scheduleando\n", 12, 15); // evans
-    newLine();
 	ticksPassed ++;
     void * aux;
-    printHexa(currentProcessStackPointer); // evans
-    newLine();
 	if(ticksPassed == QUANTUM)  {
         ticksPassed = 0;
     }
     if(ticksPassed == 0 && isInitialize) {
-        printWithColor("Chau\n", 4, 15); //evans
         if(isFirst){
             isFirst = FALSE;
         }
         else {
             nextProcess(currentProcessStackPointer);
         }
-        printWithColor("Chau\n", 4, 15); //evans
-            newLine();
+        newLine();
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
     }
     else {
         aux = currentProcessStackPointer;
     }
-    printHexa(aux); // evans
-    newLine();
-    newLine();
 
 	return aux;
 }
@@ -58,7 +45,7 @@ void * schedule(void * currentProcessStackPointer) {
 void nextProcess(void * currentProcessStackPointer) {
     processControlBlockPtr_t pcb = removeFirstPCBFromList(scheduler.ready);
     setStackPointer(pcb, currentProcessStackPointer);
-    if(!isTerminate(pcb)) {
+    if(isTerminate(pcb) == FALSE) {
         addPCBToList(scheduler.ready, pcb);
     }
 }
