@@ -12,8 +12,9 @@
 typedef struct list_t *listObject_t;
 
 #include <stdlib.h>
-#include "../listADT.c"
+#include <string.h>
 
+listObject_t newList();
 int addElement(listObject_t list,void *element,const unsigned int size);
 int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index);
 int getFirstElement(listObject_t list,void * buffer);
