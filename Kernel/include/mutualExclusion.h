@@ -14,7 +14,7 @@
 
 typedef signed long long sint64_t;
 
-int initMutualExlusion(char *mutexId);
+int initMutualExclusion(char *mutexId);
 
 int lock(char *mutexId, uint64_t processId);
 

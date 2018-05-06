@@ -13,7 +13,7 @@ static uint8_t mutex_lock(uint8_t status); /* At mutualExclusion.asm */
 
 static listObject_t mutexes;
 
-int initMutualExlusion(char *mutexId) {
+int initMutualExclusion(char *mutexId) {
 	if(existMutex(mutexId)) {
 		return ERROR_STATE;
 	}
