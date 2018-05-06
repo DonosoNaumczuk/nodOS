@@ -16,6 +16,6 @@ void terminateCurrentProcess();
 void nextProcess(void * currentProcessStackPointer);
 void startScheduler();
 void sleepCurrent();
-void wakeUp(int pid);
+void wakeUp(uint64_t pid);
 
 #endif

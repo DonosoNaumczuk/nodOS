@@ -34,7 +34,7 @@ typedef struct processControlBlock_t {
     void *stackPointer;
 } processControlBlock_t;
 
-static long int pidCounter = 0;
+static long int pidCounter = 1;
 
 void createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
 	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity, processArgs);
@@ -50,7 +50,7 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->stackPointer = allocateMemory(SIZE_OF_STACK);
     newPCB->state = PROCESS_READY;
 
-    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer + SIZE_OF_STACK, argsQuantity, processArgs);
+    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity, processArgs);
     addProcessToScheduler(newPCB);
 
     return newPCB;
@@ -99,29 +99,29 @@ void giveChildsToFather(processControlBlockPtr_t pcb) {
 
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
                  void ** processArgs) {
-	stackFrame_t * stackFrame = (stackFrame_t *)(stackBaseAddress -
+	stackFrame_t * stackFrame = (stackFrame_t *)(stackBaseAddress + SIZE_OF_STACK -
                                  sizeof(stackFrame_t) - 1);
 
-    stackFrame->gs 		=	0x001;
-    stackFrame->fs 		=	0x002;
-    stackFrame->r15		=	0x003;
-    stackFrame->r14		=	0x004;
-    stackFrame->r13		=	0x005;
-    stackFrame->r12		=	0x006;
-    stackFrame->r11		=	0x007;
-    stackFrame->r10		=	0x008;
-    stackFrame->r9 		=	0x009;
-    stackFrame->r8 		=	0x00A;
+    stackFrame->gs 		=	0x000;
+    stackFrame->fs 		=	0x000;
+    stackFrame->r15		=	0x000;
+    stackFrame->r14		=	0x000;
+    stackFrame->r13		=	0x000;
+    stackFrame->r12		=	0x000;
+    stackFrame->r11		=	0x000;
+    stackFrame->r10		=	0x000;
+    stackFrame->r9 		=	0x000;
+    stackFrame->r8 		=	0x000;
     stackFrame->rsi		=	processArgs;
     stackFrame->rdi		=	argsQuantity;
-    stackFrame->rbp		=	0x00D;
+    stackFrame->rbp		=	stackBaseAddress;
     stackFrame->rdx		=	codeAddress;
-    stackFrame->rcx		=	0x00F;
-    stackFrame->rbx		=	0x010;
-    stackFrame->rax		=	0x011;
+    stackFrame->rcx		=	0x000;
+    stackFrame->rbx		=	0x000;
+    stackFrame->rax		=	0x000;
 
     /* Interupt Return Hook */
-    stackFrame->rip 	=	(void*) &startProcess;
+    stackFrame->rip 	=	(uint64_t) &startProcess;
     stackFrame->cs  	=	0x008;
     stackFrame->rflags 	= 	0x202;
     stackFrame->rsp 	=	(uint64_t) &(stackFrame->base);

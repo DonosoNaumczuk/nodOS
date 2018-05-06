@@ -9,6 +9,7 @@ static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
 static isInitialize = FALSE;
 static isFirst = TRUE;
+static schedulerMutex = TRUE;
 
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
@@ -19,26 +20,24 @@ void startScheduler() {
     isInitialize = TRUE;
 }
 
-void * schedule(void * currentProcessStackPointer) {
+void * schedule(void * currentProcessStackPointer) {;
 	ticksPassed ++;
     void * aux;
 	if(ticksPassed == QUANTUM)  {
         ticksPassed = 0;
     }
     if(ticksPassed == 0 && isInitialize) {
-        if(isFirst){
+        if(isFirst) {
             isFirst = FALSE;
         }
         else {
             nextProcess(currentProcessStackPointer);
         }
-        newLine();
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
     }
     else {
         aux = currentProcessStackPointer;
     }
-
 	return aux;
 }
 
@@ -71,7 +70,7 @@ void sleepCurrent() {
     setState(currentPCB, PROCESS_WAITING);
 }
 
-void wakeUp(int pid) {
+void wakeUp(uint64_t pid) {
     processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.waiting, pid);
     if(pcb != NULL) {
         setState(pcb, PROCESS_READY);

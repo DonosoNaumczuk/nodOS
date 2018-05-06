@@ -15,14 +15,8 @@ static uint64_t calculateOffset(int index, uint32_t level,
 	 							uint32_t heapLevels);
 static void markUsedNodes(int heapIndex);
 static uint64_t nextPageSizeMultiple(uint64_t bytesToAllocate);
-static uint32_t freeMemoryRecursive(uint8_t *heap,
-									uint64_t skippedPages,
-									uint64_t pageQuantityPerLevel,
-									uint32_t heapIndex,
-									uint32_t pagesSkippedAtBranch,
-									uint64_t heapNodeQuantity);
 static int calculateNextHeapIndexToSearch(int heapIndex, uint32_t* currentLevel,
-												uint64_t *currentPageSize);
+											uint64_t *currentPageSize);
 static uint32_t getBrotherIndex(uint32_t currentIndex);
 
 static memoryAllocator_t memoryAllocator;
@@ -173,35 +167,23 @@ static uint64_t nextPageSizeMultiple(uint64_t bytesToAllocate) {
 uint32_t freeMemory(void * addressToFree) {
 	uint64_t skippedPages = GET_SKIPPED_PAGES(addressToFree, memoryAllocator.memoryBaseAddress);
 	uint64_t pageQuantityPerLevel = PAGE_QUANTITY;
-
+	uint32_t heapIndex = 0, pagesSkippedAtBranch = 0;
+	uint64_t heapNodeQuantity = getHeapNodeQuantity();
+	uint32_t leftChildIndex, rightChildIndex;
+	uint8_t found = 0;
 	if(skippedPages >= PAGE_QUANTITY) {
 		return ERROR_STATE;
 	}
-
-	return freeMemoryRecursive(memoryAllocator.heap, skippedPages,
-		 					   pageQuantityPerLevel, /* heapIndex: */ 0,
-						   		/*pagesSkipedAtBranch*/ 0, getHeapNodeQuantity());
-}
-
-static uint32_t freeMemoryRecursive(uint8_t *heap,
-									uint64_t skippedPages,
-									uint64_t pageQuantityPerLevel,
-									uint32_t heapIndex,
-									uint32_t pagesSkippedAtBranch,
-									uint64_t heapNodeQuantity) {
-
-	uint32_t leftChildIndex;
-	uint32_t rightChildIndex;
-	uint8_t found = 0;
 	while(!found && heapIndex < heapNodeQuantity) {
 		leftChildIndex = LEFT_CHILD_INDEX(heapIndex);
 		rightChildIndex = RIGHT_CHILD_INDEX(heapIndex);
 
 
-		if(heap[heapIndex] == USED_MEMORY) {
-			heap[heapIndex] = FREE_MEMORY;
+		if(memoryAllocator.heap[heapIndex] == USED_MEMORY) {
+			memoryAllocator.heap[heapIndex] = FREE_MEMORY;
 			if(leftChildIndex < heapNodeQuantity && rightChildIndex < heapNodeQuantity
-				&& heap[leftChildIndex] == FREE_MEMORY && heap[rightChildIndex] == FREE_MEMORY) {
+				&& memoryAllocator.heap[leftChildIndex] == FREE_MEMORY && 
+				memoryAllocator.heap[rightChildIndex] == FREE_MEMORY) {
 				return OK_STATE;
 			}
 		}
@@ -215,14 +197,13 @@ static uint32_t freeMemoryRecursive(uint8_t *heap,
 			heapIndex = RIGHT_CHILD_INDEX(heapIndex);
 		}
 	}
-	if(found)
+	if(found) {
 		return OK_STATE;
-	else
+	}
+	else {
 		return ERROR_STATE;
-
-	
+	}
 }
-
 
 
 
