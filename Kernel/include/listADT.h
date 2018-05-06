@@ -15,8 +15,7 @@
 
 typedef struct list_t *listObject_t;
 
-#include <stdlib.h>
-#include <string.h>
+#include <lib.h>
 #include <memoryAllocator.h>
 
 listObject_t newList();
