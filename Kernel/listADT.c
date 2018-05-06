@@ -93,28 +93,53 @@ int getFirstElement(listObject_t list,void * buffer) {
 
 int removeElementOnIndex(listObject_t list,const unsigned int index) {
 	int remotionState;
-	if(list == NULL) return NULL_LIST_ERROR;
-    if(list->head == NULL) return EMPTY_LIST_ERROR;
-	list->head = removeElementOnIndexRecursive(list->head,index,&remotionState);
-	if(remotionState == REMOTION_OK) list->size--;
-	return remotionState;
+     node_t aux = list->head, node;
+     if(list == NULL) {
+          return NULL_LIST_ERROR;
+     }
+     if(list->head == NULL) {
+          return EMPTY_LIST_ERROR;
+	}
+     if(list->head->index == index) {
+          list->head = aux->next;
+          freeMemory(aux->element);
+          freeMemory(aux->head);
+          
+     }
+
+     if(aux->index > index) {
+          return ELEMENT_DOESNT_EXIST;
+     }
+     while(aux->next != NULL && aux->next->index < index) {
+          aux = aux->next;
+     }
+     if(aux->next != NULL && aux->next->index == index) {
+          node = aux->next;
+          aux->next = node->next;
+          freeMemory(node->element);
+          freeMemory(node);
+          return REMOTION_OK;
+     }
+     else {
+          return ELEMENT_DOESNT_EXIST;
+     }
 }
 
-node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState) {
-	node_t aux;
-	if(node->index == index) {
-		aux = node->next;
-		freeMemory(node->element);
-		freeMemory(node);
-		*remotionState = REMOTION_OK;
-		return aux;
-	}
-	if((node->next == NULL) || (index < node->index)) {
-		*remotionState = ELEMENT_DOESNT_EXIST;
-		return node;
-	}
-	return removeElementOnIndexRecursive(node->next,index,remotionState);
-}
+// node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState) {
+// 	node_t aux;
+// 	if(node->index == index) {
+// 		aux = node->next;
+// 		freeMemory(node->element);
+// 		freeMemory(node);
+// 		*remotionState = REMOTION_OK;
+// 		return aux;
+// 	}
+// 	if((node->next == NULL) || (index < node->index)) {
+// 		*remotionState = ELEMENT_DOESNT_EXIST;
+// 		return node;
+// 	}
+// 	return removeElementOnIndexRecursive(node->next,index,remotionState);
+// }
 
 int removeFirst(listObject_t list) {
 	node_t aux;
