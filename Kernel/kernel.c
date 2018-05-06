@@ -6,6 +6,7 @@
 #include <idtLoader.h>
 #include <videoDriver.h>
 #include <memoryAllocator.h>
+#include <mutualExclusion.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -42,7 +43,6 @@ void test1(int cant, void ** args) {
 		newLine();
 		i++;
 	}
-	while (1);
 }
 
 /*evans test process 2*/
@@ -50,10 +50,11 @@ void test2(int cant, void ** args) {
 	int i = 0;
 	while(1) {
 		printWithColor("Soy proceso 2", 13, 22);
+		printHexa(i);
 		newLine();
 		i++;
 	}
-	while (1);
+	return;
 }
 
 void * initializeKernelBinary() {
@@ -74,14 +75,16 @@ void * initializeKernelBinary() {
 		/* evans: We must finish all the execution here... */
 	} //evans: check if this is the
    	  //base address and do the #define
+	initMutualExclusion();
 	initializeScheduler();
+	printWithColor("no deberia pasar\n",17,40);//evans
 	/*evans beging scheduler test*/
 	createProcess(NULL, &test1, 0, NULL);
 	createProcess(NULL, &test2, 0, NULL);
 	/*evans end of scheduler test*/
 	startScheduler();
-	while(1){ //evans need for test
-		//printWithColor("Fuck\n", 4, 49);
+	while(1) { //evans need for test
+		printWithColor("Fuck\n", 4, 49);
 		//newLine();
 	}
 	goToEntryPoint();

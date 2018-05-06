@@ -65,6 +65,7 @@ int lock(char *mutexId, uint64_t processId) {
 }
 
 int unlock(char *mutexId, uint64_t processId) {
+	printWithColor("no deberia pasar\n",17,40);//evans
 	if(!existMutex(mutexId)) {
 		return ERROR_STATE;
 	}
@@ -82,7 +83,7 @@ int unlock(char *mutexId, uint64_t processId) {
 			   who try to lock the mutex will fall to sleep.
 			   So cool, isn't it? ;) */
 			mutex->ownerProcessId = processId;
-
+			printWithColor("no deberia pasar\n",17,40);//evans
 			wakeUp(processId);
 		}
 		else {
@@ -96,16 +97,26 @@ int unlock(char *mutexId, uint64_t processId) {
 }
 
 int lockIfUnlocked(char *mutexId, uint64_t processId) {
-	if(!existMutex(mutexId)) {
+	/*if(!existMutex(mutexId)) {
 		return ERROR_STATE;
-	}
+	}*/
+
 
 	mutex_t *mutex;
-
-	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
+	newLine();
+	if(getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex) <= 0) {
+		return ERROR_STATE;
+	}
+	newLine();
+	newLine();
+	printWithColor("Status: ",9,20);
+	printHexa(mutex->status);
+	newLine();
 
 	int wasLocked = mutex_lock(&mutex->status);
-
+	printWithColor("Was lock: ",10,20);
+	printHexa(wasLocked);
+	newLine();
 	int couldLock = FALSE;
 
 	if(!wasLocked) {

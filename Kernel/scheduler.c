@@ -5,34 +5,34 @@ typedef struct scheduler_t {
    processControlBlockListPtr_t waiting;
 } scheduler_t;
 
+#define SCHEDULER_MUTEX_ID "schedulerMutex"
+
+void _cli(void);
+void _sti(void);
+void _context_switch(void);
+void _force_context_switch(void);
+
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
-static isInitialize = FALSE;
-static isFirst = TRUE;
-static schedulerMutex = TRUE;
 
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
     scheduler.waiting = initializePCBList();
+    createMutualExclusion(SCHEDULER_MUTEX_ID);
+    printHexa(lockIfUnlocked(SCHEDULER_MUTEX_ID, 0));
 }
 
 void startScheduler() {
-    isInitialize = TRUE;
+    unlock(SCHEDULER_MUTEX_ID, 0);
 }
 
 void * schedule(void * currentProcessStackPointer) {;
 	ticksPassed ++;
     void * aux;
+    printWithColor("scheduleando\n",13,40);
 	if(ticksPassed == QUANTUM)  {
         ticksPassed = 0;
-    }
-    if(ticksPassed == 0 && isInitialize) {
-        if(isFirst) {
-            isFirst = FALSE;
-        }
-        else {
-            nextProcess(currentProcessStackPointer);
-        }
+        nextProcess(currentProcessStackPointer);
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
     }
     else {
@@ -59,10 +59,11 @@ void addProcessToScheduler(processControlBlockPtr_t pcb) {
 }
 
 void terminateCurrentProcess() {
+    printWithColor("terminate process\n", 18, 30); //evans
     processControlBlockPtr_t currentPCB = consultFirstPCBFromList(scheduler.ready);
     giveChildsToFather(currentPCB);
     setState(currentPCB, PROCESS_TERMINATE);
-    nextProcess(NULL);
+    _force_context_switch();
 }
 
 void sleepCurrent() {

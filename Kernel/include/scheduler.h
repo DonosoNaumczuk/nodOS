@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <memoryAllocator.h>
 #include <videoDriver.h>
+#include <mutualExclusion.h>
 
 #define QUANTUM 1//quantity of ticks
 

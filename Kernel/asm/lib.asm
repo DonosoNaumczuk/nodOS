@@ -2,6 +2,10 @@ GLOBAL _force_context_switch
 GLOBAL _context_switch
 
 EXTERN schedule
+EXTERN lockIfUnlocked
+EXTERN unlock
+
+EXTERN printHexa
 
 SECTION .text
 
@@ -58,9 +62,22 @@ _force_context_switch:
     pusheq
 
 _context_switch:
+    mov rdi,schedulerid
+    mov rsi,0
+    call lockIfUnlocked
+
+    cmp rax, 1     ;is it is true
+    jne return_code
+
     mov rdi, rsp
     mov rsp, privateStack
     call schedule
+    push rax
+
+    mov rdi,schedulerid
+    mov rsi,0
+    call unlock
+    pop rax
     mov rsp, rax
 
     ; signal pic EOI (End of Interrupt)
@@ -77,3 +94,5 @@ SECTION .bss
 	privateStack resb 4096
 
 SECTION .data
+    schedulerid db "schedulerMutex"
+    schedulerpid db 0
