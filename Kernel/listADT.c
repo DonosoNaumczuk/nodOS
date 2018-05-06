@@ -68,16 +68,21 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     if(list == NULL) return NULL_LIST_ERROR;
     if(list->head == NULL) return EMPTY_LIST_ERROR;
     aux = getElementOnIndexRecursive(list->head,index);
-    if(aux == NULL) return ELEMENT_DOESNT_EXIST;
-    memcpy(buffer,aux->element,aux->size);
-	return aux->size;
+    while(aux->next != NULL && aux->index < index) {
+          aux = aux->next;
+    }
+    if(aux == NULL || aux->index != index) {
+     return ELEMENT_DOESNT_EXIST;
+    }
+    memcpy(buffer, aux->element, aux->size);
+     return aux->size;
 }
 
-node_t getElementOnIndexRecursive(node_t node,const unsigned int index) {
-    if(node->index == index) return node;
-    if((node->next == NULL) || (index < node->index) )  return NULL;
-    return getElementOnIndexRecursive(node->next,index);
-}
+// node_t getElementOnIndexRecursive(node_t node,const unsigned int index) {
+//     if(node->index == index) return node;
+//     if((node->next == NULL) || (index < node->index) )  return NULL;
+//     return getElementOnIndexRecursive(node->next,index);
+// }
 
 int getFirstElement(listObject_t list,void * buffer) {
     if(list == NULL) return NULL_LIST_ERROR;
