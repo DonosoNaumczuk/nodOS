@@ -53,7 +53,7 @@ void stringCopy(char *destination, char *source) {
 	int i = 0;
 
 	while(source[i] != 0) {
-		destination[i] = source[i++]
+		destination[i] = source[i++];
 	}
 
 	destination[i] = 0;

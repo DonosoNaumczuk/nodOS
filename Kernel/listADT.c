@@ -163,12 +163,12 @@ node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,
 	}
 	if((*compareTo)(reference,node->element) == 0) {
 		aux = node->next;
-		free(node->element);
-		free(node);
+		freeMemory(node->element);
+		freeMemory(node);
 		*remotionState = REMOTION_OK;
 		return aux;
 	}
-	return removeFirstElementByCriteriaRecursive(node->next,compareTo,reference);
+	return removeFirstElementByCriteriaRecursive(node->next,compareTo,reference, remotionState);
 }
 
 int removeAllElements(listObject_t list) {
