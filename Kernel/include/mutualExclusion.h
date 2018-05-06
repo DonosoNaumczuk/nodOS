@@ -7,6 +7,7 @@
 #include <bool.h>
 #include <listADT.h>
 #include <compareFunctions.h>
+#include <memoryAllocator.h>
 
 #define UNLOCKED	0
 #define LOCKED		1
