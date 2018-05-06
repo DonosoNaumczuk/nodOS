@@ -14,7 +14,7 @@ processControlBlockPtr_t consultFirstPCBFromList(processControlBlockListPtr_t li
 processControlBlockPtr_t removeTerminatePCBFromListByPID(
                         processControlBlockListPtr_t list, long int pid,
                          int *isInTheList);
-void concatenatePCBList(processControlBlockListPtr_t start,
-                       processControlBlockListPtr_t end);
+processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t start,
+                                                processControlBlockListPtr_t end);
 
 #endif

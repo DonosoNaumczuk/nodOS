@@ -5,6 +5,7 @@ GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
 GLOBAL printRegisters
+GLOBAL debugRegisters
 
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
@@ -344,6 +345,9 @@ _sti:
 	popState
 %endmacro
 
+debugRegisters:
+	printRegisters
+	ret
 
 picMasterMask:
 	push rbp

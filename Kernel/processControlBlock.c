@@ -64,8 +64,8 @@ void setStackPointer(processControlBlockPtr_t pcb, void * stackPointer) {
     pcb->stackPointer = stackPointer;
 }
 
-int isTerminateAndTheSameProcess(processControlBlockPtr_t pcb, long int pid) {
-    return pcb->pid == pid && isTerminate(pcb);
+int isThisPid(processControlBlockPtr_t pcb, long int pid) {
+    return pcb->pid == pid;
 }
 
 int isTerminate(processControlBlockPtr_t pcb) {
@@ -91,6 +91,10 @@ void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
 	// evans need fix
 	terminateCurrentProcess();
 	//syscall terminate process
+}
+
+void giveChildsToFather(processControlBlockPtr_t pcb) {
+	pcb->parent->childs = concatenatePCBList(pcb->parent->childs, pcb->childs);
 }
 
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,

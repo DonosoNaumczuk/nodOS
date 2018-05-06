@@ -7,7 +7,7 @@ typedef struct scheduler_t {
 
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
-static isInitialize = FALSE; //evans: se podria cambiar por un mutex
+static isInitialize = FALSE;
 static isFirst = TRUE;
 
 void initializeScheduler() {
@@ -46,7 +46,7 @@ void nextProcess(void * currentProcessStackPointer) {
     processControlBlockPtr_t pcb = removeFirstPCBFromList(scheduler.ready);
     setStackPointer(pcb, currentProcessStackPointer);
     if(isTerminate(pcb) == FALSE) {
-        addPCBToList(scheduler.ready, pcb);
+        addProcessToScheduler(pcb);
     }
 }
 
@@ -60,7 +60,21 @@ void addProcessToScheduler(processControlBlockPtr_t pcb) {
 }
 
 void terminateCurrentProcess() {
-    //evans:  hacer que los hijos se vuelvan hijos del padre
-    setState(consultFirstPCBFromList(scheduler.ready), PROCESS_TERMINATE);
+    processControlBlockPtr_t currentPCB = consultFirstPCBFromList(scheduler.ready);
+    giveChildsToFather(currentPCB);
+    setState(currentPCB, PROCESS_TERMINATE);
     nextProcess(NULL);
+}
+
+void sleepCurrent() {
+    processControlBlockPtr_t currentPCB = consultFirstPCBFromList(scheduler.ready);
+    setState(currentPCB, PROCESS_WAITING);
+}
+
+void wakeUp(int pid) {
+    processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.waiting, pid);
+    if(pcb != NULL) {
+        setState(pcb, PROCESS_READY);
+        addProcessToScheduler(pcb);
+    }
 }

@@ -17,7 +17,7 @@ processControlBlockListPtr_t initializePCBList() {
    processControlBlockListPtr_t  aux = allocateMemory(sizeof(processControlBlockList));
     aux->first = NULL;
     aux->last = NULL;
-    aux->quantity = NULL;
+    aux->quantity = 0;
 
     return aux;
 }
@@ -60,29 +60,18 @@ processControlBlockPtr_t consultFirstPCBFromList(processControlBlockListPtr_t li
     return (list != NULL && list->first != NULL) ? list->first->value : NULL;
 }
 
-/* returns the pcb if the process is terminate and in the ProcessList and null
- * otherwise
- * isInTheList is an output parameter that indicates if the process is in the
- * list
- */
-processControlBlockPtr_t removeTerminatePCBFromListByPID(
-                        processControlBlockListPtr_t list, long int pid,
-                         int *isInTheList) {
+processControlBlockPtr_t PCBFromListByPID(processControlBlockListPtr_t list,
+                                          long int pid) {
     processControlBlockPtr_t output = NULL;
-    *isInTheList = FALSE;
     if(list != NULL && list->first != NULL) {
-        if(isTerminateAndTheSameProcess(list->first->value, pid)) {
+        if(isThisPid(list->first->value, pid)) {
             output = removeFirstPCBFromList(list);
-            *isInTheList = TRUE;
         }
         processControlBlockNode *current = list->first;
-        while(current->next != NULL && !(*isInTheList)) {
-            if(isTerminateAndTheSameProcess(current->next->value, pid)) {
-                if(current->next == list->last) {
-                    list->last = current;
-                }
+        while(current->next != NULL) {
+            if(isThisPid(current->next->value, pid)) {
                 output = removeNextPCBNode(current);
-                *isInTheList = TRUE;
+                list->quantity--;
             }
         }
     }
@@ -97,16 +86,23 @@ processControlBlockPtr_t removeNextPCBNode(processControlBlockNode *current) {
     return output;
 }
 
-void concatenatePCBList(processControlBlockListPtr_t start,
-                       processControlBlockListPtr_t end) {
-    if(start != NULL && end != NULL && end->quantity != 0) {
-        if(start->quantity == 0) {
-            start->first = end->first;
+processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t start,
+                                                processControlBlockListPtr_t end) {
+    processControlBlockListPtr_t aux;
+    if(start != NULL) {
+        aux = start;
+        if(end != NULL && end->quantity != 0) {
+            if(start->quantity == 0) {
+                start->first = end->first;
+            }
+            else {
+                start->last->next = end->first;
+            }
+            start->last = end->last;
+            start->quantity += end->quantity;
         }
-        else {
-            start->last->next = end->first;
-        }
-        start->last = end->last;
-        start->quantity += end->quantity;
+    } else {
+        aux = end;
     }
+    return aux;
 }
