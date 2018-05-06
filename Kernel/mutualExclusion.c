@@ -42,12 +42,12 @@ int lock(char *mutexId, uint64_t processId) {
     int wasLocked = mutex_lock(&mutex->status);
 
 	if(wasLocked) {
-		addElement(mutex->sleepingProcessesId, (void *) &getProcessId(),
+		addElement(mutex->sleepingProcessesId, (void *) &processId,
 				   sizeof(uint64_t)); /* Adds pid to sleepProcessId */
 		sleepCurrent(); /* Sleeps process until mutex unlocked */
 	}
 	else {
-		mutex->ownerProcessId = getProcessId();
+		mutex->ownerProcessId = processId;
 	}
 
 	return OK_STATE;
@@ -97,7 +97,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 
 	if(!wasLocked) {
 		couldLock = TRUE;
-		mutex->ownerProcessId = getProcessId();
+		mutex->ownerProcessId = processId;
 	}
 
 	return couldLock;
