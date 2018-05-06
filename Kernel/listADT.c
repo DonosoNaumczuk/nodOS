@@ -170,3 +170,9 @@ node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,
 	}
 	return removeFirstElementByCriteriaRecursive(node->next,compareTo,reference);
 }
+
+int removeAllElements(listObject_t list) {
+	if(list == NULL) return NULL_LIST_ERROR;
+	while (removeFirst(list) != EMPTY_LIST_ERROR);
+	return REMOTION_OK;
+}
