@@ -48,12 +48,23 @@ void * memcpy(void * destination, const void * source, uint64_t length) {
 	return destination;
 }
 
-void * reserve(int size){
-	mem += size;
-	return mem - size;
+
+void stringCopy(char *destination, char *source) {
+	int i = 0;
+
+	while(source[i] != 0) {
+		destination[i] = source[i++]
+	}
+
+	destination[i] = 0;
 }
 
-void free(){
-	mem = START;
-}
+int stringLength(char *string) {
+	int length = 0;
 
+	while(string[length] != 0) {
+		length++;
+	}
+
+	return length;
+}
