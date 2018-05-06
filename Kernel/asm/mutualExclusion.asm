@@ -1,3 +1,5 @@
+GLOBAL mutex_lock
+
 section .text
 
 mutex_lock:
