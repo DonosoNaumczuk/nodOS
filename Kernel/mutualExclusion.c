@@ -127,3 +127,7 @@ static uint64_t dequeueProcessId(listObject_t processQueue) {
 	removeFirst(processQueue);
 	return processId;
 }
+
+static int mutexCompare(char *mutexId, mutex_t *mutex) {
+	return stringCompare(mutexId, mutex->id);
+}
