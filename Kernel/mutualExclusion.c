@@ -117,7 +117,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 
 
 static uint8_t existMutex(char *mutexId) {
-	return contains(mutexes, &uintCompare, mutexId);
+	return contains(mutexes, &stringCompare, mutexId);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {
