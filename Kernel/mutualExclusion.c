@@ -10,6 +10,7 @@ typedef struct {
 static uint8_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
 static uint8_t mutex_lock(uint8_t status); /* At mutualExclusion.asm */
+static int mutexCompare(char *mutexId, mutex_t *mutex);
 
 static listObject_t mutexes;
 
