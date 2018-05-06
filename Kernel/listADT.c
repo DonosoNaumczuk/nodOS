@@ -165,7 +165,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),vo
 		aux = list->head;
 		while (aux != NULL) {
 			if((*compareTo)(reference,aux->element) == 0){
-				memcpy(buffer,aux->element,node->size);
+				memcpy(buffer,aux->element,aux->size);
 				return node->size;
 			}
 		}
