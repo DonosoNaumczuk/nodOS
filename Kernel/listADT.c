@@ -1,4 +1,4 @@
-#include "./include/listADT.h"
+#include <listADT.h>
 
 typedef struct nodeStruct_t *node_t;
 
@@ -127,7 +127,7 @@ int contains(listObject_t list,int (*compareTo)(void*,void*),void *element){
 
 int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element) {
 	if(node == NULL) return FALSE;
-	if((*compareTo)(element,node->element) != 0) return TRUE;
+	if((*compareTo)(element,node->element) == 0) return TRUE;
 	return containsRecursive(node->next,compareTo,element);
 }
 
@@ -139,7 +139,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),vo
 
 int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer) {
 	if(node == NULL) return ELEMENT_DOESNT_EXIST;
-	if((*compareTo)(reference,node->element) != 0) {
+	if((*compareTo)(reference,node->element) == 0) {
 		memcpy(buffer,node->element,node->size);
 		return node->size;
 	}
