@@ -35,25 +35,31 @@ int addElement(listObject_t list,void *element,const unsigned int size) {
     newNode->element = allocateMemory(size);
     newNode->size = size;
     memcpy(newNode->element,element,size);
-    if(list->head == NULL) {
+	node_t aux;
+	if(list->head == NULL) {
         list->head = newNode;
         newNode->index = 0;
     }else {
-        addElementRecursive(list->head,newNode);
+		aux = list->head;
+		while(aux->next != NULL) {
+			aux = aux->next;
+		}
+        newNode->index = aux->index + 1;
+		aux->next = newNode;
     }
     list->size++;
     return INSERTION_OK;
 }
-
-void addElementRecursive(node_t node,node_t newNode) {
-    if(node->next == NULL) {
-        newNode->index = node->index + 1;
-        node->next = newNode;
-		return;
-    }
-    addElementRecursive(node->next,newNode);
-    return;
-}
+//
+// void addElementRecursive(node_t node,node_t newNode) {
+//     if(node->next == NULL) {
+//         newNode->index = node->index + 1;
+//         node->next = newNode;
+// 		return;
+//     }
+//     addElementRecursive(node->next,newNode);
+//     return;
+// }
 
 int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     node_t aux;
@@ -120,7 +126,7 @@ int size(listObject_t list) {
 	return list->size;
 }
 
-int contains(listObject_t list,int (*compareTo)(void*,void*),void *element){
+int contains(listObject_t list,int (*compareTo)(void*,void*),void *element) {
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
 	return containsRecursive(list->head,compareTo,element);
