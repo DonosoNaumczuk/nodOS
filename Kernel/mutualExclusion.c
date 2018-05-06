@@ -9,20 +9,27 @@ typedef struct {
 
 static uint8_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
+static void initMutualExclusion();
 static uint8_t mutex_lock(uint8_t status); /* At mutualExclusion.asm */
 
 static listObject_t mutexes;
 
-int initMutualExclusion(char *mutexId) {
+static void initMutualExclusion() {
+	mutexes = newList();
+}
+
+int createMutualExclusion(char *mutexId) {
 	if(existMutex(mutexId)) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex 				= allocateMemory(sizeof(mutex_t));
+	mutex_t *mutex 				= (mutex_t *) allocateMemory(sizeof(mutex_t));
 	mutex->id 					= mutexId;
 	mutex->status 				= UNLOCKED;
 	mutex->ownerProcessId		= NULL_PID;
-	mutex->sleepingProcessesId	= allocateMemory(sizeof(listObject_t));
+	mutex->sleepingProcessesId	= newList();
+
+	addElement(mutexes, (void *) mutex, sizeof(mutex_t));
 
 	if(mutex == NULL || mutex->sleepingProcessesId == NULL) {
 		return ERROR_STATE;
