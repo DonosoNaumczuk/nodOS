@@ -47,7 +47,7 @@ int lock(char *mutexId, uint64_t processId) {
 
 	mutex_t *mutex;
 
-	getFirstElementByCriteria(mutexes, &stringCompare, mutexId, (void *) mutex);
+	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
     int wasLocked = mutex_lock(&mutex->status);
 
@@ -70,7 +70,7 @@ int unlock(char *mutexId, uint64_t processId) {
 
 	mutex_t *mutex;
 
-	getFirstElementByCriteria(mutexes, &stringCompare, mutexId, (void *) mutex);
+	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
 	if(mutex->ownerProcessId == processId) {
 		if(size(mutex->sleepingProcessesId) > 0) {
@@ -101,7 +101,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 
 	mutex_t *mutex;
 
-	getFirstElementByCriteria(mutexes, &stringCompare, mutexId, (void *) mutex);
+	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
 	int wasLocked = mutex_lock(&mutex->status);
 
@@ -117,7 +117,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 
 
 static uint8_t existMutex(char *mutexId) {
-	return contains(mutexes, &stringCompare, mutexId);
+	return contains(mutexes, &mutexCompare, mutexId);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {

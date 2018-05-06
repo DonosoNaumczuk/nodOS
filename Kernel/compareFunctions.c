@@ -2,7 +2,10 @@
 #include <compareFunctions.h>
 
 int stringCompare(char *string, char *otherString) {
-     int i = 0;
+	if(string == NULL || otherString == NULL) {
+		return 1;
+	}
+	 int i = 0;
      while(string[i] != 0 && otherString[i] != 0) {
           if(string[i] - otherString[i] != 0) {
                return string[i] - otherString[i];
@@ -19,4 +22,8 @@ int stringCompare(char *string, char *otherString) {
 
 int uintCompare(uint64_t number, uint64_t otherNumber) {
      return number - otherNumber;
+}
+
+int mutexCompare(char *mutexId, mutex_t *mutex) {
+	return stringCompare(mutexId, mutex->id);
 }
