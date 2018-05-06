@@ -21,7 +21,7 @@ int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
 int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
 
 listObject_t newList() {
-	listObject_t list = allocateMemory(sizeof(struct list_t));	//EVANS
+	listObject_t list = allocateMemory(sizeof(struct list_t));	
 	list->size = 0;
 	return list;
 }
@@ -30,10 +30,10 @@ int addElement(listObject_t list,void *element,const unsigned int size) {
     if(list == NULL) return NULL_LIST_ERROR;
     if(element == NULL) return NULL_ELEMENT_ERROR;
     if(size == 0)  return SIZE_ERROR;
-    node_t newNode = allocateMemory(sizeof(node_t));			//EVANS
-    newNode->element = allocateMemory(size);            		//EVANS
+    node_t newNode = allocateMemory(sizeof(node_t));
+    newNode->element = allocateMemory(size);
     newNode->size = size;
-    memcpy(newNode->element,element,size);		      	//EVANS
+    memcpy(newNode->element,element,size);
     if(list->head == NULL) {
         list->head = newNode;
         newNode->index = 0;
@@ -60,7 +60,7 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     if(list->head == NULL) return EMPTY_LIST_ERROR;
     aux = getElementOnIndexRecursive(list->head,index);
     if(aux == NULL) return ELEMENT_DOESNT_EXIST;
-    memcpy(buffer,aux->element,aux->size);     			 //EVANS
+    memcpy(buffer,aux->element,aux->size);
 	return aux->size;
 }
 
@@ -90,8 +90,8 @@ node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *r
 	node_t aux;
 	if(node->index == index) {
 		aux = node->next;
-		freeMemory(node->element);	//EVANS
-		freeMemory(node);				//EVANS
+		freeMemory(node->element);
+		freeMemory(node);
 		*remotionState = REMOTION_OK;
 		return aux;
 	}
@@ -108,8 +108,8 @@ int removeFirst(listObject_t list) {
 	if(list->head == NULL) return EMPTY_LIST_ERROR;
 	aux = list->head;
 	list->head = list->head->next;
-	freeMemory(aux->element);			//EVANS
-	freeMemory(aux);					//EVANS
+	freeMemory(aux->element);
+	freeMemory(aux);
 	list->size--;
 	return REMOTION_OK;
 }
