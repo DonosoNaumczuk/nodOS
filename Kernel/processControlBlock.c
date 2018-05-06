@@ -34,7 +34,7 @@ typedef struct processControlBlock_t {
     void *stackPointer;
 } processControlBlock_t;
 
-static long int pidCounter = 0;
+static long int pidCounter = 1;
 
 void createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
 	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity, processArgs);
