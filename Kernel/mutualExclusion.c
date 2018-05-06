@@ -24,7 +24,7 @@ int initMutualExclusion(char *mutexId) {
 	mutex->ownerProcessId		= NULL_PID;
 	mutex->sleepingProcessesId	= allocateMemory(sizeof(listObject_t));
 
-	if(mutex == NULL || sleepingProcessesId == NULL) {
+	if(mutex == NULL || mutex->sleepingProcessesId == NULL) {
 		return ERROR_STATE;
 	}
 
