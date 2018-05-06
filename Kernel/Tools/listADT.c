@@ -17,9 +17,11 @@ typedef struct list_t{
 void addElementRecursive(node_t node,node_t newNode);
 node_t getElementOnIndexRecursive(node_t node,const unsigned int index);
 node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState);
+int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
+int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
 
 listObject_t newList() {
-	listObject_t list = malloc(sizeof(struct list_t)); //EVANS
+	listObject_t list = allocateMemory(sizeof(struct list_t));	//EVANS
 	list->size = 0;
 	return list;
 }
@@ -28,10 +30,10 @@ int addElement(listObject_t list,void *element,const unsigned int size) {
     if(list == NULL) return NULL_LIST_ERROR;
     if(element == NULL) return NULL_ELEMENT_ERROR;
     if(size == 0)  return SIZE_ERROR;
-    node_t newNode = malloc(sizeof(node_t));   //EVANS
-    newNode->element = malloc(size);            //EVANS
+    node_t newNode = allocateMemory(sizeof(node_t));			//EVANS
+    newNode->element = allocateMemory(size);            		//EVANS
     newNode->size = size;
-    memcpy(newNode->element,element,size);      //EVANS
+    memcpy(newNode->element,element,size);		      	//EVANS
     if(list->head == NULL) {
         list->head = newNode;
         newNode->index = 0;
@@ -58,7 +60,7 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     if(list->head == NULL) return EMPTY_LIST_ERROR;
     aux = getElementOnIndexRecursive(list->head,index);
     if(aux == NULL) return ELEMENT_DOESNT_EXIST;
-    memcpy(buffer,aux->element,aux->size);      //EVANS
+    memcpy(buffer,aux->element,aux->size);     			 //EVANS
 	return aux->size;
 }
 
@@ -87,9 +89,9 @@ int removeElementOnIndex(listObject_t list,const unsigned int index) {
 node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState) {
 	node_t aux;
 	if(node->index == index) {
-		free(node->element);	//EVANS
 		aux = node->next;
-		free(aux);				//EVANS
+		freeMemory(node->element);	//EVANS
+		freeMemory(node);				//EVANS
 		*remotionState = REMOTION_OK;
 		return aux;
 	}
@@ -106,8 +108,8 @@ int removeFirst(listObject_t list) {
 	if(list->head == NULL) return EMPTY_LIST_ERROR;
 	aux = list->head;
 	list->head = list->head->next;
-	free(aux->element);
-	free(aux);
+	freeMemory(aux->element);			//EVANS
+	freeMemory(aux);					//EVANS
 	list->size--;
 	return REMOTION_OK;
 }
@@ -115,4 +117,31 @@ int removeFirst(listObject_t list) {
 int size(listObject_t list) {
 	if(list == NULL) return NULL_LIST_ERROR;
 	return list->size;
+}
+
+int contains(listObject_t list,int (*compareTo)(void*,void*),void *element){
+	if(list == NULL) return NULL_LIST_ERROR;
+	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
+	return containsRecursive(list->head,compareTo,element);
+}
+
+int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element) {
+	if(node == NULL) return FALSE;
+	if((*compareTo)(element,node->element) != 0) return TRUE;
+	return containsRecursive(node->next,compareTo,element);
+}
+
+int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference,void *buffer) {
+	if(list == NULL) return NULL_LIST_ERROR;
+	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
+	return getFirstElementByCriteriaRecursive(list->head,compareTo,reference,buffer);
+}
+
+int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer) {
+	if(node == NULL) return ELEMENT_DOESNT_EXIST;
+	if((*compareTo)(reference,node->element) != 0) {
+		memcpy(buffer,node->element,node->size);
+		return node->size;
+	}
+	return getFirstElementByCriteriaRecursive(node->next,compareTo,reference,buffer);
 }
