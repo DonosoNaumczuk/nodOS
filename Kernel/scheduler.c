@@ -19,17 +19,17 @@ void initializeScheduler() {
     scheduler.ready = initializePCBList();
     scheduler.waiting = initializePCBList();
     createMutualExclusion(SCHEDULER_MUTEX_ID);
-    printHexa(lockIfUnlocked(SCHEDULER_MUTEX_ID, 0));
+    lockIfUnlocked(SCHEDULER_MUTEX_ID, 0);
 }
 
 void startScheduler() {
-    unlock(SCHEDULER_MUTEX_ID, 0);
+    //unlock(SCHEDULER_MUTEX_ID, 0);
 }
 
 void * schedule(void * currentProcessStackPointer) {;
 	ticksPassed ++;
     void * aux;
-    printWithColor("scheduleando\n",13,40);
+    printWithColor("scheduleando\n",13,40); //evans
 	if(ticksPassed == QUANTUM)  {
         ticksPassed = 0;
         nextProcess(currentProcessStackPointer);

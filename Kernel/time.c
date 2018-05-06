@@ -13,6 +13,7 @@ void _context_switch(void);
 
 void timer_handler() {
 	ticks++;
+	printWithColor("tick\n",5,50); //evans
 	_context_switch();
 		//while(1); //evans
 }

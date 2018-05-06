@@ -103,20 +103,12 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 
 
 	mutex_t *mutex;
-	newLine();
 	if(getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex) <= 0) {
 		return ERROR_STATE;
 	}
-	newLine();
-	newLine();
-	printWithColor("Status: ",9,20);
-	printHexa(mutex->status);
-	newLine();
 
 	int wasLocked = mutex_lock(&mutex->status);
-	printWithColor("Was lock: ",10,20);
-	printHexa(wasLocked);
-	newLine();
+
 	int couldLock = FALSE;
 
 	if(!wasLocked) {

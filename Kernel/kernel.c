@@ -77,14 +77,13 @@ void * initializeKernelBinary() {
    	  //base address and do the #define
 	initMutualExclusion();
 	initializeScheduler();
-	printWithColor("no deberia pasar\n",17,40);//evans
 	/*evans beging scheduler test*/
 	createProcess(NULL, &test1, 0, NULL);
 	createProcess(NULL, &test2, 0, NULL);
 	/*evans end of scheduler test*/
 	startScheduler();
 	while(1) { //evans need for test
-		printWithColor("Fuck\n", 4, 49);
+		//printWithColor("Fuck\n", 4, 49);
 		//newLine();
 	}
 	goToEntryPoint();
