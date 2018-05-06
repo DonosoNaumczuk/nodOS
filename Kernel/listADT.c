@@ -21,7 +21,7 @@ int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
 int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
 
 listObject_t newList() {
-	listObject_t list = allocateMemory(sizeof(struct list_t));	
+	listObject_t list = allocateMemory(sizeof(struct list_t));
 	list->size = 0;
 	return list;
 }
