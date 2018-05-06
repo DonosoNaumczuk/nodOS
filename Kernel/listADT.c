@@ -19,6 +19,7 @@ node_t getElementOnIndexRecursive(node_t node,const unsigned int index);
 node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState);
 int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
 int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
+node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState);
 
 listObject_t newList() {
 	listObject_t list = allocateMemory(sizeof(struct list_t));
@@ -144,4 +145,28 @@ int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*)
 		return node->size;
 	}
 	return getFirstElementByCriteriaRecursive(node->next,compareTo,reference,buffer);
+}
+
+int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference) {
+	int remotionState;
+	if(list == NULL) return NULL_LIST_ERROR;
+	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
+	list->head = removeFirstElementByCriteriaRecursive(list->head,compareTo,reference,&remotionState);
+	return remotionState;
+}
+
+node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState) {
+	node_t aux;
+	if(node == NULL) {
+		*remotionState = ELEMENT_DOESNT_EXIST;
+		return node;
+	}
+	if((*compareTo)(reference,node->element) == 0) {
+		aux = node->next;
+		free(node->element);
+		free(node);
+		*remotionState = REMOTION_OK;
+		return aux;
+	}
+	return removeFirstElementByCriteriaRecursive(node->next,compareTo,reference);
 }
