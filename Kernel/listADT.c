@@ -23,6 +23,7 @@ node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,
 
 listObject_t newList() {
 	listObject_t list = allocateMemory(sizeof(struct list_t));
+	list->head = NULL;
 	list->size = 0;
 	return list;
 }
@@ -50,6 +51,7 @@ int addElement(listObject_t list,void *element,const unsigned int size) {
     list->size++;
     return INSERTION_OK;
 }
+
 //
 // void addElementRecursive(node_t node,node_t newNode) {
 //     if(node->next == NULL) {
@@ -127,16 +129,25 @@ int size(listObject_t list) {
 }
 
 int contains(listObject_t list,int (*compareTo)(void*,void*),void *element) {
+	node_t aux;
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
-	return containsRecursive(list->head,compareTo,element);
+	if(list->head == NULL){
+		return FALSE;
+	}else {
+		aux = list->head;
+		while(aux != NULL){
+			if((*compareTo)(element,aux->element) == 0)	return TRUE;
+		}
+	}
+	return FALSE;
 }
 
-int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element) {
-	if(node == NULL) return FALSE;
-	if((*compareTo)(element,node->element) == 0) return TRUE;
-	return containsRecursive(node->next,compareTo,element);
-}
+// int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element) {
+// 	if(node == NULL) return FALSE;
+// 	if((*compareTo)(element,node->element) == 0) return TRUE;
+// 	return containsRecursive(node->next,compareTo,element);
+// }
 
 int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference,void *buffer) {
 	if(list == NULL) return NULL_LIST_ERROR;
