@@ -23,7 +23,3 @@ int stringCompare(char *string, char *otherString) {
 int uintCompare(uint64_t number, uint64_t otherNumber) {
      return number - otherNumber;
 }
-
-int mutexCompare(char *mutexId, mutex_t *mutex) {
-	return stringCompare(mutexId, mutex->id);
-}
