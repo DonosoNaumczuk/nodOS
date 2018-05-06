@@ -2,6 +2,8 @@
 
 static unsigned long ticks = 0;
 
+void _force_context_switch(void);
+
 #define SECOND 0
 #define MINUTE 1
 #define HOUR 2
@@ -11,6 +13,7 @@ static unsigned long ticks = 0;
 
 void timer_handler() {
 	ticks++;
+	_force_context_switch();
 }
 
 int ticks_elapsed() {

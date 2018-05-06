@@ -5,7 +5,6 @@ GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
 GLOBAL printRegisters
-GLOBAL debugRegisters
 
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
@@ -27,8 +26,8 @@ EXTERN printHexa
 EXTERN newLine
 EXTERN clear
 EXTERN goToEntryPoint
+
 EXTERN schedule
-EXTERN nextProcess
 
 SECTION .text
 
@@ -48,9 +47,13 @@ SECTION .text
 	push r13
 	push r14
 	push r15
+	push fs
+	push gs
 %endmacro
 
 %macro popState 0
+	pop gs
+	pop fs
 	pop r15
 	pop r14
 	pop r13
@@ -66,18 +69,6 @@ SECTION .text
 	pop rcx
 	pop rbx
 	pop rax
-%endmacro
-
-%macro pushaq 0
-	pushState
-	push fs
-	push gs
-%endmacro
-
-%macro popaq 0
-	pop gs
-	pop fs
-	popState
 %endmacro
 
 %macro irqHandlerMaster 1
@@ -345,10 +336,6 @@ _sti:
 	popState
 %endmacro
 
-debugRegisters:
-	printRegisters
-	ret
-
 picMasterMask:
 	push rbp
     mov rbp, rsp
@@ -367,12 +354,6 @@ picSlaveMask:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	pushaq
-	mov rdi, rsp
-	mov rsp, privateStack
-	call schedule
-	mov rsp, rax
-	popaq
 	irqHandlerMaster 0
 
 ;Keyboard
@@ -416,7 +397,6 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
-	privateStack resb 4096
 
 SECTION .data
 	register1 db "RAX: "

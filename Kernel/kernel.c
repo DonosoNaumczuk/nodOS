@@ -37,7 +37,7 @@ void * getStackBase() {
 /*evans test process 1*/
 void test1(int cant, void ** args) {
 	int i = 0;
-	while(i != 100) {
+	while(1) {
 		printWithColor("Soy proceso 1", 13, 49);
 		newLine();
 		i++;
@@ -48,7 +48,7 @@ void test1(int cant, void ** args) {
 /*evans test process 2*/
 void test2(int cant, void ** args) {
 	int i = 0;
-	while(i != 100) {
+	while(1) {
 		printWithColor("Soy proceso 2", 13, 22);
 		newLine();
 		i++;
