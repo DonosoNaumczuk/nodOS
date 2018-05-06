@@ -9,8 +9,13 @@ typedef struct {
 
 static uint8_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
-static uint8_t mutex_lock(uint8_t status); /* At mutualExclusion.asm */
 static int mutexCompare(char *mutexId, mutex_t *mutex);
+
+/*	Implemented at mutualExclusion.asm
+	Set status to locked.
+	Returns TRUE if was currenty locked,
+	otherwise return FALSE, atomically. */
+static uint8_t mutex_lock(uint8_t status);
 
 static listObject_t mutexes;
 
@@ -46,7 +51,7 @@ int lock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex;
+	mutex_t *mutex = (mutex_t *) memoryAllocator(sizeof(mutex_t));
 
 	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
@@ -69,7 +74,7 @@ int unlock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex;
+	mutex_t *mutex = (mutex_t *) memoryAllocator(sizeof(mutex_t));
 
 	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
@@ -100,7 +105,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex;
+	mutex_t *mutex = (mutex_t *) memoryAllocator(sizeof(mutex_t));
 
 	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 

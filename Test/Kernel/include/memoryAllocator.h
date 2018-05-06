@@ -3,6 +3,7 @@
 #define _MEMORY_ALLOCATOR_H_
 
 #include <stdint.h>
+#include <errors.h>
 
 #define MiB(x) (x * (1 << 20))
 #define AVAILABLE_MEMORY_SIZE 32768//MiB(512)
@@ -10,8 +11,6 @@
 #define PAGE_QUANTITY (AVAILABLE_MEMORY_SIZE / MIN_PAGE_SIZE)
 #define FREE_MEMORY 0
 #define USED_MEMORY 1
-#define ERROR_STATE -1
-#define OK_STATE 0
 #define NULL (void *) 0
 #define TRUE 1
 #define FALSE 0
