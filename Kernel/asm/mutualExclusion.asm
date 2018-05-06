@@ -1,18 +1,28 @@
-mutex_lock:
-	mov edx, 0
-	mov eax, 0 ;edx:eax = UNLOCKED 	= 0
-	mov ecx, 0
-	mov ebx, 1 ;ecx:ebx = LOCKED 	= 1
+section .text
 
-	cmpxchg8b [rdi] ;if(edx:eax == [rdi])
-					;	set [rdi] to LOCKED
-					; 	and jump to was_locked
-	jz was_unlocked
+mutex_lock:
+	mov rdx, 0
+	mov rax, UNLOCKED	; edx:eax = UNLOCKED = 0
+	mov rcx, 0
+	mov rbx, LOCKED		; ecx:ebx = LOCKED	= 1
+
+	cmpxchg8b [rdi]		; if(edx:eax == [rdi]) {
+						;	 set [rdi] to ecx:ebx
+
+	jz was_unlocked		; 	 and jump to was_unlocked
+						; }
 
 was_locked:
-	mov rax, 1 ;LOCKED = 1, wasLocked = TRUE
+	mov rax, LOCKED		; LOCKED	= 1, return wasLocked = TRUE
 	ret
 
 was_unlocked:
-	mov rax, 0 ;UNLOCKED = 0, wasLocked = FALSE
+	mov rax, UNLOCKED	; UNLOCKED	= 0, return wasLocked = FALSE
 	ret
+
+;----------------------------------------------------------
+
+section .data
+
+UNLOCKED db 0
+LOCKED db 1

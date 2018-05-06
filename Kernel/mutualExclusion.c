@@ -1,22 +1,15 @@
-#include <listADT.h>
-
-#define UNLOCKED 0
-#define LOCKED 1
-#define NULL_PID 0
+#include <mutualExclusion.h>
 
 typedef struct {
 	char *id;
 	uint8_t status;
-	uint64_t ownerProcessId;
+	sint64_t ownerProcessId;
 	listObject_t sleepingProcessesId;
 } mutex_t;
 
-int initMutualExlusion(char *mutexId);
-int lock(char *mutexId, uint64_t processId);
-int unlock(char *mutexId, uint64_t processId);
 static uint8_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
-static uint8_t mutex_lock(uint8_t status); /* mutualExlusion.asm */
+static uint8_t mutex_lock(uint8_t status); /* At mutualExclusion.asm */
 
 static listObject_t mutexes;
 
@@ -44,14 +37,14 @@ int lock(char *mutexId, uint64_t processId) {
 	}
 
 	mutex_t *mutex = (mutex_t *) getFirstElementByCriteria(mutexes, mutexId,
-														   criteria);
+														   &stringCompare);
 
     int wasLocked = mutex_lock(&mutex->status);
 
 	if(wasLocked) {
 		addElement(mutex->sleepingProcessesId, (void *) &getProcessId(),
-				   sizeof(uint64_t)); /* adds pid to sleepProcessId */
-		sleepCurrent(); /* sleep process */
+				   sizeof(uint64_t)); /* Adds pid to sleepProcessId */
+		sleepCurrent(); /* Sleeps process until mutex unlocked */
 	}
 	else {
 		mutex->ownerProcessId = getProcessId();
@@ -61,16 +54,21 @@ int lock(char *mutexId, uint64_t processId) {
 }
 
 int unlock(char *mutexId, uint64_t processId) {
-	mutex_t *mutex = (mutex_t *) getFirstElementByCriteria(mutexes, mutexId,
-		 			  criteria);
+	if(!existMutex(mutexId)) {
+		return ERROR_STATE;
+	}
 
-	if(existMutex(mutexId) && (mutex->ownerProcessId == processId)) {
+	mutex_t *mutex = (mutex_t *) getFirstElementByCriteria(mutexes, mutexId,
+		 			  &stringCompare);
+
+	if(mutex->ownerProcessId == processId) {
 		if(size(mutex->sleepingProcessesId) > 0) {
 			uint64_t processId = dequeueProcessId(mutex->sleepingProcessesId);
 
 			/* Mutex will still locked but now the owner is other process.
 			   So only that process can unlock the mutex and any other process
-			   who try to lock the mutex will fall to sleep. */
+			   who try to lock the mutex will fall to sleep.
+			   So cool, isn't it? ;) */
 			mutex->ownerProcessId = processId;
 
 			wakeUp(processId);
@@ -85,8 +83,29 @@ int unlock(char *mutexId, uint64_t processId) {
 	return ERROR_STATE;
 }
 
+int lockIfUnlocked(char *mutexId, uint64_t processId) {
+	if(!existMutex(mutexId)) {
+		return ERROR_STATE;
+	}
+
+	mutex_t *mutex = (mutex_t *) getFirstElementByCriteria(mutexes, mutexId,
+														   &stringCompare);
+
+	int wasLocked = mutex_lock(&mutex->status);
+
+	int couldLock = FALSE;
+
+	if(!wasLocked) {
+		couldLock = TRUE;
+		mutex->ownerProcessId = getProcessId();
+	}
+
+	return couldLock;
+}
+
+
 static uint8_t existMutex(char *mutexId) {
-	return contains(mutexes, mutexId, criteria);
+	return contains(mutexes, mutexId, &uintCompare);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {

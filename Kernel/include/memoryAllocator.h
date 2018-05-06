@@ -3,6 +3,8 @@
 #define _MEMORY_ALLOCATOR_H_
 
 #include <stdint.h>
+#include <errors.h>
+#include <bool.h>
 
 #define MiB(x) (x * (1 << 20))
 #define AVAILABLE_MEMORY_SIZE MiB(512) /* Must be power of two */
@@ -10,11 +12,7 @@
 #define PAGE_QUANTITY (AVAILABLE_MEMORY_SIZE / MIN_PAGE_SIZE)
 #define FREE_MEMORY 0
 #define USED_MEMORY 1
-#define ERROR_STATE -1
-#define OK_STATE 0
 #define NULL (void *) 0
-#define TRUE 1
-#define FALSE 0
 #define PARENT_INDEX(currentIndex) ((currentIndex + 1) / 2 - 1)
 #define LEFT_CHILD_INDEX(currentIndex) (currentIndex * 2 + 1)
 #define RIGHT_CHILD_INDEX(currentIndex) (currentIndex * 2 + 2)
