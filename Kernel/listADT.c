@@ -14,11 +14,11 @@ typedef struct list_t{
     int size;
 }list_t;
 
-void addElementRecursive(node_t node,node_t newNode);
+// void addElementRecursive(node_t node,node_t newNode);
 node_t getElementOnIndexRecursive(node_t node,const unsigned int index);
 node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState);
-int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
-int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
+// int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
+// int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
 node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState);
 
 listObject_t newList() {
@@ -67,7 +67,7 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     node_t aux;
     if(list == NULL) return NULL_LIST_ERROR;
     if(list->head == NULL) return EMPTY_LIST_ERROR;
-    aux = getElementOnIndexRecursive(list->head,index);
+	aux = list->head;
     while(aux->next != NULL && aux->index < index) {
           aux = aux->next;
     }
@@ -135,14 +135,15 @@ int size(listObject_t list) {
 
 int contains(listObject_t list,int (*compareTo)(void*,void*),void *element) {
 	node_t aux;
-	if(list == NULL) return NULL_LIST_ERROR;
-	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
+	if(list == NULL) return FALSE;
+	if(compareTo == NULL) return FALSE;
 	if(list->head == NULL){
 		return FALSE;
 	}else {
 		aux = list->head;
 		while(aux != NULL){
 			if((*compareTo)(element,aux->element) == 0)	return TRUE;
+			aux = aux->next;
 		}
 	}
 	return FALSE;
@@ -155,43 +156,80 @@ int contains(listObject_t list,int (*compareTo)(void*,void*),void *element) {
 // }
 
 int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference,void *buffer) {
+	node_t aux;
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
-	return getFirstElementByCriteriaRecursive(list->head,compareTo,reference,buffer);
+	if(list->head == NULL) {
+		return ELEMENT_DOESNT_EXIST;
+	}else {
+		aux = list->head;
+		while (aux != NULL) {
+			if((*compareTo)(reference,aux->element) == 0){
+				memcpy(buffer,node->element,node->size);
+				return node->size;
+			}
+		}
+	}
+	return ELEMENT_DOESNT_EXIST;
 }
 
-int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer) {
-	if(node == NULL) return ELEMENT_DOESNT_EXIST;
-	if((*compareTo)(reference,node->element) == 0) {
-		memcpy(buffer,node->element,node->size);
-		return node->size;
-	}
-	return getFirstElementByCriteriaRecursive(node->next,compareTo,reference,buffer);
-}
+// int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer) {
+// 	if(node == NULL) return ELEMENT_DOESNT_EXIST;
+// 	if((*compareTo)(reference,node->element) == 0) {
+// 		memcpy(buffer,node->element,node->size);
+// 		return node->size;
+// 	}
+// 	return getFirstElementByCriteriaRecursive(node->next,compareTo,reference,buffer);
+// }
 
 int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference) {
-	int remotionState;
+	node_t aux;
+	node_t auxPrev;
+	node_t aux2;
+	int firstLoop = 1;
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
-	list->head = removeFirstElementByCriteriaRecursive(list->head,compareTo,reference,&remotionState);
-	return remotionState;
+	if(list->head == NULL) {
+		return ELEMENT_DOESNT_EXIST;
+	}else {
+		aux = list->head;
+		auxPrev=NULL;
+
+		while (aux != NULL) {
+			if((*compareTo)(reference,aux->element)) {
+				aux2 = aux->next;
+				freeMemory(aux->element);
+				freeMemory(aux);
+				if(firstLoop == 1){
+					list->head = aux2;
+				}else {
+					auxPrev->next = aux2;
+				}
+				return REMOTION_OK;
+			}
+			auxPrev = aux;
+			aux = aux->next;
+			firstLoop = 0;
+		}
+		return ELEMENT_DOESNT_EXIST;
+	}
 }
 
-node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState) {
-	node_t aux;
-	if(node == NULL) {
-		*remotionState = ELEMENT_DOESNT_EXIST;
-		return node;
-	}
-	if((*compareTo)(reference,node->element) == 0) {
-		aux = node->next;
-		freeMemory(node->element);
-		freeMemory(node);
-		*remotionState = REMOTION_OK;
-		return aux;
-	}
-	return removeFirstElementByCriteriaRecursive(node->next,compareTo,reference, remotionState);
-}
+// node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState) {
+// 	node_t aux;
+// 	if(node == NULL) {
+// 		*remotionState = ELEMENT_DOESNT_EXIST;
+// 		return node;
+// 	}
+// 	if((*compareTo)(reference,node->element) == 0) {
+// 		aux = node->next;
+// 		freeMemory(node->element);
+// 		freeMemory(node);
+// 		*remotionState = REMOTION_OK;
+// 		return aux;
+// 	}
+// 	return removeFirstElementByCriteriaRecursive(node->next,compareTo,reference, remotionState);
+// }
 
 int removeAllElements(listObject_t list) {
 	if(list == NULL) return NULL_LIST_ERROR;
