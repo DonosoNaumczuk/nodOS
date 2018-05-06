@@ -91,40 +91,15 @@ int getFirstElement(listObject_t list,void * buffer) {
 	return list->head->size;
 }
 
-int removeElementOnIndex(listObject_t list,const unsigned int index) {
-	int remotionState;
-     node_t aux = list->head, node;
-     if(list == NULL) {
-          return NULL_LIST_ERROR;
-     }
-     if(list->head == NULL) {
-          return EMPTY_LIST_ERROR;
-	}
-     if(list->head->index == index) {
-          list->head = aux->next;
-          freeMemory(aux->element);
-          freeMemory(aux->head);
-          
-     }
-
-     if(aux->index > index) {
-          return ELEMENT_DOESNT_EXIST;
-     }
-     while(aux->next != NULL && aux->next->index < index) {
-          aux = aux->next;
-     }
-     if(aux->next != NULL && aux->next->index == index) {
-          node = aux->next;
-          aux->next = node->next;
-          freeMemory(node->element);
-          freeMemory(node);
-          return REMOTION_OK;
-     }
-     else {
-          return ELEMENT_DOESNT_EXIST;
-     }
-}
-
+// int removeElementOnIndex(listObject_t list,const unsigned int index) {
+// 	int remotionState;
+// 	if(list == NULL) return NULL_LIST_ERROR;
+//     if(list->head == NULL) return EMPTY_LIST_ERROR;
+// 	list->head = removeElementOnIndexRecursive(list->head,index,&remotionState);
+// 	if(remotionState == REMOTION_OK) list->size--;
+// 	return remotionState;
+// }
+//
 // node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState) {
 // 	node_t aux;
 // 	if(node->index == index) {
@@ -190,7 +165,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),vo
 		aux = list->head;
 		while (aux != NULL) {
 			if((*compareTo)(reference,aux->element) == 0){
-				memcpy(buffer,node->element,node->size);
+				memcpy(buffer,aux->element,node->size);
 				return node->size;
 			}
 		}
