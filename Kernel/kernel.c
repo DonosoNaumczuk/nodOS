@@ -74,12 +74,16 @@ void initialPrint() {
 
 void init(int cant, void ** args) {
 	while(1) {
-		_hlt();
+		_hlt(); //evans check if halt?
 	}
 }
+
 void cleaner(int cant, void ** args) {
 	while(1) {
 		processControlBlockPtr_t son = getASonOfCurrentProcess();
+		if(son == NULL) {
+			return;
+		}
 		wait(getPid(son));
 	}
 }
