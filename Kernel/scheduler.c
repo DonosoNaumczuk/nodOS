@@ -73,6 +73,7 @@ void terminateCurrentProcess() {
     if(isWaiting(currentPCBFather)) {
         wakeUp(getPid(getFather(currentPCB)));
     }
+    freeStack(currentPCB);
     setState(currentPCB, PROCESS_TERMINATE);
     _force_context_switch();
 }
@@ -91,7 +92,7 @@ void wakeUp(uint64_t pid) {
     }
 }
 
-void wait(uint64_t pid) {
+void waitChild(uint64_t pid) {
     processControlBlockPtr_t father = consultFirstPCBFromList(scheduler.ready);
     processControlBlockPtr_t son = PCBFromListByPID(getSons(father), pid);
     if(son != NULL) {
@@ -99,6 +100,7 @@ void wait(uint64_t pid) {
             sleepCurrent();
         }
     }
+    freeMemory(son);
 }
 
 processControlBlockPtr_t getASonOfCurrentProcess() {
