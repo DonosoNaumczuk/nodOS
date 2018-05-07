@@ -7,6 +7,7 @@
 #include <videoDriver.h>
 #include <memoryAllocator.h>
 #include <mutualExclusion.h>
+#include <processControlBlock.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -35,28 +36,6 @@ void * getStackBase() {
 	);
 }
 
-/*evans test process 1*/
-void test1(int cant, void ** args) {
-	int i = 0;
-	while(1) {
-		printWithColor("Soy proceso 1", 13, 49);
-		newLine();
-		i++;
-	}
-}
-
-/*evans test process 2*/
-void test2(int cant, void ** args) {
-	int i = 0;
-	while(1) {
-		printWithColor("Soy proceso 2", 13, 22);
-		printHexa(i);
-		newLine();
-		i++;
-	}
-	return;
-}
-
 void * initializeKernelBinary() {
 	char buffer[10];
 	(cpuVendor(buffer));
@@ -68,7 +47,6 @@ void * initializeKernelBinary() {
 	clearBSS(&bss, &endOfKernel - &bss);
 	initializeVideoDriver();
 	initialPrint();
-	load_idt();
 	_setBinaryTime();
 	if(initializeMemoryAllocator(getStackBase()) == ERROR_STATE) {
 		printWithColor("Error initializating memory allocator\n", 38, 49);
@@ -77,16 +55,7 @@ void * initializeKernelBinary() {
    	  //base address and do the #define
 	initMutualExclusion();
 	initializeScheduler();
-	/*evans beging scheduler test*/
-	createProcess(NULL, &test1, 0, NULL);
-	createProcess(NULL, &test2, 0, NULL);
-	/*evans end of scheduler test*/
-	startScheduler();
-	while(1) { //evans need for test
-		//printWithColor("Fuck\n", 4, 49);
-		//newLine();
-	}
-	goToEntryPoint();
+	load_idt();
 	clear();
 	return getStackBase();
 }
@@ -103,6 +72,26 @@ void initialPrint() {
 	newLine();
 }
 
+void init(int cant, void ** args) {
+	while(1) {
+		_hlt(); //evans check if halt?
+	}
+}
+
+void cleaner(int cant, void ** args) {
+	while(1) {
+		processControlBlockPtr_t son = getASonOfCurrentProcess();
+		if(son == NULL) {
+			return;
+		}
+		wait(getPid(son));
+	}
+}
+
 int main() {
+	processControlBlockPtr_t initPCB = createProcess(NULL, &init, 0, NULL);
+	processControlBlockPtr_t cleanerPCB = createProcess(initPCB, &cleaner, 0, NULL);
+	createProcess(cleanerPCB, sampleCodeModuleAddress, 0, NULL);
+	startScheduler();
 	return 0;
 }

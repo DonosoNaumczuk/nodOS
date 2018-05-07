@@ -11,9 +11,8 @@ processControlBlockListPtr_t initializePCBList(void);
 void addPCBToList(processControlBlockListPtr_t list, processControlBlockPtr_t pcb);
 processControlBlockPtr_t removeFirstPCBFromList(processControlBlockListPtr_t list);
 processControlBlockPtr_t consultFirstPCBFromList(processControlBlockListPtr_t list);
-processControlBlockPtr_t removeTerminatePCBFromListByPID(
-                        processControlBlockListPtr_t list, long int pid,
-                         int *isInTheList);
+processControlBlockPtr_t PCBFromListByPID(processControlBlockListPtr_t list,
+                                          long int pid);
 processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t start,
                                                 processControlBlockListPtr_t end);
 

@@ -2,7 +2,7 @@
 
 static unsigned long ticks = 0;
 
-void _context_switch(void);
+void _force_context_switch(void);
 
 #define SECOND 0
 #define MINUTE 1
@@ -13,9 +13,7 @@ void _context_switch(void);
 
 void timer_handler() {
 	ticks++;
-	printWithColor("tick\n",5,50); //evans
-	_context_switch();
-		//while(1); //evans
+	_force_context_switch();
 }
 
 int ticks_elapsed() {

@@ -18,5 +18,8 @@ void nextProcess(void * currentProcessStackPointer);
 void startScheduler();
 void sleepCurrent();
 void wakeUp(uint64_t pid);
+void wait(uint64_t pid);
+processControlBlockPtr_t getASonOfCurrentProcess();
+uint64_t getProcessID();
 
 #endif
