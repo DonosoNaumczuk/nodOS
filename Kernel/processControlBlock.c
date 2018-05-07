@@ -41,6 +41,10 @@ void createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQ
 	addProcessToScheduler(newPCB);
 }
 
+uint64_t getPid(processControlBlockPtr_t pcb) {
+	return pcb->pid;
+}
+
 processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
     processControlBlock_t *newPCB = allocateMemory(sizeof(processControlBlock_t));
     newPCB->pid = pidCounter;
@@ -51,13 +55,16 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->state = PROCESS_READY;
 
     newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity, processArgs);
-    addProcessToScheduler(newPCB);
 
     return newPCB;
 }
 
 void * getStackPointer(processControlBlockPtr_t pcb) {
     return pcb->stackPointer;
+}
+
+processControlBlockPtr_t getFather(processControlBlockPtr_t pcb) {
+	return pcb->parent;
 }
 
 void setStackPointer(processControlBlockPtr_t pcb, void * stackPointer) {
@@ -87,10 +94,7 @@ void setState(processControlBlockPtr_t pcb, int state) {
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
     ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
 
-    //terminate process
-	// evans need fix
 	terminateCurrentProcess();
-	//syscall terminate process
 }
 
 void giveChildsToFather(processControlBlockPtr_t pcb) {

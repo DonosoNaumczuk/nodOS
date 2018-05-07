@@ -43,18 +43,18 @@ void test1(int cant, void ** args) {
 		newLine();
 		i++;
 	}
+	//while(1);
 }
 
 /*evans test process 2*/
 void test2(int cant, void ** args) {
 	int i = 0;
-	while(1) {
+	while(i!=20) {
 		printWithColor("Soy proceso 2", 13, 22);
-		printHexa(i);
 		newLine();
 		i++;
 	}
-	return;
+	while(1);
 }
 
 void * initializeKernelBinary() {
@@ -68,7 +68,6 @@ void * initializeKernelBinary() {
 	clearBSS(&bss, &endOfKernel - &bss);
 	initializeVideoDriver();
 	initialPrint();
-	load_idt();
 	_setBinaryTime();
 	if(initializeMemoryAllocator(getStackBase()) == ERROR_STATE) {
 		printWithColor("Error initializating memory allocator\n", 38, 49);
@@ -77,6 +76,7 @@ void * initializeKernelBinary() {
    	  //base address and do the #define
 	initMutualExclusion();
 	initializeScheduler();
+	load_idt();
 	/*evans beging scheduler test*/
 	createProcess(NULL, &test1, 0, NULL);
 	createProcess(NULL, &test2, 0, NULL);

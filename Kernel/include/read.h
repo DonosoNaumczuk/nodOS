@@ -2,6 +2,7 @@
 #define _read_h_
 
 #include <videoDriver.h>
+#include <keyboard.h>
 
 #define KEYBOARD_IN_ID 0
 #define SCREEN_IN_ID 1

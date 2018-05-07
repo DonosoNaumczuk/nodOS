@@ -7,37 +7,44 @@ typedef struct scheduler_t {
 
 #define SCHEDULER_MUTEX_ID "schedulerMutex"
 
-void _cli(void);
-void _sti(void);
-void _context_switch(void);
 void _force_context_switch(void);
+int mutex_lock(uint8_t * arg);
+
 
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
+static uint8_t mutex = 0;
+static int isFirst = TRUE;
 
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
     scheduler.waiting = initializePCBList();
     createMutualExclusion(SCHEDULER_MUTEX_ID);
-    lockIfUnlocked(SCHEDULER_MUTEX_ID, 0);
+    mutex_lock(&mutex);
 }
 
 void startScheduler() {
-    //unlock(SCHEDULER_MUTEX_ID, 0);
+    mutex = 0;
 }
 
-void * schedule(void * currentProcessStackPointer) {;
+void * schedule(void * currentProcessStackPointer) {
 	ticksPassed ++;
-    void * aux;
-    printWithColor("scheduleando\n",13,40); //evans
-	if(ticksPassed == QUANTUM)  {
+    void * aux = currentProcessStackPointer;
+
+	if(ticksPassed == QUANTUM) {
         ticksPassed = 0;
-        nextProcess(currentProcessStackPointer);
+    }
+    if(ticksPassed == 0 && !mutex_lock(&mutex))  {
+        if(isFirst) {
+            isFirst = FALSE;
+        }
+        else {
+            nextProcess(currentProcessStackPointer);
+        }
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
+        mutex = 0;
     }
-    else {
-        aux = currentProcessStackPointer;
-    }
+
 	return aux;
 }
 
@@ -59,9 +66,12 @@ void addProcessToScheduler(processControlBlockPtr_t pcb) {
 }
 
 void terminateCurrentProcess() {
-    printWithColor("terminate process\n", 18, 30); //evans
     processControlBlockPtr_t currentPCB = consultFirstPCBFromList(scheduler.ready);
+    processControlBlockPtr_t currentPCBFather = getFather(currentPCB);
     giveChildsToFather(currentPCB);
+    if(isWaiting(currentPCBFather)) {
+        wakeUp(getFather(currentPCB));
+    }
     setState(currentPCB, PROCESS_TERMINATE);
     _force_context_switch();
 }
@@ -69,6 +79,7 @@ void terminateCurrentProcess() {
 void sleepCurrent() {
     processControlBlockPtr_t currentPCB = consultFirstPCBFromList(scheduler.ready);
     setState(currentPCB, PROCESS_WAITING);
+    _force_context_switch();
 }
 
 void wakeUp(uint64_t pid) {
@@ -76,5 +87,14 @@ void wakeUp(uint64_t pid) {
     if(pcb != NULL) {
         setState(pcb, PROCESS_READY);
         addProcessToScheduler(pcb);
+    }
+}
+
+void wait(uint64_t pid, processControlBlockPtr_t father) {
+    processControlBlockPtr_t son = PCBFromListByPID(father, pid);
+    if(son != NULL) {
+        while (!isTerminate(son)) {
+            sleepCurrent();
+        }
     }
 }
