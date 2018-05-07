@@ -32,7 +32,7 @@ int addElement(listObject_t list,void *element,const unsigned int size) {
     if(list == NULL) return NULL_LIST_ERROR;
     if(element == NULL) return NULL_ELEMENT_ERROR;
     if(size == 0)  return SIZE_ERROR;
-    node_t newNode = allocateMemory(sizeof(node_t));
+    node_t newNode = (node_t) allocateMemory(sizeof(nodeStruct_t));
     newNode->element = allocateMemory(size);
     newNode->size = size;
     memcpy(newNode->element,element,size);
@@ -166,7 +166,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),vo
 		while (aux != NULL) {
 			if((*compareTo)(reference,aux->element) == 0){
 				memcpy(buffer,aux->element,aux->size);
-				return node->size;
+				return aux->size;
 			}
 		}
 	}
