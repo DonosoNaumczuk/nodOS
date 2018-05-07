@@ -33,8 +33,8 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index);
 int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference,void *buffer);
 
 int getFirstElement(listObject_t list,void * buffer);
-
-int removeElementOnIndex(listObject_t list,const unsigned int index);
+//
+// int removeElementOnIndex(listObject_t list,const unsigned int index);
 
 int removeFirst(listObject_t list);
 

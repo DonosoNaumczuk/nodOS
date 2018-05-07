@@ -1,7 +1,6 @@
 #include <stdint.h>
 
 #define START 0x1000000
-static void* mem = (void*) START;
 
 void * memset(void * destination, int32_t c, uint64_t length) {
 	uint8_t chr = (uint8_t)c;
@@ -53,7 +52,8 @@ void stringCopy(char *destination, char *source) {
 	int i = 0;
 
 	while(source[i] != 0) {
-		destination[i] = source[i++];
+		destination[i] = source[i];
+		i++;
 	}
 
 	destination[i] = 0;

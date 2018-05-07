@@ -15,7 +15,7 @@ static int mutexCompare(char *mutexId, mutex_t *mutex);
 	Set status to locked.
 	Returns TRUE if was currenty locked,
 	otherwise return FALSE, atomically. */
-static uint8_t mutex_lock(uint8_t status);
+static uint8_t mutex_lock(uint8_t *status);
 
 static listObject_t mutexes;
 
@@ -23,7 +23,7 @@ void initMutualExclusion() {
 	static int initializations = 0;
 
 	if(initializations > 0) {
-		return ERROR_STATE;
+		return;
 	}
 
 	initializations++;
@@ -51,7 +51,7 @@ int lock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) memoryAllocator(sizeof(mutex_t));
+	mutex_t *mutex = (mutex_t *) allocateMemory(sizeof(mutex_t));
 
 	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
@@ -74,7 +74,7 @@ int unlock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) memoryAllocator(sizeof(mutex_t));
+	mutex_t *mutex = (mutex_t *) allocateMemory(sizeof(mutex_t));
 
 	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
 
@@ -87,7 +87,6 @@ int unlock(char *mutexId, uint64_t processId) {
 			   who try to lock the mutex will fall to sleep.
 			   So cool, isn't it? ;) */
 			mutex->ownerProcessId = processId;
-
 			wakeUp(processId);
 		}
 		else {
@@ -105,12 +104,14 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) memoryAllocator(sizeof(mutex_t));
+	mutex_t *mutex = (mutex_t *) allocateMemory(sizeof(mutex_t));
 
 	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
-
+	printHexa(mutex->status);
+	newLine();
 	int wasLocked = mutex_lock(&mutex->status);
-
+	printHexa(mutex->status);
+	newLine();
 	int couldLock = FALSE;
 
 	if(!wasLocked) {

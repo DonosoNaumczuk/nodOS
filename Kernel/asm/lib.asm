@@ -5,7 +5,7 @@ EXTERN schedule
 
 SECTION .text
 
-%macro pusheq 0
+%macro pushState 0
 	push rax
 	push rbx
 	push rcx
@@ -25,7 +25,7 @@ SECTION .text
 	push gs
 %endmacro
 
-%macro popeq 0
+%macro popState 0
 	pop gs
 	pop fs
 	pop r15
@@ -45,6 +45,18 @@ SECTION .text
 	pop rax
 %endmacro
 
+%macro clearStack 0
+	pop rax
+	pop rax
+	pop rax
+	pop rax
+	pop rax
+	pop rax
+	pop rax
+	pop rax
+	pop rax
+%endmacro
+
 _force_context_switch:
     mov rax,rsp
 
@@ -55,25 +67,24 @@ _force_context_switch:
     push QWORD 0x008
     push return_code
 
-    pusheq
-
 _context_switch:
+	pushState
     mov rdi, rsp
-    mov rsp, privateStack
+    mov rsp, privateStackBase
     call schedule
     mov rsp, rax
+    popState
 
     ; signal pic EOI (End of Interrupt)
     mov al, 20h
     out 20h, al
 
-    popeq
     iretq
 
 return_code:
     ret
 
+
 SECTION .bss
 	privateStack resb 4096
-
-SECTION .data
+	privateStackBase resb 1

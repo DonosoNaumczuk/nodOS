@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <RTCReader.h>
+#include <videoDriver.h>
 
 void timer_handler();
 int ticks_elapsed();
