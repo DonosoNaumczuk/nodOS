@@ -70,7 +70,7 @@ _force_context_switch:
 _context_switch:
 	pushState
     mov rdi, rsp
-    ;mov rsp, privateStack evans
+    mov rsp, privateStackBase
     call schedule
     mov rsp, rax
     popState
@@ -87,3 +87,4 @@ return_code:
 
 SECTION .bss
 	privateStack resb 4096
+	privateStackBase resb 1

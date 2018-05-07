@@ -25,6 +25,7 @@ void initializeScheduler() {
 
 void startScheduler() {
     mutex = 0;
+    _force_context_switch();
 }
 
 void * schedule(void * currentProcessStackPointer) {
@@ -70,7 +71,7 @@ void terminateCurrentProcess() {
     processControlBlockPtr_t currentPCBFather = getFather(currentPCB);
     giveChildsToFather(currentPCB);
     if(isWaiting(currentPCBFather)) {
-        wakeUp(getFather(currentPCB));
+        wakeUp(getPid(getFather(currentPCB)));
     }
     setState(currentPCB, PROCESS_TERMINATE);
     _force_context_switch();
@@ -90,11 +91,22 @@ void wakeUp(uint64_t pid) {
     }
 }
 
-void wait(uint64_t pid, processControlBlockPtr_t father) {
-    processControlBlockPtr_t son = PCBFromListByPID(father, pid);
+void wait(uint64_t pid) {
+    processControlBlockPtr_t father = consultFirstPCBFromList(scheduler.ready);
+    processControlBlockPtr_t son = PCBFromListByPID(getSons(father), pid);
     if(son != NULL) {
         while (!isTerminate(son)) {
             sleepCurrent();
         }
     }
+}
+
+processControlBlockPtr_t getASonOfCurrentProcess() {
+    processControlBlockPtr_t current = consultFirstPCBFromList(scheduler.ready);
+    processControlBlockListPtr_t currentSons = getSons(current);
+    return consultFirstPCBFromList(currentSons);
+}
+
+uint64_t getProcessID() {
+    return getPid(consultFirstPCBFromList(scheduler.ready));
 }

@@ -66,12 +66,13 @@ processControlBlockPtr_t PCBFromListByPID(processControlBlockListPtr_t list,
     if(list != NULL && list->first != NULL) {
         if(isThisPid(list->first->value, pid)) {
             output = removeFirstPCBFromList(list);
-        }
-        processControlBlockNode *current = list->first;
-        while(current->next != NULL) {
-            if(isThisPid(current->next->value, pid)) {
-                output = removeNextPCBNode(current);
-                list->quantity--;
+        } else {
+            processControlBlockNode *current = list->first;
+            while(current->next != NULL) {
+                if(isThisPid(current->next->value, pid)) {
+                    output = removeNextPCBNode(current);
+                    list->quantity--;
+                }
             }
         }
     }
