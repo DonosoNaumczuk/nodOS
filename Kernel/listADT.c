@@ -14,12 +14,12 @@ typedef struct list_t{
     int size;
 }list_t;
 
-// void addElementRecursive(node_t node,node_t newNode);
-node_t getElementOnIndexRecursive(node_t node,const unsigned int index);
-node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState);
-// int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
-// int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
-node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState);
+// // void addElementRecursive(node_t node,node_t newNode);
+// node_t getElementOnIndexRecursive(node_t node,const unsigned int index);
+// node_t removeElementOnIndexRecursive(node_t node,const unsigned int index,int *remotionState);
+// // int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
+// // int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
+// node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState);
 
 listObject_t newList() {
 	listObject_t list = allocateMemory(sizeof(struct list_t));
