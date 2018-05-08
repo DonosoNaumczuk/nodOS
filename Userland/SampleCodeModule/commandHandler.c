@@ -29,6 +29,9 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case TEST:
 			processId = createProcess(&test, 1, &arguments);
 			return waitChild(processId);
+		case CLEAN_SCREEN:
+				cleanScreen();
+			return;
 	}
 	return 1;
 }
@@ -53,6 +56,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
 	if(strncmp("test",cmd,4) == 0)			return	TEST;
+	if(strncmp("clean", cmd, 5) == 0) 	return	CLEAN_SCREEN;
 	return INVALID;
 }
 
@@ -137,6 +141,7 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	printf("          * quadratic a b c xScale yScale : print a cuadratic fuction [ax^2 + bx + c]\n");
 	printf("          * linear a b xScale yScale : print a linear function [ax + b]\n");
 	printf("          * exit : exit \n");
+	printf("          * clean : clears the Screen \n");
 	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
 	return VALID_CMD;
 }

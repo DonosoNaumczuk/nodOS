@@ -19,6 +19,7 @@
 #define   HELP            4
 #define   ECHO            5
 #define   TEST            6
+#define   CLEAN_SCREEN     7
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size);
 int printTime(int argumentQuantity, void **argumentVector);
