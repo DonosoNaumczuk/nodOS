@@ -21,5 +21,6 @@ void wakeUp(uint64_t pid);
 void waitChild(uint64_t pid);
 processControlBlockPtr_t getASonOfCurrentProcess();
 uint64_t getProcessID();
+processControlBlockPtr_t getCurrentPCB();
 
 #endif

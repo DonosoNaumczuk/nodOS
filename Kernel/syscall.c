@@ -22,5 +22,20 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return 0;
 		case TERMINATE_PROCESS:
 			terminateCurrentProcess();
+			return 0;
+		case SLEEP_PROCESS:
+			sleepCurrent();
+			return 0;
+		case WAIT_CHILD_PROCESS:
+			waitChild(rdi);
+			return 0;
+		case WAKE_UP_PROCESS:
+			wakeUp(rdi);
+			return 0;
+		case CREATE_PROCESS:
+			processControlBlockPtr_t son = createProcess(getCurrentPCB(), rdi, rsi, rdx);
+			return getPid(son);
+		case GET_PID:
+			return getProcessID();
 	}
 }
