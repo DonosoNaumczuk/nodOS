@@ -58,7 +58,7 @@ void addProcessToScheduler(processControlBlockPtr_t pcb) {
     if(isReady(pcb)) {
         addPCBToList(scheduler.ready, pcb);
     }
-	else if (isWaiting(pcb)) {
+	else if (isWaiting(pcb) || isBlocked(pcb)) {
         addPCBToList(scheduler.waiting, pcb);
     }
 }

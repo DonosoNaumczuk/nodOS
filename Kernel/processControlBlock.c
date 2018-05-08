@@ -96,6 +96,10 @@ int isWaiting(processControlBlockPtr_t pcb) {
     return pcb->state == PROCESS_WAITING;
 }
 
+int isBlocked(processControlBlockPtr_t pcb) {
+    return pcb->state == PROCESS_BLOCKED;
+}
+
 int isReady(processControlBlockPtr_t pcb) {
 	return pcb->state == PROCESS_READY;
 }

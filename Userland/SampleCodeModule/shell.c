@@ -101,3 +101,8 @@ void receiveTest() {
 	char * result = receive("mailboxTest");
 	printf("Devolvio: %s\n", result);
 }
+
+void sendTest() {
+	createMailbox("mailboxTest");
+	send("mailboxTest","hola como va.\n", 15);
+}

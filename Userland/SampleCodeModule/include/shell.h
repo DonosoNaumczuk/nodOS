@@ -12,5 +12,6 @@
 
 int shell();
 void receiveTest();
+void sendTest();
 
 #endif

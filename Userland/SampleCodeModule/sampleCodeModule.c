@@ -6,7 +6,10 @@ void printLogo();
 int main() {
      printLogo();
      //shell();
-     receiveTest();
+
+     createProcess(&receiveTest, 0, NULL);
+     createProcess(&sendTest, 0, NULL);
+     
      return 0;
 }
 
