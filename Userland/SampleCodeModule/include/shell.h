@@ -11,5 +11,6 @@
 #define   NULL (void * ) 0
 
 int shell();
+void receiveTest();
 
 #endif

@@ -5,7 +5,8 @@ void printLogo();
 
 int main() {
      printLogo();
-     shell();
+     //shell();
+     receiveTest();
      return 0;
 }
 

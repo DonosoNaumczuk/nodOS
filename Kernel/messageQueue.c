@@ -64,7 +64,7 @@ static mailbox_t newMailbox(const char *mailboxId) {
 	newMailbox->mailboxId = allocateMemory(stringLength(mailboxId) + 1);
 	stringCopy(newMailbox->mailboxId,mailboxId);
 	newMailbox->messageQueue = newList();
-	createSemaphore(stringConcatenation(MUTEX_NAME,mailboxId),0,getProcessID());
+	createSemaphore(stringConcatenation(SEMAPHORE_NAME,mailboxId),0,getProcessID());
 	createMutualExclusion(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
 	return newMailbox;
 }

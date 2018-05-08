@@ -96,6 +96,8 @@ int shell(){
 	return 0;
 }
 
-// void receiveTest() {
-// 	//
-// }
+void receiveTest() {
+	createMailbox("mailboxTest");
+	char * result = receive("mailboxTest");
+	printf("Devolvio: %s\n", result);
+}

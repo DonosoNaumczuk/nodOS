@@ -48,7 +48,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 
 	if(strcmp("time",cmd) == 0)				return	TIME;
 	if(strcmp("help",cmd) == 0)				return	HELP;
-	if(strncmp("quadratic",cmd,14) == 0)	return	QUADRATIC;
+	if(strncmp("quadratic", cmd, 14) == 0)	return	QUADRATIC;
 	if(strncmp("linear",cmd,11) == 0)		return	LINEAR;
 	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
@@ -68,6 +68,10 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 	unsigned int i = 0;
 	unsigned int argNum = 0;
 	unsigned int negativeFlag = 0;
+	//evans
+	for(int j = 0; j<total; j++)
+	printf("%c\n", buffer[i]);
+//evans
 	while(argNum < total){
 		negativeFlag = 0;
 		while(buffer[i] == ' ')	i++;
@@ -86,8 +90,8 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 int graphQuadratic(int argumentQuantity, void** argumentVector) {
 	int args[5];	// a,b,c,xScale,yScale
 	unsigned char *buffer = (unsigned char*) (*argumentVector);
-	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
-	//printArgs(args, 5); evans
+	if(getIntArguments(buffer, args, 5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
+	printArgs(args, 5); //evans
 	if(args[3] <= 0 || args [4] <= 0) {
 		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
