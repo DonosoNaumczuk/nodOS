@@ -11,5 +11,6 @@ unsigned char putChar(unsigned char c);
 int scanf(const char* c, ...);
 int	charToInt(unsigned char* string);
 int pow(int base,unsigned int exponent);
+void changeFontColor(int newColor);
 
 #endif

@@ -48,7 +48,7 @@ void * memcpy(void * destination, const void * source, uint64_t length) {
 }
 
 
-void stringCopy(char *destination, char *source) {
+void stringCopy(char *destination,const char *source) {
 	int i = 0;
 
 	while(source[i] != 0) {
@@ -59,7 +59,7 @@ void stringCopy(char *destination, char *source) {
 	destination[i] = 0;
 }
 
-int stringLength(char *string) {
+int stringLength(const char *string) {
 	int length = 0;
 
 	while(string[length] != 0) {

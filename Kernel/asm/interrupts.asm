@@ -26,6 +26,9 @@ EXTERN printHexa
 EXTERN newLine
 EXTERN clear
 EXTERN goToEntryPoint
+EXTERN getProcessID
+EXTERN terminateCurrentProcess
+
 
 EXTERN schedule
 
@@ -94,8 +97,10 @@ SECTION .text
 	call exceptionDispatcher
 
 	popState
-
-	mov qword [rsp], goToEntryPoint
+	call getProcessID
+	mov rdi, rax
+	call terminateCurrentProcess
+	;mov qword [rsp], goToEntryPoint
 	iretq
 %endmacro
 

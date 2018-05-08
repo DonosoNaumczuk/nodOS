@@ -26,26 +26,36 @@ listObject_t newList();
    Return SIZE_ERROR if the size is smaller than 1
    Return INSERTION_OK if the element was inserted to the list
 */
-int addElement(listObject_t list,void *element,const unsigned int size);
+int addElement(listObject_t list,const void *element,const unsigned int size);
 
 int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index);
 
-int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference,void *buffer);
+int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference,void *buffer);
 
 int getFirstElement(listObject_t list,void * buffer);
 
-void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference);
+void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
+
+void *getFirstElementReferece(listObject_t list);
 
 // int removeElementOnIndex(listObject_t list,const unsigned int index);
-
-int removeFirst(listObject_t list);
 
 int size(listObject_t list);
 
 int contains(listObject_t list,int (*compareTo)(void*,void*),void *reference);
 
-int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference);
+int removeFirst(listObject_t list);
+
+int removeAndFreeFirst(listObject_t list);
+
+int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
+
+int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
 
 int removeAllElements(listObject_t list);
+
+int removeAndFreeAllElements(listObject_t list);
+
+void freeList();
 
 #endif

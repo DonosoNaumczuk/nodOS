@@ -38,5 +38,19 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		}
 		case GET_PID:
 			return getProcessID();
+		case SEND_MAILBOX:
+			send(rsi, rdx, rcx);
+			return 0;
+		case RECEIVE_MAILBOX:
+			return receive(rsi);
+		case CREATE_MAILBOX:
+			return createMailbox(rsi);
+		case DESTROY_MAILBOX:
+			closeMailbox(rsi);
+			return 0;
+		case ALLOCATE_MEMORY:
+			return allocateMemory(rsi);
+		case FREE:
+			return freeMemory(rsi);
 	}
 }

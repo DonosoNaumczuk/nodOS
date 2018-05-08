@@ -2,6 +2,7 @@
 
 
 
+void printArgs(int *args, int size);
 
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size){
@@ -19,15 +20,15 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case QUADRATIC:
 			processId = createProcess(&graphQuadratic, 1, &arguments);
 			return	waitChild(processId);
-		
-		//return	graphCuadratic(arguments);
 		case LINEAR:
-		return	graphLinear(arguments);
+			processId = createProcess(&graphLinear, 1, &arguments);
+			return	waitChild(processId);
 		case HELP:
 			processId = createProcess(&printHelp, 1, &arguments);
 			return waitChild(processId);
 		case TEST:
-		return	test(arguments);
+			processId = createProcess(&test, 1, &arguments);
+			return waitChild(processId);
 	}
 	return 1;
 }
@@ -86,7 +87,8 @@ int graphQuadratic(int argumentQuantity, void** argumentVector) {
 	int args[5];	// a,b,c,xScale,yScale
 	unsigned char *buffer = (unsigned char*) (*argumentVector);
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
-	if(args[3] <= 0 || args [4] <= 0){
+	//printArgs(args, 5); evans
+	if(args[3] <= 0 || args [4] <= 0) {
 		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
 	}
@@ -95,10 +97,12 @@ int graphQuadratic(int argumentQuantity, void** argumentVector) {
 	return VALID_CMD;
 }
 
-int graphLinear(unsigned char* buffer) {
-	int args[3];
-	if(getIntArguments(buffer,args,3) != VALID_CMD)	return	ARGS_ERROR;
-	if(args[2] <= 0 || args [3] <= 0){
+int graphLinear(int argumentQuantity, void** argumentVector) {
+	int args[4];//a b xScale yScale
+	unsigned char *buffer = (unsigned char*)(*argumentVector);
+	if(getIntArguments(buffer,args,4) != VALID_CMD)	return	ARGS_ERROR;
+	//printArgs(args, 4);
+	if(args[2] <= 0 || args [3] <= 0) {
 		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
 	}
@@ -107,7 +111,8 @@ int graphLinear(unsigned char* buffer) {
 	return	VALID_CMD;
 }
 
-int test(unsigned char* buffer) {
+int test(int argumentQuantity, void** argumentVector) {
+	unsigned char *buffer = (unsigned char*)(*argumentVector);
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
@@ -131,4 +136,10 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	return	-1;
 	else 	return	ARGS_ERROR;
+}
+
+void printArgs(int *args, int size) {//evans
+	for (int  i = 0; i < size; i++) {
+		printf("args[%d] = %d\n", i, args[i]);
+	}
 }

@@ -2,8 +2,10 @@
 
 #define MAX 100
 
+static int color = 0x0F;
+
 unsigned char putChar(unsigned char c){
-	write(&c,1,0x0F);
+	write(&c,1,color);
 	return c;
 }
 
@@ -56,13 +58,13 @@ int printf(const char* c, ...){
 		}
 		if(j==MAX){
 			aux[j];
-			write(aux,MAX,0x0F);
+			write(aux,MAX,color);
 			j = 0;
 		}
 		i++;
 	}
 	va_end(args);
-	write(aux,j,0x0F);
+	write(aux,j,color);
 }
 
 int scanf(const char* c, ...){
@@ -242,6 +244,8 @@ int	charToInt(unsigned char* string){
 	return res;
 }
 
-
+void changeFontColor(int newColor) {
+	color = newColor;
+}
 
 
