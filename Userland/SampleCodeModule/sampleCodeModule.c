@@ -7,8 +7,8 @@ int main() {
      printLogo();
      shell();
 
-     //createProcess(&receiveTest, 0, NULL);
-     //createProcess(&sendTest, 0, NULL);
+     //createProcess(&receiveTest, 0, NULL); //evans
+     //createProcess(&sendTest, 0, NULL); //evans
 
      return 0;
 }

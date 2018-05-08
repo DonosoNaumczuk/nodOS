@@ -64,22 +64,26 @@ int printTime(int argumentQuantity, void **argumentVector) {
 	return	VALID_CMD;
 }
 
-unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total) {
+unsigned int getIntArguments(unsigned char buffer[], int args[], unsigned int total) {
 	unsigned int i = 0;
 	unsigned int argNum = 0;
 	unsigned int negativeFlag = 0;
-	//evans
-	for(int j = 0; j<total; j++)
-	printf("%c\n", buffer[i]);
-//evans
 	while(argNum < total){
 		negativeFlag = 0;
-		while(buffer[i] == ' ')	i++;
-		if(buffer[i] != 0)	args[argNum]	=	charToInt(buffer + i);
-		else	return	ARGS_ERROR;
-		while((buffer[i] != ' ') && (buffer[i] != 0)){
+		while(buffer[i] == ' ') {
+			i++;
+		}
+		if(buffer[i] != 0) {
+			args[argNum]	=	charToInt(buffer + i);
+		}
+		else {
+			return	ARGS_ERROR;
+		}
+		while((buffer[i] != ' ') && (buffer[i] != 0)) {
 			if(buffer[i] == '-' && !negativeFlag)	negativeFlag = 1;
-			else if(!isNumber(buffer[i]))	return	ARGS_ERROR;
+			else if(!isNumber(buffer[i]))	{
+				return	ARGS_ERROR;
+			}
 			i++;
 		}
 		argNum++;
@@ -89,9 +93,10 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 
 int graphQuadratic(int argumentQuantity, void** argumentVector) {
 	int args[5];	// a,b,c,xScale,yScale
-	unsigned char *buffer = (unsigned char*) (*argumentVector);
-	if(getIntArguments(buffer, args, 5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
-	printArgs(args, 5); //evans
+	unsigned char *buffer = (unsigned char *) (*argumentVector);
+	if(getIntArguments(buffer, args, 5) != VALID_CMD) {
+		return	ARGS_ERROR;	//Cantidad de argumentos invalida.
+	}
 	if(args[3] <= 0 || args [4] <= 0) {
 		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
@@ -105,7 +110,6 @@ int graphLinear(int argumentQuantity, void** argumentVector) {
 	int args[4];//a b xScale yScale
 	unsigned char *buffer = (unsigned char*)(*argumentVector);
 	if(getIntArguments(buffer,args,4) != VALID_CMD)	return	ARGS_ERROR;
-	//printArgs(args, 4);
 	if(args[2] <= 0 || args [3] <= 0) {
 		printf("Scales must be greater than zero\n");
 		return ERROR_CMD;
