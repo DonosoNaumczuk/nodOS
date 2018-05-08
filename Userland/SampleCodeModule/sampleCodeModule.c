@@ -5,11 +5,11 @@ void printLogo();
 
 int main() {
      printLogo();
-     //shell();
+     shell();
 
-     createProcess(&receiveTest, 0, NULL);
-     createProcess(&sendTest, 0, NULL);
-     
+     //createProcess(&receiveTest, 0, NULL);
+     //createProcess(&sendTest, 0, NULL);
+
      return 0;
 }
 
