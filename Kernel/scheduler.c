@@ -5,8 +5,6 @@ typedef struct scheduler_t {
    processControlBlockListPtr_t waiting;
 } scheduler_t;
 
-#define SCHEDULER_MUTEX_ID "schedulerMutex"
-
 void _force_context_switch(void);
 int mutex_lock(uint8_t * arg);
 
@@ -18,12 +16,12 @@ static int isFirst = TRUE;
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
     scheduler.waiting = initializePCBList();
-    createMutualExclusion(SCHEDULER_MUTEX_ID);
-    lockIfUnlocked(SCHEDULER_MUTEX_ID, 0);
+    createMutualExclusion(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
+    lockIfUnlocked(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
 }
 
 void startScheduler() {
-    unlock(SCHEDULER_MUTEX_ID, 0);
+    unlock(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
     _force_context_switch();
 }
 
@@ -34,7 +32,7 @@ void * schedule(void * currentProcessStackPointer) {
 	if(ticksPassed == QUANTUM) {
         ticksPassed = 0;
     }
-    if(ticksPassed == 0 && lockIfUnlocked(SCHEDULER_MUTEX_ID, 0))  {
+    if(ticksPassed == 0 && lockIfUnlocked(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID))  {
         if(isFirst) {
             isFirst = FALSE;
         }
@@ -42,7 +40,7 @@ void * schedule(void * currentProcessStackPointer) {
             nextProcess(currentProcessStackPointer);
         }
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
-        unlock(SCHEDULER_MUTEX_ID, 0);
+        unlock(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
     }
 
 	return aux;
@@ -76,6 +74,7 @@ void terminateCurrentProcess(int returnValue) {
     freeStack(currentPCB);
     setState(currentPCB, PROCESS_TERMINATE);
     _force_context_switch();
+
 }
 
 void sleepCurrent(int condition) {

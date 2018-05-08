@@ -9,7 +9,9 @@
 #include <mutualExclusion.h>
 #include <processControlBlock.h>
 
-#define QUANTUM 1//quantity of ticks
+#define SCHEDULER_MUTEX_ID "schedulerMutex"
+#define SCHEDULER_PROCESS_ID 0
+#define QUANTUM 1 /* Quantity of ticks to force context switching */
 
 void initializeScheduler();
 void * schedule(void * currentProcessStackPointer);

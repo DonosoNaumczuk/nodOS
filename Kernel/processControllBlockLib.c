@@ -23,6 +23,7 @@ processControlBlockListPtr_t initializePCBList() {
 }
 
 void addPCBToList(processControlBlockListPtr_t list, processControlBlockPtr_t pcb) {
+   
     if(list != NULL && pcb != NULL) {
         processControlBlockNode *pcbNode = allocateMemory(sizeof(processControlBlockNode));
         pcbNode->next = NULL;

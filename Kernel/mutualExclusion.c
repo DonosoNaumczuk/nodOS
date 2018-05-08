@@ -28,9 +28,20 @@ void initMutualExclusion() {
 
 	initializations++;
 	mutexes = newList();
+
+	/* initialize mutex master */
+	mutex_t mutex;
+	mutex.id 					= MUTEX_MASTER_ID;
+	mutex.status 				= UNLOCKED;
+	mutex.ownerProcessId		= NULL_PID;
+	mutex.sleepingProcessesId	= newList();
+
+	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
 }
 
-int createMutualExclusion(char *mutexId) {
+int createMutualExclusion(char *mutexId, uint64_t processId) {
+	lock(MUTEX_MASTER_ID, processId); /* For atomic mutex creation */
+
 	if(existMutex(mutexId)) {
 		return ERROR_STATE;
 	}
@@ -42,6 +53,8 @@ int createMutualExclusion(char *mutexId) {
 	mutex.sleepingProcessesId	= newList();
 
 	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
+
+	unlock(MUTEX_MASTER_ID, processId);
 
 	return OK_STATE;
 }

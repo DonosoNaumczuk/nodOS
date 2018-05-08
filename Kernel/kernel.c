@@ -8,6 +8,7 @@
 #include <memoryAllocator.h>
 #include <mutualExclusion.h>
 #include <processControlBlock.h>
+#include <scheduler.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -54,6 +55,7 @@ void * initializeKernelBinary() {
 	} //evans: check if this is the
    	  //base address and do the #define
 	initMutualExclusion();
+	initSemaphores(SCHEDULER_PROCESS_ID);
 	initializeScheduler();
 	load_idt();
 	clear();
