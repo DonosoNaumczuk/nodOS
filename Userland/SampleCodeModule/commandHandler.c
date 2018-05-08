@@ -23,12 +23,12 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case LINEAR:
 			processId = createProcess(&graphLinear, 1, &arguments);
 			return	waitChild(processId);
-//			return	graphLinear(arguments);
 		case HELP:
 			processId = createProcess(&printHelp, 1, &arguments);
 			return waitChild(processId);
 		case TEST:
-		return	test(arguments);
+			processId = createProcess(&test, 1, &arguments);
+			return waitChild(processId);
 	}
 	return 1;
 }
@@ -98,7 +98,7 @@ int graphQuadratic(int argumentQuantity, void** argumentVector) {
 }
 
 int graphLinear(int argumentQuantity, void** argumentVector) {
-	int args[4];
+	int args[4];//a b xScale yScale
 	unsigned char *buffer = (unsigned char*)(*argumentVector);
 	if(getIntArguments(buffer,args,4) != VALID_CMD)	return	ARGS_ERROR;
 	//printArgs(args, 4);
@@ -111,7 +111,8 @@ int graphLinear(int argumentQuantity, void** argumentVector) {
 	return	VALID_CMD;
 }
 
-int test(unsigned char* buffer) {
+int test(int argumentQuantity, void** argumentVector) {
+	unsigned char *buffer = (unsigned char*)(*argumentVector);
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
