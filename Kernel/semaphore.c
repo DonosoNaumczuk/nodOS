@@ -1,9 +1,9 @@
 #include <semaphore.h>
 
-wait() {
-
+int semaphoreWait(char *semaphoreId) {
+	
 }
 
-post() {
-	
+int semaphorePost(char *semaphoreId) {
+
 }
