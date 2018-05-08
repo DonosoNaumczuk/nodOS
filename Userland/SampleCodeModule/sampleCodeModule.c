@@ -10,6 +10,7 @@ int main() {
 }
 
 void printLogo(){
+changeFontColor(49);
 printf("\n\n");
 printf("                                                                                                               \n");
 printf("                                                                 dddddddd                                      \n");
@@ -36,4 +37,5 @@ printf("                                                                        
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");
+changeFontColor(0x0F);
 }
