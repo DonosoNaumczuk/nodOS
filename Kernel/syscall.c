@@ -1,7 +1,7 @@
 #include <syscall.h>
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx) {
-	switch(rdi){
+	switch(rdi) {
 		case WRITE:
 			printWithColor((char*)rsi,rdx,(char)rcx);
 			return 0;
@@ -32,9 +32,11 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		case WAKE_UP_PROCESS:
 			wakeUp(rdi);
 			return 0;
-		case CREATE_PROCESS:
-			processControlBlockPtr_t son = createProcess(getCurrentPCB(), rdi, rsi, rdx);
-			return getPid(son);
+		case CREATE_PROCESS: {
+			processControlBlockPtr_t parent = getCurrentPCB();
+			processControlBlockPtr_t child = createProcess(parent, rdi, rsi, rdx);
+			return getPid(child);
+		}
 		case GET_PID:
 			return getProcessID();
 	}

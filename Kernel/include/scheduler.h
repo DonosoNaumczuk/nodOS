@@ -7,6 +7,7 @@
 #include <memoryAllocator.h>
 #include <videoDriver.h>
 #include <mutualExclusion.h>
+#include <processControlBlock.h>
 
 #define QUANTUM 1//quantity of ticks
 

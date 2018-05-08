@@ -7,6 +7,7 @@
 #include <lib.h>
 #include <read.h>
 #include <scheduler.h>
+#include <processControlBlock.h>
 
 #define WRITE 0
 #define READ 1
