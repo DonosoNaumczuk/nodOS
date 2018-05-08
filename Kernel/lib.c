@@ -76,7 +76,5 @@ char *stringConcatenation(const char *s1,const char *s2) {
 	stringCopy(result,s1);
 	stringCopy(result + s1Length, s2);
 	result[s1Length + s2Length] = 0;
-	printWithColor(result, s1Length + s2Length + 1, 49);
-	newLine();
 	return result;
 }
