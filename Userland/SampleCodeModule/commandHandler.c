@@ -29,19 +29,20 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	switch(cmdID){
 		case TIME:
 			processId = createProcess(&printTime, 1, &arguments);
-			printf("id = %d\n",processId);
 			return	waitChild(processId);
-		//return printTime(arguments);
 		case EXIT:
 		return	exit_(arguments);
 		case CUADRATIC:
-		return	graphCuadratic(arguments);
+			printf("reconoce cuadratic.\n");
+			processId = createProcess(&graphCuadratic, 1, &arguments);
+			return	waitChild(processId);
+		
+		//return	graphCuadratic(arguments);
 		case LINEAR:
 		return	graphLinear(arguments);
 		case HELP:
 			processId = createProcess(&printHelp, 1, &arguments);
 			return waitChild(processId);
-			//return	printHelp(arguments);
 		case TEST:
 		return	test(arguments);
 	}
@@ -71,7 +72,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	return INVALID;
 }
 
-int printTime(int argc, void **argumentVector) {
+int printTime(int argumentQuantity, void **argumentVector) {
 	if(*(unsigned char*)(*argumentVector) != 0)	return ARGS_ERROR;
 	unsigned char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
 	getTimeDateString(timeDate);
@@ -98,8 +99,9 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 	return VALID_CMD;
 }
 
-int graphCuadratic(unsigned char* buffer) {
+int graphCuadratic(int argumentQuantity, void** argumentVector) {
 	int args[5];	// a,b,c,xScale,yScale
+	unsigned char *buffer = (unsigned char*) (*argumentVector);
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
 	if(args[3] <= 0 || args [4] <= 0){
 		printf("Scales must be greater than zero\n");
@@ -132,7 +134,7 @@ int test(unsigned char* buffer) {
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
-int printHelp(int argc, void **argumentVector) {
+int printHelp(int argumentQuantity, void **argumentVector) {
 	if(*(unsigned char *)(*argumentVector) != 0)	return	ARGS_ERROR;
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
