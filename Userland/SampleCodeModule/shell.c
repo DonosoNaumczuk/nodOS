@@ -107,3 +107,24 @@ void sendTest() {
 	createMailbox("mailboxTest");
 	send("mailboxTest","hola como va.\n", 15);
 }
+//evans
+void sendTest2() {
+	createMailbox("mailboxTest2");
+	send("mailboxTest2","segundo mensaje.\n", 18);
+}
+//evans
+void receiveTest2() {
+	createMailbox("mailboxTest2");
+	printf("recibio: %s\n",receive("mailboxTest2"));
+}
+
+void sendTest3() {
+	createMailbox("mailboxTest3");
+	send("mailboxTest3", "mensaje", 8);
+
+}
+
+void receiveTest3() {
+	createMailbox("mailboxTest3");
+		printf("recibio: %s\n",receive("mailboxTest3"));
+}

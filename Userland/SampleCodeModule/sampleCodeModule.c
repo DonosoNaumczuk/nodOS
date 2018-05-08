@@ -5,11 +5,28 @@ void printLogo();
 
 int main() {
      printLogo();
-     shell();
+     //shell();
 
-     //createProcess(&receiveTest, 0, NULL); //evans
-     //createProcess(&sendTest, 0, NULL); //evans
+     createProcess(&sendTest, 0, NULL); //evans
+     createProcess(&sendTest, 0, NULL); //evans
+     createProcess(&sendTest, 0, NULL); //evans
+     createProcess(&receiveTest, 0, NULL); //evans
+     createProcess(&receiveTest, 0, NULL); //evans
+     createProcess(&receiveTest, 0, NULL); //evans
+     // createProcess(&sendTest3, 0, NULL); //evans
+     // createProcess(&receiveTest3, 0, NULL); //evans
+     // createProcess(&sendTest3, 0, NULL); //ev
 
+     // createProcess(&receiveTest2, 0, NULL); //evans
+     // createProcess(&sendTest, 0, NULL); //evans
+     // createProcess(&sendTest3, 0, NULL); //evans
+     // createProcess(&receiveTest, 0, NULL); //evans
+     // createProcess(&sendTest2, 0, NULL); //evans
+     // createProcess(&receiveTest3, 0, NULL); //evans
+     // createProcess(&sendTest3, 0, NULL); //evans
+     // createProcess(&receiveTest3, 0, NULL); //evans
+     // createProcess(&sendTest3, 0, NULL); //evans
+     
      return 0;
 }
 
