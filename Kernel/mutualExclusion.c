@@ -2,12 +2,12 @@
 
 typedef struct {
 	char *id;
-	uint8_t status;
+	uint32_t status;
 	sint64_t ownerProcessId;
 	listObject_t sleepingProcessesId;
 } mutex_t;
 
-static uint8_t existMutex(char *mutexId);
+static uint32_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
 static int mutexCompare(char *mutexId, mutex_t *mutex);
 
@@ -15,7 +15,7 @@ static int mutexCompare(char *mutexId, mutex_t *mutex);
 	Set status to locked.
 	Returns TRUE if was currenty locked,
 	otherwise return FALSE, atomically. */
-static uint8_t mutex_lock(uint8_t *status);
+static uint32_t mutex_lock(uint32_t *status);
 
 static listObject_t mutexes;
 
@@ -117,7 +117,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 	return couldLock;
 }
 
-static uint8_t existMutex(char *mutexId) {
+static uint32_t existMutex(char *mutexId) {
 	return contains(mutexes, &mutexCompare, mutexId);
 }
 
