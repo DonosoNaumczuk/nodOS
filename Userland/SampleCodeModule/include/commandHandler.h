@@ -8,7 +8,7 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 int graphCuadratic(unsigned char* buffer);
 int graphLinear(unsigned char* buffer);
 int test(unsigned char* buffer);
-int printHelp(unsigned char* arguments);
+int printHelp(int argc, void **argumentVector);
 int exit_(unsigned char* arguments);
 
 #endif
