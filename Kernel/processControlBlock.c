@@ -106,9 +106,9 @@ void setState(processControlBlockPtr_t pcb, int state) {
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
     int returnValue = ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
-
 	terminateCurrentProcess(returnValue);
 }
+
 
 void giveChildsToFather(processControlBlockPtr_t pcb) {
 	pcb->parent->childs = concatenatePCBList(pcb->parent->childs, pcb->childs);

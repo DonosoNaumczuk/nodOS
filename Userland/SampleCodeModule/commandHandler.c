@@ -29,6 +29,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	switch(cmdID){
 		case TIME:		
 			processId = createProcess(&printTime, 1, &arguments);
+			printf("id = %d\n",processId);
 			return	waitChild(processId);
 		//return printTime(arguments);
 		case EXIT:		
@@ -38,8 +39,9 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case LINEAR:	
 		return	graphLinear(arguments);
 		case HELP:		
-			
-			return	printHelp(arguments);
+			processId = createProcess(&printHelp, 1, &arguments);
+			return waitChild(processId);
+			//return	printHelp(arguments);
 		case TEST:		
 		return	test(arguments);
 	}
@@ -130,8 +132,8 @@ int test(unsigned char* buffer) {
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
-int printHelp(unsigned char* arguments) {
-	if(*arguments != 0)	return	ARGS_ERROR;
+int printHelp(int argc, void **argumentVector) {
+	if(*(unsigned char *)(*argumentVector) != 0)	return	ARGS_ERROR;
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
 	printf("          * cuadratic a b c xScale yScale : print a cuadratic fuction [ax^2 + bx + c]\n");
