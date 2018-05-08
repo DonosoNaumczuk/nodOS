@@ -31,6 +31,7 @@ typedef struct processControlBlock_t {
     uint8_t state;
     struct processControlBlock_t *parent;
     processControlBlockListPtr_t childs;
+	int returnValue;
     void *stackPointer;
 } processControlBlock_t;
 
@@ -104,13 +105,21 @@ void setState(processControlBlockPtr_t pcb, int state) {
 }
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
-    ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
+    int returnValue = ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
 
-	terminateCurrentProcess();
+	terminateCurrentProcess(returnValue);
 }
 
 void giveChildsToFather(processControlBlockPtr_t pcb) {
 	pcb->parent->childs = concatenatePCBList(pcb->parent->childs, pcb->childs);
+}
+
+void setReturnValue(processControlBlockPtr_t pcb, int returnValue) {
+	pcb->returnValue = returnValue;
+}
+
+int getReturnValue(processControlBlockPtr_t son) {
+	return son->returnValue;
 }
 
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,

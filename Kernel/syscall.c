@@ -21,20 +21,22 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			clear();
 			return 0;
 		case TERMINATE_PROCESS:
-			terminateCurrentProcess();
+			terminateCurrentProcess(0);
 			return 0;
 		case SLEEP_PROCESS:
 			sleepCurrent();
 			return 0;
 		case WAIT_CHILD_PROCESS:
-			waitChild(rdi);
-			return 0;
+			printWithColor("antes del waitchild.\n", 22, 49);
+			waitChild(rsi);
+			printWithColor("volvio del waitchild\n", 22, 49);
+	//			return waitChild(rsi);
 		case WAKE_UP_PROCESS:
-			wakeUp(rdi);
+			wakeUp(rsi);
 			return 0;
 		case CREATE_PROCESS: {
 			processControlBlockPtr_t parent = getCurrentPCB();
-			processControlBlockPtr_t child = createProcess(parent, rdi, rsi, rdx);
+			processControlBlockPtr_t child = createProcess(parent, rsi, rdx, rcx);
 			return getPid(child);
 		}
 		case GET_PID:
