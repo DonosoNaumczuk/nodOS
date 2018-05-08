@@ -50,8 +50,8 @@ void closeMailbox(const char *mailboxId) {
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
 
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
-	removeAllElements(mailbox->messageQueue);
-	removeFirstElementByCriteria(mailboxList,&existMailbox,mailboxId);
+	removeAndFreeAllElements(mailbox->messageQueue);
+	removeAndFreeFirstElementByCriteria(mailboxList,&existMailbox,mailboxId);
 
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
 	//mutexClose(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());

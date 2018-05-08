@@ -81,6 +81,18 @@ int removeFirst(listObject_t list) {
 	node_t aux;
 	aux = list->head;
 	list->head = list->head->next;
+	freeMemory(aux);
+	list->size--;
+	return REMOTION_OK;
+}
+
+int removeAndFreeFirst(listObject_t list) {
+	if(list == NULL) return NULL_LIST_ERROR;
+	if(list->head == NULL) return EMPTY_LIST_ERROR;
+
+	node_t aux;
+	aux = list->head;
+	list->head = list->head->next;
 	freeMemory(aux->element);
 	freeMemory(aux);
 	list->size--;
@@ -141,7 +153,7 @@ void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void
 	return NULL;
 }
 
-int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
 	node_t aux;
 	node_t auxPrev;
 	node_t aux2;
@@ -172,6 +184,44 @@ int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*)
 		}
 		return ELEMENT_DOESNT_EXIST;
 	}
+}
+
+int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+	node_t aux;
+	node_t auxPrev;
+	node_t aux2;
+	int firstLoop = 1;
+	if(list == NULL) return NULL_LIST_ERROR;
+	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
+	if(list->head == NULL) {
+		return ELEMENT_DOESNT_EXIST;
+	}else {
+		aux = list->head;
+		auxPrev=NULL;
+
+		while (aux != NULL) {
+			if((*compareTo)(reference,aux->element)) {
+				aux2 = aux->next;
+				freeMemory(aux);
+				if(firstLoop == 1){
+					list->head = aux2;
+				}else {
+					auxPrev->next = aux2;
+				}
+				return REMOTION_OK;
+			}
+			auxPrev = aux;
+			aux = aux->next;
+			firstLoop = 0;
+		}
+		return ELEMENT_DOESNT_EXIST;
+	}
+}
+
+int removeAndFreeAllElements(listObject_t list) {
+	if(list == NULL) return NULL_LIST_ERROR;
+	while (removeAndFreeFirst(list) != EMPTY_LIST_ERROR);
+	return REMOTION_OK;
 }
 
 int removeAllElements(listObject_t list) {

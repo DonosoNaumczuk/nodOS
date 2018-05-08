@@ -40,14 +40,20 @@ void *getFirstElementReferece(listObject_t list);
 
 // int removeElementOnIndex(listObject_t list,const unsigned int index);
 
-int removeFirst(listObject_t list);
-
 int size(listObject_t list);
 
 int contains(listObject_t list,int (*compareTo)(void*,void*),void *reference);
 
+int removeFirst(listObject_t list);
+
+int removeAndFreeFirst(listObject_t list);
+
 int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
 
+int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
+
 int removeAllElements(listObject_t list);
+
+int removeAndFreeAllElements(listObject_t list);
 
 #endif
