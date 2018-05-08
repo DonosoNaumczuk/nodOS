@@ -28,9 +28,9 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	uint64_t processId;
 	switch(cmdID){
 		case TIME:		
-			//processId = createProcess(&printTime, 1, &arguments);
-		//return	waitChild(processId);
-		return printTime(arguments);
+			processId = createProcess(&printTime, 1, &arguments);
+			return	waitChild(processId);
+		//return printTime(arguments);
 		case EXIT:		
 		return	exit_(arguments);
 		case CUADRATIC:	
@@ -38,7 +38,8 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case LINEAR:	
 		return	graphLinear(arguments);
 		case HELP:		
-		return	printHelp(arguments);
+			
+			return	printHelp(arguments);
 		case TEST:		
 		return	test(arguments);
 	}
@@ -68,8 +69,8 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	return INVALID;
 }
 
-int printTime(unsigned char* arguments) {
-	if(*arguments != 0)	return ARGS_ERROR;
+int printTime(int argc, void **argumentVector) {
+	if(*(unsigned char*)(*argumentVector) != 0)	return ARGS_ERROR;
 	unsigned char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
 	getTimeDateString(timeDate);
 	printf("%s\n",timeDate);

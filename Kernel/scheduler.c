@@ -93,7 +93,9 @@ void wakeUp(uint64_t pid) {
 }
 
 int waitChild(uint64_t pid) {
+    printWithColor("entro al wait.\n", 16 , 49);
     processControlBlockPtr_t father = consultFirstPCBFromList(scheduler.ready);
+    printWithColor("entro al wait.\n", 16 , 49);
     processControlBlockPtr_t son = PCBFromListByPID(getSons(father), pid);
     if(son != NULL) {
         while (!isTerminate(son)) {

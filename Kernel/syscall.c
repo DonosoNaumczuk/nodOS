@@ -27,8 +27,10 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			sleepCurrent();
 			return 0;
 		case WAIT_CHILD_PROCESS:
-
-			return waitChild(rsi);
+			printWithColor("antes del waitchild.\n", 22, 49);
+			waitChild(rsi);
+			printWithColor("volvio del waitchild\n", 22, 49);
+	//			return waitChild(rsi);
 		case WAKE_UP_PROCESS:
 			wakeUp(rsi);
 			return 0;

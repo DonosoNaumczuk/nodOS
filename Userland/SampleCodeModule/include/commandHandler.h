@@ -2,7 +2,7 @@
 #define	_command_interpreter_h_
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size);
-int printTime(unsigned char* arguments);
+int printTime(int argc, void **argumentVector);
 int readCommand(unsigned char buffer[],int * argumentsStart);
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total);
 int graphCuadratic(unsigned char* buffer);
