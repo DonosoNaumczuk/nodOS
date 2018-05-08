@@ -8,6 +8,7 @@
 #include <listADT.h>
 #include <compareFunctions.h>
 #include <memoryAllocator.h>
+#include <processControlBlock.h>
 
 #define UNLOCKED	0
 #define LOCKED		1

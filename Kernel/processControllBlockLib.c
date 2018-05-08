@@ -70,6 +70,9 @@ processControlBlockPtr_t PCBFromListByPID(processControlBlockListPtr_t list,
             processControlBlockNode *current = list->first;
             while(current->next != NULL && output == NULL) {
                 if(isThisPid(current->next->value, pid)) {
+                    if(list->last == current->next) {
+                        list->last = current;
+                    }
                     output = removeNextPCBNode(current);
                     list->quantity--;
                 }

@@ -17,7 +17,7 @@ void addProcessToScheduler(processControlBlockPtr_t pcb);
 void terminateCurrentProcess(int returnValue);
 void nextProcess(void * currentProcessStackPointer);
 void startScheduler();
-void sleepCurrent();
+void sleepCurrent(int condition);
 void wakeUp(uint64_t pid);
 int waitChild(uint64_t pid);
 processControlBlockPtr_t getASonOfCurrentProcess();

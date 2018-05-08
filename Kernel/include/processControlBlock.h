@@ -12,6 +12,8 @@ typedef struct processControlBlock_t * processControlBlockPtr_t;
 #define PROCESS_TERMINATE 1
 #define PROCESS_NEW 2
 #define PROCESS_WAITING 3
+#define PROCESS_BLOCKED 4
+
 #define SIZE_OF_STACK 4096 /* 4K */
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs);

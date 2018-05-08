@@ -27,20 +27,20 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	unsigned char* arguments = buffer + argumentsStart;
 	uint64_t processId;
 	switch(cmdID){
-		case TIME:		
+		case TIME:
 			processId = createProcess(&printTime, 1, &arguments);
 			return	waitChild(processId);
 		//return printTime(arguments);
-		case EXIT:		
+		case EXIT:
 		return	exit_(arguments);
-		case CUADRATIC:	
+		case CUADRATIC:
 		return	graphCuadratic(arguments);
-		case LINEAR:	
+		case LINEAR:
 		return	graphLinear(arguments);
-		case HELP:		
-			
+		case HELP:
+
 			return	printHelp(arguments);
-		case TEST:		
+		case TEST:
 		return	test(arguments);
 	}
 	return 1;
