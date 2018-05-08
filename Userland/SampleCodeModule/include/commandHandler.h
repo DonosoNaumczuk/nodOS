@@ -25,7 +25,7 @@ int printTime(int argumentQuantity, void **argumentVector);
 int readCommand(unsigned char buffer[],int * argumentsStart);
 unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total);
 int graphQuadratic(int argumentQuantity, void **argumentVector);
-int graphLinear(unsigned char* buffer);
+int graphLinear(int argumentQuantity, void **argumentVector);
 int test(unsigned char* buffer);
 int printHelp(int argumentQuantity, void **argumentVector);
 int exit_(unsigned char* arguments);
