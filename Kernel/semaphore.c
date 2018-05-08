@@ -46,6 +46,7 @@ int semaphoreWait(char *semaphoreId, uint64_t processId) {
 		return OK_STATE;
 	}
 
+	unlock(semaphore->mutex, processId);
 	return OK_STATE;
 }
 
