@@ -53,13 +53,9 @@ int createMutualExclusion(char *mutexId, uint64_t processId) {
 	mutex.status 				= UNLOCKED;
 	mutex.ownerProcessId		= NULL_PID;
 	mutex.sleepingProcessesId	= newList();
-<<<<<<< HEAD
 
 	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
 
-=======
-	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
->>>>>>> e04aed8232b37c6c876316c191721a3cfcffd132
 	unlock(MUTEX_MASTER_ID, processId);
 
 	return OK_STATE;
