@@ -45,18 +45,6 @@ SECTION .text
 	pop rax
 %endmacro
 
-%macro clearStack 0
-	pop rax
-	pop rax
-	pop rax
-	pop rax
-	pop rax
-	pop rax
-	pop rax
-	pop rax
-	pop rax
-%endmacro
-
 _force_context_switch:
     mov rax,rsp
 

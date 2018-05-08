@@ -67,6 +67,10 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     return newPCB;
 }
 
+void freeStack(processControlBlockPtr_t pcb) {
+	freeMemory(pcb->stackPointer);
+}
+
 void * getStackPointer(processControlBlockPtr_t pcb) {
     return pcb->stackPointer;
 }

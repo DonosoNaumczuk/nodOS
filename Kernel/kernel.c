@@ -84,7 +84,7 @@ void cleaner(int cant, void ** args) {
 		if(son == NULL) {
 			return;
 		}
-		wait(getPid(son));
+		waitChild(getPid(son));
 	}
 }
 
