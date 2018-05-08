@@ -27,6 +27,7 @@ int isReady(processControlBlockPtr_t pcb);
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress);
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
                  void ** processArgs);
+void freeStack(processControlBlockPtr_t pcb);
 void setState(processControlBlockPtr_t pcb, int state);
 void giveChildsToFather(processControlBlockPtr_t pcb);
 int isThisPid(processControlBlockPtr_t pcb, long int pid);
