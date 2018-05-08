@@ -1,22 +1,6 @@
-#include	<lib.h>
-#include	<string.h>
-#include	<system.h>
-#include	<cuadraticGraficator.h>
-#include	<shell.h>
-#include	<exceptionSample.h>
-#include  <syscall.h>
 #include <commandHandler.h>
 
-#define	MAX_CMD_LONG	15
 
-#define	INVALID		-1
-#define	EXIT			 0
-#define	TIME			 1
-#define	CUADRATIC	 	 2
-#define	LINEAR		 3
-#define	HELP			 4
-#define	ECHO			 5
-#define	TEST 		 6
 
 
 
@@ -32,9 +16,8 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			return	waitChild(processId);
 		case EXIT:
 		return	exit_(arguments);
-		case CUADRATIC:
-			printf("reconoce cuadratic.\n");
-			processId = createProcess(&graphCuadratic, 1, &arguments);
+		case QUADRATIC:
+			processId = createProcess(&graphQuadratic, 1, &arguments);
 			return	waitChild(processId);
 		
 		//return	graphCuadratic(arguments);
@@ -64,7 +47,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 
 	if(strcmp("time",cmd) == 0)				return	TIME;
 	if(strcmp("help",cmd) == 0)				return	HELP;
-	if(strncmp("cuadratic",cmd,14) == 0)	return	CUADRATIC;
+	if(strncmp("quadratic",cmd,14) == 0)	return	QUADRATIC;
 	if(strncmp("linear",cmd,11) == 0)		return	LINEAR;
 	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
@@ -99,7 +82,7 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 	return VALID_CMD;
 }
 
-int graphCuadratic(int argumentQuantity, void** argumentVector) {
+int graphQuadratic(int argumentQuantity, void** argumentVector) {
 	int args[5];	// a,b,c,xScale,yScale
 	unsigned char *buffer = (unsigned char*) (*argumentVector);
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
@@ -138,7 +121,7 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	if(*(unsigned char *)(*argumentVector) != 0)	return	ARGS_ERROR;
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
-	printf("          * cuadratic a b c xScale yScale : print a cuadratic fuction [ax^2 + bx + c]\n");
+	printf("          * quadratic a b c xScale yScale : print a cuadratic fuction [ax^2 + bx + c]\n");
 	printf("          * linear a b xScale yScale : print a linear function [ax + b]\n");
 	printf("          * exit : exit \n");
 	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
