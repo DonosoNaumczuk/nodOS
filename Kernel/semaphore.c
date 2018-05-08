@@ -18,6 +18,8 @@ static char *getMutexId(char *semaphoreId);
 static uint32_t existSemaphore(char *semaphoreId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
 static int semaphoreCompare(char *semaphoreId, semaphore_t *semaphore);
+static semaphore_t *getSemaphore(char *semaphoreId);
+static void removeSemaphore(char *semaphoreId);
 
 static listObject_t semaphores;
 

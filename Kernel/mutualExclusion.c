@@ -133,13 +133,13 @@ int terminateMutualExclusion(char *mutexId, uint64_t processId) {
 	lock(MUTEX_MASTER_ID, processId); /* For atomic termination */
 
 	if(!existMutex(mutexId)) {
-		unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
+		unlock(MUTEX_MASTER_ID, processId);
 		return ERROR_STATE;
 	}
 
 	removeMutex(mutexId);
 
-	unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
+	unlock(MUTEX_MASTER_ID, processId);
 
 	return OK_STATE;
 }
