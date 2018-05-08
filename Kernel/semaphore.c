@@ -22,7 +22,7 @@ int semaphoreWait(char *semaphoreId) {
 	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
 							  semaphores, &semaphoreCompare, semaphoreId);
 
-	lock(semaphore->mutexId);
+	lock(semaphore->mutex);
 
 	if(semaphore->counter == INT_MIN) {
 		return ERROR_STATE;
@@ -33,7 +33,7 @@ int semaphoreWait(char *semaphoreId) {
 	if(semaphore->counter < 0) {
 		addElement(semaphore->sleepingProcessesId, (void *) &processId,
 				   sizeof(uint64_t)); /* Adds pid to sleepProcessId */
-		unlock(semaphore->mutexId);
+		unlock(semaphore->mutex);
 		sleepCurrent(); /* Sleeps process */
 	}
 
@@ -48,15 +48,15 @@ int semaphoreTryWait(char *semaphoreId) {
 	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
 							  semaphores, &semaphoreCompare, semaphoreId);
 
-	lock(semaphore->mutexId);
+	lock(semaphore->mutex);
 
 	if(semaphore->counter > 0) {
 		semaphore->counter--;
-		unlock(semaphore->mutexId);
+		unlock(semaphore->mutex);
 		return TRUE;
 	}
 
-	unlock(semaphore->mutexId);
+	unlock(semaphore->mutex);
 
 	return FALSE;
 }
@@ -73,7 +73,7 @@ int semaphorePost(char *semaphoreId) {
 		return ERROR_STATE;
 	}
 
-	lock(semaphore->mutexId);
+	lock(semaphore->mutex);
 
 	if(semaphore->counter < 0 && size(semaphore->sleepingProcessesId) > 0) {
 		uint64_t processId = dequeueProcessId(semaphore->sleepingProcessesId);
@@ -82,7 +82,7 @@ int semaphorePost(char *semaphoreId) {
 
 	semaphore->counter++;
 
-	unlock(semaphore->mutexId);
+	unlock(semaphore->mutex);
 
 	return OK_STATE;
 }
@@ -114,7 +114,7 @@ int createSemaphore(char *semaphoreId, int counterInitialValue) {
 	semaphore_t semaphore;
 	semaphore.id 					= semaphoreId;
 	semaphore.counter				= counterInitialValue;
-	semaphore.mutexId 				= mutexId;
+	semaphore.mutex 				= mutexId;
 	semaphore.sleepingProcessesId	= newList();
 
 	addElement(semaphores, (void *) &semaphore, sizeof(semaphore_t));
