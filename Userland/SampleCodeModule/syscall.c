@@ -36,3 +36,10 @@ int waitChild(uint64_t processId) {
      return _int_80(WAIT_CHILD_PROCESS, processId, 0, 0);
 }
 
+void * allocateMemory(uint64_t bytesToAllocate) {
+     return _int_80(ALLOCATE_MEMORY, bytesToAllocate, 0, 0);
+}
+
+uint32_t freeMemory(void * addressToFree) {
+     return _int_80(FREE, addressToFree, 0, 0);
+}

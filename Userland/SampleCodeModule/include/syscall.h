@@ -10,12 +10,22 @@
 #define GET_RESOLUTION_Y 4
 #define TIME 5
 #define CLEAR 6
+//process
 #define TERMINATE_PROCESS 7
 #define SLEEP_PROCESS 8
 #define WAIT_CHILD_PROCESS 9
 #define WAKE_UP_PROCESS 10
 #define CREATE_PROCESS 11
 #define GET_PID 12
+//mailbox
+#define SEND_MAILBOX       13
+#define RECEIVE_MAILBOX    14
+#define CREATE_MAILBOX     15
+#define DESTROY_MAILBOX    16
+//memory Allocator
+#define ALLOCATE_MEMORY    17
+#define FREE               18
+
 
 #define KEYBOARD_IN_ID 0
 #define SCREEN_IN_ID 1
