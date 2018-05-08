@@ -14,6 +14,6 @@ int createMailbox(const char *mailboxID);
 void send(const char *mailboxId, const void *message, const unsigned int messageSize);
 void * receive(const char *mailboxId);
 void closeMailbox(const char *mailboxID);
-void startMessageQueue();
+void initMessageQueue();
 
 #endif
