@@ -27,6 +27,6 @@ int semaphorePost(char *semaphoreId, uint64_t processId);
    TRUE if can decrement (without sleep/block)
    and FALSE otherwise. */
 int semaphoreTryWait(char *semaphoreId, uint64_t processId);
-
+int terminateSemaphore(char *semaphoreId, uint64_t processId);
 
 #endif

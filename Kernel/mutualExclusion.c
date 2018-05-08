@@ -7,15 +7,16 @@ typedef struct {
 	listObject_t sleepingProcessesId;
 } mutex_t;
 
-static uint32_t existMutex(char *mutexId);
-static uint64_t dequeueProcessId(listObject_t processQueue);
-static int mutexCompare(char *mutexId, mutex_t *mutex);
-
 /*	Implemented at mutualExclusion.asm
 	Set status to locked.
 	Returns TRUE if was currenty locked,
 	otherwise return FALSE, atomically. */
 static uint32_t mutex_lock(uint32_t *status);
+static uint32_t existMutex(char *mutexId);
+static uint64_t dequeueProcessId(listObject_t processQueue);
+static int mutexCompare(char *mutexId, mutex_t *mutex);
+static mutex_t *getMutex(mutexId);
+static void removeMutex(char *mutexId);
 
 static listObject_t mutexes;
 
@@ -43,6 +44,7 @@ int createMutualExclusion(char *mutexId, uint64_t processId) {
 	lock(MUTEX_MASTER_ID, processId); /* For atomic mutex creation */
 
 	if(existMutex(mutexId)) {
+		unlock(MUTEX_MASTER_ID, processId);
 		return ERROR_STATE;
 	}
 
@@ -51,9 +53,9 @@ int createMutualExclusion(char *mutexId, uint64_t processId) {
 	mutex.status 				= UNLOCKED;
 	mutex.ownerProcessId		= NULL_PID;
 	mutex.sleepingProcessesId	= newList();
-	printWithColor("antes\n",6,7);
+
 	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
-	printWithColor("despues\n",8,7);
+
 	unlock(MUTEX_MASTER_ID, processId);
 
 	return OK_STATE;
@@ -64,8 +66,7 @@ int lock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
-					 &mutexCompare, mutexId);
+	mutex_t *mutex = getMutex(mutexId);
 
     int wasLocked = mutex_lock(&mutex->status);
 
@@ -86,8 +87,7 @@ int unlock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
-					 &mutexCompare, mutexId);
+	mutex_t *mutex = getMutex(mutexId);
 
 	if(mutex->ownerProcessId == processId) {
 		if(size(mutex->sleepingProcessesId) > 0) {
@@ -114,9 +114,8 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 	if(!existMutex(mutexId)) {
 		return ERROR_STATE;
 	}
-	
-	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
-					 &mutexCompare, mutexId);
+
+	mutex_t *mutex = getMutex(mutexId);
 
 	int wasLocked = mutex_lock(&mutex->status);
 
@@ -130,14 +129,41 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 	return couldLock;
 }
 
+int terminateMutualExclusion(char *mutexId, uint64_t processId) {
+	lock(MUTEX_MASTER_ID, processId); /* For atomic termination */
+
+	if(!existMutex(mutexId)) {
+		unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
+		return ERROR_STATE;
+	}
+
+	removeMutex(mutexId);
+
+	unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
+
+	return OK_STATE;
+}
+
 static uint32_t existMutex(char *mutexId) {
 	return contains(mutexes, &mutexCompare, mutexId);
+}
+
+static void removeMutex(char *mutexId) {
+	mutex_t *mutex = getMutex(mutexId);
+	removeAndFreeAllElements(mutex->sleepingProcessesId);
+	freeList(mutex->sleepingProcessesId);
+	removeAndFreeFirstElementByCriteria(mutexes, &mutexCompare, mutexId);
+}
+
+static mutex_t *getMutex(mutexId) {
+	return (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
+		   &mutexCompare, mutexId);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {
 	uint64_t processId;
 	getFirstElement(processQueue, &processId);
-	removeFirst(processQueue);
+	removeAndFreeFirst(processQueue);
 	return processId;
 }
 

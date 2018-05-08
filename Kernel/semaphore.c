@@ -26,8 +26,7 @@ int semaphoreWait(char *semaphoreId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
-							  semaphores, &semaphoreCompare, semaphoreId);
+	semaphore_t *semaphore = getSemaphore(semaphoreId);
 
 	lock(semaphore->mutex, processId);
 
@@ -52,8 +51,7 @@ int semaphoreTryWait(char *semaphoreId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
-							  semaphores, &semaphoreCompare, semaphoreId);
+	semaphore_t *semaphore = getSemaphore(semaphoreId);
 
 	lock(semaphore->mutex, processId);
 
@@ -73,8 +71,7 @@ int semaphorePost(char *semaphoreId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
-							  semaphores, &semaphoreCompare, semaphoreId);
+	semaphore_t *semaphore = getSemaphore(semaphoreId);
 
 	if(semaphore->counter == INT_MAX) {
 		return ERROR_STATE;
@@ -110,6 +107,7 @@ int createSemaphore(char *semaphoreId, int counterInitialValue, uint64_t process
 	lock(MUTEX_SEMAPHORE_MASTER_ID, processId); /* For atomic creation */
 
 	if(existSemaphore(semaphoreId)) {
+		unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
 		return ERROR_STATE;
 	}
 
@@ -129,6 +127,34 @@ int createSemaphore(char *semaphoreId, int counterInitialValue, uint64_t process
 	unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
 
 	return OK_STATE;
+}
+
+int terminateSemaphore(char *semaphoreId, uint64_t processId) {
+	lock(MUTEX_SEMAPHORE_MASTER_ID, processId); /* For atomic termination */
+
+	if(!existSemaphore(semaphoreId)) {
+		unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
+		return ERROR_STATE;
+	}
+
+	removeSemaphore(semaphoreId);
+
+	unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
+
+	return OK_STATE;
+}
+
+static void removeSemaphore(char *semaphoreId) {
+	semaphore_t *semaphore = getSemaphore(semaphoreId);
+	removeAndFreeAllElements(semaphore->sleepingProcessesId);
+	freeList(semaphore->sleepingProcessesId);
+	removeAndFreeFirstElementByCriteria(semaphores, &semaphoreCompare,
+		 								semaphoreId);
+}
+
+static semaphore_t *getSemaphore(char *semaphoreId) {
+	return (semaphore_t *) getFirstElementReferenceByCriteria(semaphores,
+		   &semaphoreCompare, semaphoreId);
 }
 
 static char *getMutexId(char *semaphoreId) {

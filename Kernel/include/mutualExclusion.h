@@ -29,4 +29,6 @@ int unlock(char *mutexId, uint64_t processId);
    could lock and FALSE if was currently locked */
 int lockIfUnlocked(char *mutexId, uint64_t processId);
 
+int terminateMutualExclusion(char *mutexId, uint64_t processId);
+
 #endif
