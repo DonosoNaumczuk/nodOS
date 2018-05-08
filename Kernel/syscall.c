@@ -27,12 +27,8 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			sleepCurrent();
 			return 0;
 		case WAIT_CHILD_PROCESS:
-<<<<<<< HEAD
+
 			return waitChild(rsi);
-=======
-			waitChild(rsi);
-			return 0;
->>>>>>> 681f600af07533da4b9883fde7ff2a6ab143f63c
 		case WAKE_UP_PROCESS:
 			wakeUp(rsi);
 			return 0;
