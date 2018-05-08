@@ -12,7 +12,7 @@ static listObject_t mailboxList;
 static mailbox_t newMailbox(const char *mailboxId);
 static int existMailbox(char *mailboxId,mailbox_t mailbox);
 
-void startMessageQueue() {
+void initMessageQueue() {
 	 mailboxList = newList();
 	 createMutualExclusion(MUTEX_NAME,getProcessID());
 }

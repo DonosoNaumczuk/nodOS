@@ -240,3 +240,7 @@ void *getFirstElementReferece(listObject_t list) {
 	if(list->head == NULL) return NULL;
 	return list->head->element;
 }
+
+void freeList(listObject_t list) {
+	freeMemory(list);
+}

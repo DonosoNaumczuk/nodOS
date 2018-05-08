@@ -56,4 +56,6 @@ int removeAllElements(listObject_t list);
 
 int removeAndFreeAllElements(listObject_t list);
 
+void freeList();
+
 #endif
