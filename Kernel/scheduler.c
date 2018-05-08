@@ -109,6 +109,10 @@ processControlBlockPtr_t getASonOfCurrentProcess() {
     return consultFirstPCBFromList(currentSons);
 }
 
+processControlBlockPtr_t getCurrentPCB() {
+    return consultFirstPCBFromList(scheduler.ready);
+}
+
 uint64_t getProcessID() {
     return getPid(consultFirstPCBFromList(scheduler.ready));
 }

@@ -7,6 +7,7 @@
 #include <memoryAllocator.h>
 #include <videoDriver.h>
 #include <mutualExclusion.h>
+#include <processControlBlock.h>
 
 #define QUANTUM 1//quantity of ticks
 
@@ -21,5 +22,6 @@ void wakeUp(uint64_t pid);
 void waitChild(uint64_t pid);
 processControlBlockPtr_t getASonOfCurrentProcess();
 uint64_t getProcessID();
+processControlBlockPtr_t getCurrentPCB();
 
 #endif
