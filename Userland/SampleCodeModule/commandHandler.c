@@ -38,18 +38,11 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		return	graphCuadratic(arguments);
 		case LINEAR:
 		return	graphLinear(arguments);
-<<<<<<< HEAD
 		case HELP:
-
-			return	printHelp(arguments);
-		case TEST:
-=======
-		case HELP:		
 			processId = createProcess(&printHelp, 1, &arguments);
 			return waitChild(processId);
 			//return	printHelp(arguments);
-		case TEST:		
->>>>>>> 84305ac28b6df9ba280c0fb38e2628b2ed35045d
+		case TEST:
 		return	test(arguments);
 	}
 	return 1;

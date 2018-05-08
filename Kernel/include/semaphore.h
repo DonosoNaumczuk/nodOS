@@ -12,6 +12,7 @@
 #include <memoryAllocator.h>
 #include <limits.h>
 #include <mutualExclusion.h>
+#include <processControlBlock.h>
 
 #define MUTEX_SEMAPHORE_MASTER_ID "__mutex_semaphore_master_id__"
 #define MUTEX_ID_PREFIX "__mutex/__"

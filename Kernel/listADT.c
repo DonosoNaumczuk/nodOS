@@ -38,6 +38,7 @@ int addElement(listObject_t list,void *element,const unsigned int size) {
 	node_t newNode = (node_t) allocateMemory(sizeof(nodeStruct_t));
     newNode->element = allocateMemory(size);
     newNode->size = size;
+    newNode->next = NULL;
     memcpy(newNode->element,element,size);
 
 	node_t aux;
@@ -189,6 +190,7 @@ void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void
 		if((*compareTo)(reference,aux->element) == 0) {
 			return aux->element;
 		}
+        aux = aux->next;
 	}
 	return NULL;
 }

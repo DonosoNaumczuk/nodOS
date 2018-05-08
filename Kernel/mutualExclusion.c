@@ -51,9 +51,9 @@ int createMutualExclusion(char *mutexId, uint64_t processId) {
 	mutex.status 				= UNLOCKED;
 	mutex.ownerProcessId		= NULL_PID;
 	mutex.sleepingProcessesId	= newList();
-
+	printWithColor("antes\n",6,7);
 	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
-
+	printWithColor("despues\n",8,7);
 	unlock(MUTEX_MASTER_ID, processId);
 
 	return OK_STATE;
@@ -72,7 +72,7 @@ int lock(char *mutexId, uint64_t processId) {
 	if(wasLocked) {
 		addElement(mutex->sleepingProcessesId, (void *) &processId,
 				   sizeof(uint64_t)); /* Adds pid to sleepProcessId */
-		sleepCurrent(); /* Sleeps process until mutex unlocked */
+		sleepCurrent(PROCESS_BLOCKED); /* Sleeps process until mutex unlocked */
 	}
 	else {
 		mutex->ownerProcessId = processId;
@@ -114,7 +114,7 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 	if(!existMutex(mutexId)) {
 		return ERROR_STATE;
 	}
-
+	
 	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
 					 &mutexCompare, mutexId);
 
