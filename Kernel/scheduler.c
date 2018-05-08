@@ -13,18 +13,17 @@ int mutex_lock(uint8_t * arg);
 
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
-static uint8_t mutex = 0;
 static int isFirst = TRUE;
 
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
     scheduler.waiting = initializePCBList();
     createMutualExclusion(SCHEDULER_MUTEX_ID);
-    mutex_lock(&mutex);
+    lockIfUnlocked(SCHEDULER_MUTEX_ID, 0);
 }
 
 void startScheduler() {
-    mutex = 0;
+    unlock(SCHEDULER_MUTEX_ID, 0);
     _force_context_switch();
 }
 
@@ -35,7 +34,7 @@ void * schedule(void * currentProcessStackPointer) {
 	if(ticksPassed == QUANTUM) {
         ticksPassed = 0;
     }
-    if(ticksPassed == 0 && !mutex_lock(&mutex))  {
+    if(ticksPassed == 0 && lockIfUnlocked(SCHEDULER_MUTEX_ID, 0))  {
         if(isFirst) {
             isFirst = FALSE;
         }
@@ -43,7 +42,7 @@ void * schedule(void * currentProcessStackPointer) {
             nextProcess(currentProcessStackPointer);
         }
         aux = getStackPointer(consultFirstPCBFromList(scheduler.ready));
-        mutex = 0;
+        unlock(SCHEDULER_MUTEX_ID, 0);
     }
 
 	return aux;
