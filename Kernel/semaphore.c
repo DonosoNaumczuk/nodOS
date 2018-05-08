@@ -2,8 +2,15 @@
 
 typedef struct {
 	char *id;
+	uint32_t status;
+	sint64_t ownerProcessId;
+	listObject_t sleepingProcessesId;
+} mutex_t;
+
+typedef struct {
+	char *id;
 	int counter;
-	mutex_t mutex;
+	char *mutex;
 	listObject_t sleepingProcessesId;
 } semaphore_t;
 
@@ -14,7 +21,7 @@ static int semaphoreCompare(char *semaphoreId, semaphore_t *semaphore);
 
 static listObject_t semaphores;
 
-int semaphoreWait(char *semaphoreId) {
+int semaphoreWait(char *semaphoreId, uint64_t processId) {
 	if(!existSemaphore(semaphoreId)) {
 		return ERROR_STATE;
 	}
@@ -22,7 +29,7 @@ int semaphoreWait(char *semaphoreId) {
 	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
 							  semaphores, &semaphoreCompare, semaphoreId);
 
-	lock(semaphore->mutex);
+	lock(semaphore->mutex, processId);
 
 	if(semaphore->counter == INT_MIN) {
 		return ERROR_STATE;
@@ -33,14 +40,14 @@ int semaphoreWait(char *semaphoreId) {
 	if(semaphore->counter < 0) {
 		addElement(semaphore->sleepingProcessesId, (void *) &processId,
 				   sizeof(uint64_t)); /* Adds pid to sleepProcessId */
-		unlock(semaphore->mutex);
+		unlock(semaphore->mutex, processId);
 		sleepCurrent(); /* Sleeps process */
 	}
 
 	return OK_STATE;
 }
 
-int semaphoreTryWait(char *semaphoreId) {
+int semaphoreTryWait(char *semaphoreId, uint64_t processId) {
 	if(!existSemaphore(semaphoreId)) {
 		return ERROR_STATE;
 	}
@@ -48,20 +55,20 @@ int semaphoreTryWait(char *semaphoreId) {
 	semaphore_t *semaphore = (semaphore_t *) getFirstElementReferenceByCriteria(
 							  semaphores, &semaphoreCompare, semaphoreId);
 
-	lock(semaphore->mutex);
+	lock(semaphore->mutex, processId);
 
 	if(semaphore->counter > 0) {
 		semaphore->counter--;
-		unlock(semaphore->mutex);
+		unlock(semaphore->mutex, processId);
 		return TRUE;
 	}
 
-	unlock(semaphore->mutex);
+	unlock(semaphore->mutex, processId);
 
 	return FALSE;
 }
 
-int semaphorePost(char *semaphoreId) {
+int semaphorePost(char *semaphoreId, uint64_t processId) {
 	if(!existSemaphore(semaphoreId)) {
 		return ERROR_STATE;
 	}
@@ -73,7 +80,7 @@ int semaphorePost(char *semaphoreId) {
 		return ERROR_STATE;
 	}
 
-	lock(semaphore->mutex);
+	lock(semaphore->mutex, processId);
 
 	if(semaphore->counter < 0 && size(semaphore->sleepingProcessesId) > 0) {
 		uint64_t processId = dequeueProcessId(semaphore->sleepingProcessesId);
@@ -82,12 +89,12 @@ int semaphorePost(char *semaphoreId) {
 
 	semaphore->counter++;
 
-	unlock(semaphore->mutex);
+	unlock(semaphore->mutex, processId);
 
 	return OK_STATE;
 }
 
-void initSemaphores() {
+void initSemaphores(uint64_t processId) {
 	static int initializations = 0;
 
 	if(initializations > 0) {
@@ -96,18 +103,18 @@ void initSemaphores() {
 
 	initializations++;
 	semaphores = newList();
-	createMutualExclusion(MUTEX_SEMAPHORE_MASTER_ID);
+	createMutualExclusion(MUTEX_SEMAPHORE_MASTER_ID, processId);
 }
 
-int createSemaphore(char *semaphoreId, int counterInitialValue) {
-	lock(MUTEX_SEMAPHORE_MASTER_ID); /* For atomic creation */
+int createSemaphore(char *semaphoreId, int counterInitialValue, uint64_t processId) {
+	lock(MUTEX_SEMAPHORE_MASTER_ID, processId); /* For atomic creation */
 
 	if(existSemaphore(semaphoreId)) {
 		return ERROR_STATE;
 	}
 
 	char *mutexId = getMutexId(semaphoreId);
-	if(createMutualExclusion(mutexId) == ERROR_STATE) {
+	if(createMutualExclusion(mutexId, processId) == ERROR_STATE) {
 		return ERROR_STATE;
 	}
 
@@ -119,7 +126,7 @@ int createSemaphore(char *semaphoreId, int counterInitialValue) {
 
 	addElement(semaphores, (void *) &semaphore, sizeof(semaphore_t));
 
-	unlock(MUTEX_SEMAPHORE_MASTER_ID);
+	unlock(MUTEX_SEMAPHORE_MASTER_ID, processId);
 
 	return OK_STATE;
 }

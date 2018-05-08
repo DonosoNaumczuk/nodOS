@@ -39,8 +39,8 @@ void initMutualExclusion() {
 	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
 }
 
-int createMutualExclusion(char *mutexId) {
-	lock(MUTEX_MASTER_ID); /* For atomic mutex creation */
+int createMutualExclusion(char *mutexId, uint64_t processId) {
+	lock(MUTEX_MASTER_ID, processId); /* For atomic mutex creation */
 
 	if(existMutex(mutexId)) {
 		return ERROR_STATE;
@@ -54,7 +54,7 @@ int createMutualExclusion(char *mutexId) {
 
 	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
 
-	unlock(MUTEX_MASTER_ID);
+	unlock(MUTEX_MASTER_ID, processId);
 
 	return OK_STATE;
 }
