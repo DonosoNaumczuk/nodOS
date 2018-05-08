@@ -35,13 +35,13 @@ int createMutualExclusion(char *mutexId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex				= (mutex_t *) allocateMemory(sizeof(mutex_t));
-	mutex->id 					= mutexId;
-	mutex->status 				= UNLOCKED;
-	mutex->ownerProcessId		= NULL_PID;
-	mutex->sleepingProcessesId	= newList();
+	mutex_t mutex;
+	mutex.id 					= mutexId;
+	mutex.status 				= UNLOCKED;
+	mutex.ownerProcessId		= NULL_PID;
+	mutex.sleepingProcessesId	= newList();
 
-	addElement(mutexes, (void *) mutex, sizeof(mutex_t));
+	addElement(mutexes, (void *) &mutex, sizeof(mutex_t));
 
 	return OK_STATE;
 }
@@ -51,9 +51,8 @@ int lock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) allocateMemory(sizeof(mutex_t));
-
-	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
+	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
+					 &mutexCompare, mutexId;
 
     int wasLocked = mutex_lock(&mutex->status);
 
@@ -74,9 +73,8 @@ int unlock(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) allocateMemory(sizeof(mutex_t));
-
-	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
+	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
+					 &mutexCompare, mutexId;
 
 	if(mutex->ownerProcessId == processId) {
 		if(size(mutex->sleepingProcessesId) > 0) {
@@ -104,14 +102,11 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 		return ERROR_STATE;
 	}
 
-	mutex_t *mutex = (mutex_t *) allocateMemory(sizeof(mutex_t));
+	mutex_t *mutex = (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
+					 &mutexCompare, mutexId;
 
-	getFirstElementByCriteria(mutexes, &mutexCompare, mutexId, (void *) mutex);
-	printHexa(mutex->status);
-	newLine();
 	int wasLocked = mutex_lock(&mutex->status);
-	printHexa(mutex->status);
-	newLine();
+
 	int couldLock = FALSE;
 
 	if(!wasLocked) {
@@ -121,7 +116,6 @@ int lockIfUnlocked(char *mutexId, uint64_t processId) {
 
 	return couldLock;
 }
-
 
 static uint8_t existMutex(char *mutexId) {
 	return contains(mutexes, &mutexCompare, mutexId);

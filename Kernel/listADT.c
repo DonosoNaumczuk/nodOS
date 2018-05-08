@@ -20,6 +20,7 @@ typedef struct list_t{
 // // int containsRecursive(node_t node,int (*compareTo)(void*,void*),void *element);
 // // int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer);
 // node_t removeFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,int *remotionState);
+static int copyElement(void *buffer,void *element,unsigned int elementSize);
 
 listObject_t newList() {
 	listObject_t list = allocateMemory(sizeof(struct list_t));
@@ -177,6 +178,19 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),vo
 		}
 	}
 	return ELEMENT_DOESNT_EXIST;
+}
+
+void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void*,void*),void *reference) {
+	if(list == NULL) return NULL;
+	if(compareTo == NULL) return NULL;
+
+	node_t aux = list->head;
+	while (aux != NULL) {
+		if((*compareTo)(reference,aux->element) == 0) {
+			return aux->element;
+		}
+	}
+	return NULL;
 }
 
 // int getFirstElementByCriteriaRecursive(node_t node,int (*compareTo)(void*,void*),void *reference,void *buffer) {
