@@ -68,3 +68,15 @@ int stringLength(char *string) {
 
 	return length;
 }
+
+char *stringConcatenation(const char *s1,const char *s2) {
+	unsigned int s1Length = stringLength(s1);
+	unsigned int s2Length = stringLength(s2);
+	char *result = allocateMemory(s1Length + s2Length + 1);
+	stringCopy(result,s1);
+	result += s1Length;
+	stringCopy(result,s2);
+	result += s2Length;
+	result = 0;
+	return result;
+}
