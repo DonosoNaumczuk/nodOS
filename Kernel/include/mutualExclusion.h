@@ -9,6 +9,7 @@
 #include <compareFunctions.h>
 #include <memoryAllocator.h>
 
+#define MUTEX_MASTER_ID "__mutex_master_id__"
 #define UNLOCKED	0
 #define LOCKED		1
 #define NULL_PID   -1
