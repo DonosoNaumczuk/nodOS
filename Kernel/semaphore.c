@@ -43,6 +43,7 @@ int semaphoreWait(char *semaphoreId, uint64_t processId) {
 				   sizeof(uint64_t)); /* Adds pid to sleepProcessId */
 		unlock(semaphore->mutex, processId);
 		sleepCurrent(PROCESS_BLOCKED); /* Sleeps process */
+		return OK_STATE;
 	}
 
 	return OK_STATE;
