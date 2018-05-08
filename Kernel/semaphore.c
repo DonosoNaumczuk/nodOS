@@ -47,6 +47,7 @@ int semaphoreWait(char *semaphoreId, uint64_t processId) {
 	}
 
 	unlock(semaphore->mutex, processId);
+
 	return OK_STATE;
 }
 
@@ -103,7 +104,9 @@ void initSemaphores(uint64_t processId) {
 	}
 
 	initializations++;
+
 	semaphores = newList();
+
 	createMutualExclusion(MUTEX_SEMAPHORE_MASTER_ID, processId);
 }
 
@@ -150,8 +153,11 @@ int terminateSemaphore(char *semaphoreId, uint64_t processId) {
 
 static void removeSemaphore(char *semaphoreId) {
 	semaphore_t *semaphore = getSemaphore(semaphoreId);
+
 	removeAndFreeAllElements(semaphore->sleepingProcessesId);
+
 	freeList(semaphore->sleepingProcessesId);
+
 	removeAndFreeFirstElementByCriteria(semaphores, &semaphoreCompare,
 		 								semaphoreId);
 }
@@ -171,8 +177,11 @@ static uint32_t existSemaphore(char *semaphoreId) {
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {
 	uint64_t processId;
+	
 	getFirstElement(processQueue, &processId);
+
 	removeFirst(processQueue);
+
 	return processId;
 }
 

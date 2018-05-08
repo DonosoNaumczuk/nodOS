@@ -150,8 +150,11 @@ static uint32_t existMutex(char *mutexId) {
 
 static void removeMutex(char *mutexId) {
 	mutex_t *mutex = getMutex(mutexId);
+
 	removeAndFreeAllElements(mutex->sleepingProcessesId);
+
 	freeList(mutex->sleepingProcessesId);
+
 	removeAndFreeFirstElementByCriteria(mutexes, &mutexCompare, mutexId);
 }
 
@@ -162,8 +165,11 @@ static mutex_t *getMutex(mutexId) {
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {
 	uint64_t processId;
+
 	getFirstElement(processQueue, &processId);
+
 	removeAndFreeFirst(processQueue);
+	
 	return processId;
 }
 
