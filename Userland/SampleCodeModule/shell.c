@@ -48,7 +48,7 @@ int shell(){
 	clearHist(hist);
 
 	while(!exitFlag){
-		printf("ARQ_Kernel@ITBA:~/Userland$    ");
+		printf("nodOS:$    ");
 		while((currentChar = getchar()) != '\n'){
 			if(currentChar == '\b'){	//BACKSPACE
 				if(index>0){
@@ -93,4 +93,5 @@ int shell(){
 		clearBuffer(buffer);
 		index = 0;
 	}
+	return 0;
 }

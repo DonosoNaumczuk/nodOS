@@ -4,17 +4,20 @@
 #include	<cuadraticGraficator.h>
 #include	<shell.h>
 #include	<exceptionSample.h>
+#include  <syscall.h>
+#include <commandHandler.h>
 
 #define	MAX_CMD_LONG	15
 
 #define	INVALID		-1
-#define	EXIT		0
-#define	TIME		1
-#define	CUADRATIC	2
-#define	LINEAR		3
-#define	HELP		4
-#define	ECHO		5
-#define	TEST 		6
+#define	EXIT			 0
+#define	TIME			 1
+#define	CUADRATIC	 	 2
+#define	LINEAR		 3
+#define	HELP			 4
+#define	ECHO			 5
+#define	TEST 		 6
+
 
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size){
@@ -22,19 +25,27 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	int cmdID;
 	cmdID = readCommand(buffer,&argumentsStart);
 	unsigned char* arguments = buffer + argumentsStart;
-
+	uint64_t processId;
 	switch(cmdID){
-		case TIME:		return	printTime(arguments);
-		case EXIT:		return	exit_(arguments);
-		case CUADRATIC:	return	graphCuadratic(arguments);
-		case LINEAR:	return	graphLinear(arguments);
-		case HELP:		return	printHelp(arguments);
-		case TEST:		return	test(arguments);
+		case TIME:		
+			//processId = createProcess(&printTime, 1, &arguments);
+		//return	waitChild(processId);
+		return printTime(arguments);
+		case EXIT:		
+		return	exit_(arguments);
+		case CUADRATIC:	
+		return	graphCuadratic(arguments);
+		case LINEAR:	
+		return	graphLinear(arguments);
+		case HELP:		
+		return	printHelp(arguments);
+		case TEST:		
+		return	test(arguments);
 	}
 	return 1;
 }
 
-int readCommand(unsigned char buffer[],int * argumentsStart){
+int readCommand(unsigned char buffer[],int * argumentsStart) {
 	unsigned char cmd[MAX_CMD_LONG];
 	int i = 0;
 
@@ -57,7 +68,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart){
 	return INVALID;
 }
 
-int printTime(unsigned char* arguments){
+int printTime(unsigned char* arguments) {
 	if(*arguments != 0)	return ARGS_ERROR;
 	unsigned char timeDate[TIMEDATE_FMT_LONG];	//constant TIMEDATE_FMT_LONG in system.h
 	getTimeDateString(timeDate);
@@ -65,7 +76,7 @@ int printTime(unsigned char* arguments){
 	return	VALID_CMD;
 }
 
-unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total){
+unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total) {
 	unsigned int i = 0;
 	unsigned int argNum = 0;
 	unsigned int negativeFlag = 0;
@@ -84,7 +95,7 @@ unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int tota
 	return VALID_CMD;
 }
 
-int graphCuadratic(unsigned char* buffer){
+int graphCuadratic(unsigned char* buffer) {
 	int args[5];	// a,b,c,xScale,yScale
 	if(getIntArguments(buffer,args,5) != VALID_CMD)	return	ARGS_ERROR;	//Cantidad de argumentos invalida.
 	if(args[3] <= 0 || args [4] <= 0){
@@ -96,7 +107,7 @@ int graphCuadratic(unsigned char* buffer){
 	return VALID_CMD;
 }
 
-int graphLinear(unsigned char* buffer){
+int graphLinear(unsigned char* buffer) {
 	int args[3];
 	if(getIntArguments(buffer,args,3) != VALID_CMD)	return	ARGS_ERROR;
 	if(args[2] <= 0 || args [3] <= 0){
@@ -108,7 +119,7 @@ int graphLinear(unsigned char* buffer){
 	return	VALID_CMD;
 }
 
-int test(unsigned char* buffer){
+int test(unsigned char* buffer) {
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
@@ -118,7 +129,7 @@ int test(unsigned char* buffer){
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
-int printHelp(unsigned char* arguments){
+int printHelp(unsigned char* arguments) {
 	if(*arguments != 0)	return	ARGS_ERROR;
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
@@ -129,7 +140,7 @@ int printHelp(unsigned char* arguments){
 	return VALID_CMD;
 }
 
-int exit_(unsigned char* arguments){
+int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	return	-1;
 	else 	return	ARGS_ERROR;
 }
