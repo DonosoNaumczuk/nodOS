@@ -1,4 +1,5 @@
 #include <messageQueue.h>
+#include <videoDriver.h>
 
 typedef struct mailboxStruct_t *mailbox_t;
 
@@ -24,20 +25,15 @@ int createMailbox(const char *mailboxId) {
 }
 
 void send(const char *mailboxId,const void *message,const unsigned int messageSize) {
-	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID);
-
+	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
 	addElement(mailbox->messageQueue,message,messageSize);
-
 	semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessID());
-	printWithColor("salio del post.\n", 16 , 59);//evans
-	newLine();//evans
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
 }
 
 void *receive(const char *mailboxId) {
 	semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessID());
-	printWithColor("salio del wait.\n", 16 , 59);//evans
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
 
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
