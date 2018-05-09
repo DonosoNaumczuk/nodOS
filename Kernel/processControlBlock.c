@@ -43,7 +43,7 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
 	}
-	if(*((uint64_t *)(*processArgs)) == TRUE && getPid(parent) == getForegroundPid()) {
+	if(*((uint64_t *)(*processArgs)) == TRUE && getProcessIdOf(parent) == getForegroundPid()) {
 		setForeground(newPCB);
 	}
 	addProcessToScheduler(newPCB);

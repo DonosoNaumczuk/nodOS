@@ -28,7 +28,7 @@ void setForeground(processControlBlockPtr_t pid) {
 }
 
 uint64_t getForegroundPid() {
-    return currentForegroundProcess == NULL ? 0 : getPid(currentForegroundProcess);
+    return currentForegroundProcess == NULL ? 0 : getProcessIdOf(currentForegroundProcess);
 }
 
 void startScheduler() {
@@ -84,7 +84,7 @@ void terminateCurrentProcess(int returnValue) {
     }
     setReturnValue(currentPCB, returnValue);
     freeStack(currentPCB);
-    if(getForegroundPid() == getProcessID()) {
+    if(getForegroundPid() == getProcessId()) {
         setForeground(currentPCBFather);
     }
     setState(currentPCB, PROCESS_TERMINATE);

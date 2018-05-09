@@ -115,11 +115,11 @@ processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t sta
 
 void printListPid(processControlBlockListPtr_t list) {
     if(list != NULL && list->first != NULL) {
-        printHexa(getPid(list->first->value));
+        printHexa(getProcessIdOf(list->first->value));
         processControlBlockNode *current = list->first;
         while(current->next != NULL) {
             printWithColor(", ", 2, 10);
-            printHexa(getPid(current->next->value));
+            printHexa(getProcessIdOf(current->next->value));
             current = current->next;
         }
     }

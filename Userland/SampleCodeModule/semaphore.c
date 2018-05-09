@@ -8,7 +8,7 @@ int semaphoreWait(char *semaphoreId) {
 	return _int_80(SEMAPHORE_WAIT, semaphoreId, 0 , 0);
 }
 
-int semaphorePost(char *semaphoreId, uint64_t processId) {
+int semaphorePost(char *semaphoreId) {
 	return _int_80(SEMAPHORE_POST, semaphoreId, 0, 0);
 }
 
