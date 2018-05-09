@@ -55,15 +55,16 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 			
 		case TEST:
-			// setArguments(argVector, arguments, &processType);
-			// processId = createProcess(&printTime, 1, argVector);
-			// if(processType == FOREGROUND) {
-			// 	return	waitChild(processId);
-			// }
-			// else
-			// 	return 0;
+			setArguments(argVector, arguments, &processType, "test");
 			processId = createProcess(&test, 1, argVector);
-			return waitChild(processId);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+			
+
 		case CLEAN_SCREEN:
 				cleanScreen();
 			return;
@@ -183,10 +184,11 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	{
+		changeFontColor(49);
+		printf("bye bye.\n");
 		return	-1;
 	}
 	else {
-		printf("bye bye.\n");
 		return	ARGS_ERROR;
 	}
 }
