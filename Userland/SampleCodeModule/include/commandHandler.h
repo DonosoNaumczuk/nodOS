@@ -8,6 +8,8 @@
 #include  <shell.h>
 #include  <exceptionSample.h>
 #include  <syscall.h>
+#include  <semaphore.h>
+#include  <semaphoreTest.h>
 
 #define   MAX_CMD_LONG   18
 

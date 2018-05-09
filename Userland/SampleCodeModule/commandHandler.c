@@ -152,7 +152,7 @@ unsigned int getIntArguments(unsigned char buffer[], int args[], unsigned int to
 	return VALID_CMD;
 }
 
-int graphQuadratic(int argumentQuantity, void** argumentVector) {
+int graphQuadratic(int argumentQuantity, void ** argumentVector) {
 	int args[5];	// a,b,c,xScale,yScale
 	unsigned char *buffer = (unsigned char *) (*argumentVector);
 	if(getIntArguments(buffer, args, 5) != VALID_CMD) {
@@ -167,7 +167,7 @@ int graphQuadratic(int argumentQuantity, void** argumentVector) {
 	return VALID_CMD;
 }
 
-int graphLinear(int argumentQuantity, void** argumentVector) {
+int graphLinear(int argumentQuantity, void ** argumentVector) {
 	int args[4];//a b xScale yScale
 	unsigned char *buffer = (unsigned char*)(*argumentVector);
 	if(getIntArguments(buffer,args,4) != VALID_CMD)	return	ARGS_ERROR;
@@ -180,7 +180,7 @@ int graphLinear(int argumentQuantity, void** argumentVector) {
 	return	VALID_CMD;
 }
 
-int test(int argumentQuantity, void** argumentVector) {
+int test(int argumentQuantity, void ** argumentVector) {
 	unsigned char *buffer = (unsigned char*)(*argumentVector);
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
@@ -190,7 +190,7 @@ int test(int argumentQuantity, void** argumentVector) {
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
-int printHelp(int argumentQuantity, void **argumentVector) {
+int printHelp(int argumentQuantity, void ** argumentVector) {
 	if(*(unsigned char *)(*argumentVector) != 0)	return	ARGS_ERROR;
 	printf("Commands:\n");
 	printf("          * time : print the time provided by the Real Time Clock (RTC)\n");
@@ -289,9 +289,6 @@ int getStartOfBackgroundParameter(char * arguments) {
 	return -1;
 }
 
-// int semaphoreShow(int argumentQuantity, void **argumentVector) {
-// 	uint64_t createProcess()
-// }
 
 int ps(int argumentQuantity, void **argumentVector) {
 	return printAllProcess();

@@ -1,4 +1,5 @@
 #include <semaphore.h>
+#include <error.h>
 
 int createSemaphore(char *semaphoreId, int counterInitialValue) {
 	return _int_80(CREATE_SEMAPHORE, semaphoreId, counterInitialValue, 0);
