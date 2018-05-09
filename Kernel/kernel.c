@@ -94,9 +94,13 @@ void cleaner(int cant, void ** args) {
 }
 
 int main() {
-	processControlBlockPtr_t initPCB = createProcess(NULL, &init, 0, NULL);
-	processControlBlockPtr_t cleanerPCB = createProcess(initPCB, &cleaner, 0, NULL);
-	createProcess(cleanerPCB, sampleCodeModuleAddress, 0, NULL);
+	int foreground = 0;
+	void * initargs[] = {&foreground, "init"};
+	void * cleanerargs[] = {&foreground, "cleaner"};
+	void * shellargs[] = {&foreground, "shell"};
+	processControlBlockPtr_t initPCB = createProcess(NULL, &init, 2, initargs);
+	processControlBlockPtr_t cleanerPCB = createProcess(initPCB, &cleaner, 1, cleanerargs);
+	setForeground(createProcess(cleanerPCB, sampleCodeModuleAddress, 1, shellargs));
 	startScheduler();
 	return 0;
 }

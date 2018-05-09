@@ -10,25 +10,61 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	int cmdID;
 	cmdID = readCommand(buffer,&argumentsStart);
 	unsigned char* arguments = buffer + argumentsStart;
+	void ** argVector = allocateMemory(sizeof(void*) * 3);
 	uint64_t processId;
-	switch(cmdID){
+	uint64_t processType;
+	switch(cmdID) {
 		case TIME:
-			processId = createProcess(&printTime, 1, &arguments);
-			return	waitChild(processId);
+			setArguments(argVector, arguments, &processType, "time");
+			processId = createProcess(&printTime, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 		case EXIT:
 		return	exit_(arguments);
 		case QUADRATIC:
-			processId = createProcess(&graphQuadratic, 1, &arguments);
-			return	waitChild(processId);
+			setArguments(argVector, arguments, &processType, "quadratic");
+			processId = createProcess(&graphQuadratic, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+
 		case LINEAR:
-			processId = createProcess(&graphLinear, 1, &arguments);
-			return	waitChild(processId);
+			setArguments(argVector, arguments, &processType, "linear");
+			processId = createProcess(&graphLinear, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 		case HELP:
-			processId = createProcess(&printHelp, 1, &arguments);
-			return waitChild(processId);
+			setArguments(argVector, arguments, &processType, "help");
+			processId = createProcess(&printHelp, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+			
 		case TEST:
-			processId = createProcess(&test, 1, &arguments);
-			return waitChild(processId);
+			setArguments(argVector, arguments, &processType, "test");
+			processId = createProcess(&test, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+			
+
 		case CLEAN_SCREEN:
 				cleanScreen();
 			return;
@@ -128,9 +164,8 @@ int test(int argumentQuantity, void** argumentVector) {
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
-	if((cmpRes = strcmp("zerodiv",buffer)) == 0)		divide0();
-	else if((cmpRes = strcmp("overflow",buffer)) == 0)	overflow();
-	else if ((cmpRes = strcmp("opcode",buffer)) == 0)	invalidop();
+	if((cmpRes = strcmp("zerodiv", buffer)) == 0)		divide0();
+	else if ((cmpRes = strcmp("opcode", buffer)) == 0)	invalidop();
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
@@ -142,17 +177,61 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	printf("          * linear a b xScale yScale : print a linear function [ax + b]\n");
 	printf("          * exit : exit \n");
 	printf("          * clean : clears the Screen \n");
-	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
+	printf("          * test zerodiv/opcode : execute a dedicate test for the selected exception\n");
 	return VALID_CMD;
 }
 
 int exit_(unsigned char* arguments) {
-	if(*arguments == 0)	return	-1;
-	else 	return	ARGS_ERROR;
+	if(*arguments == 0)	{
+		changeFontColor(49);
+		printf("bye bye.\n");
+		return	-1;
+	}
+	else {
+		return	ARGS_ERROR;
+	}
 }
 
 void printArgs(int *args, int size) {//evans
 	for (int  i = 0; i < size; i++) {
 		printf("args[%d] = %d\n", i, args[i]);
 	}
+}
+
+void setArguments(void ** argVector, unsigned char *arguments,
+ 						uint64_t *processType,	char *processName) {
+	*processType = FOREGROUND;
+
+	if(isBackground(arguments)) {
+		*processType = BACKGROUND;
+	}
+	*argVector = processType;
+	*(argVector + 1) = processName;
+	*(argVector + 2) = arguments;
+	return;
+}
+
+int isBackground(char * arguments) {
+	int index = getStartOfBackgroundParameter(arguments);
+	if(index == -1) {
+		return 0;
+	}
+	return strncmp(arguments + index, "-b", strLength("-b")) == 0;
+}
+
+int getStartOfBackgroundParameter(char * arguments) {
+	int i;
+	for(i = 0; arguments[i] != 0; i++);
+	if(i > 0 ) {
+		i = i - 1;
+		while(i > 0 && arguments[i] == ' ') {
+			i--;
+		}
+		if(i >= (strLength("-b") - 1)) {
+			i = i - (strLength("-b") - 1);
+			return i;
+		}
+
+	}
+	return -1;
 }

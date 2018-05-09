@@ -23,7 +23,7 @@ processControlBlockListPtr_t initializePCBList() {
 }
 
 void addPCBToList(processControlBlockListPtr_t list, processControlBlockPtr_t pcb) {
-   
+
     if(list != NULL && pcb != NULL) {
         processControlBlockNode *pcbNode = allocateMemory(sizeof(processControlBlockNode));
         pcbNode->next = NULL;
@@ -111,4 +111,21 @@ processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t sta
         aux = end;
     }
     return aux;
+}
+
+void printListPid(processControlBlockListPtr_t list) {
+    if(list != NULL && list->first != NULL) {
+        printHexa(getPid(list->first->value));
+        processControlBlockNode *current = list->first;
+        while(current->next != NULL) {
+            printWithColor(", ", 2, 10);
+            printHexa(getPid(current->next->value));
+            current = current->next;
+        }
+    }
+    else {
+        printWithColor("EMPTY", 5, 0x0F);
+    }
+    printWithColor(".", 1, 0x0F);
+    newLine();
 }

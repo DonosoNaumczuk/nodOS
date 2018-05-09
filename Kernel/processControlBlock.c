@@ -31,6 +31,7 @@ typedef struct processControlBlock_t {
     uint8_t state;
     struct processControlBlock_t *parent;
     processControlBlockListPtr_t childs;
+	char *name;
 	int returnValue;
     void *stackPointer;
 } processControlBlock_t;
@@ -38,9 +39,12 @@ typedef struct processControlBlock_t {
 static long int pidCounter = 1;
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
-	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity, processArgs);
+	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity-1, processArgs+1);
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
+	}
+	if(*((uint64_t *)(*processArgs)) == TRUE && getPid(parent) == getForegroundPid()) {
+		setForeground(newPCB);
 	}
 	addProcessToScheduler(newPCB);
 	return newPCB;
@@ -62,8 +66,9 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->childs = initializePCBList();
     newPCB->stackPointer = allocateMemory(SIZE_OF_STACK);
     newPCB->state = PROCESS_READY;
+	newPCB->name = (char *)(*processArgs);
 
-    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity, processArgs);
+    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-1, processArgs+1);
 
     return newPCB;
 }
