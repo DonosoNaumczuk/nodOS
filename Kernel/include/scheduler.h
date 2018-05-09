@@ -23,7 +23,7 @@ void sleepCurrent(int condition);
 void wakeUp(uint64_t pid);
 int waitChild(uint64_t pid);
 processControlBlockPtr_t getASonOfCurrentProcess();
-uint64_t getProcessID();
+uint64_t getProcessId();
 processControlBlockPtr_t getCurrentPCB();
 
 #endif

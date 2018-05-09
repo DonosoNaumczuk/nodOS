@@ -15,46 +15,46 @@ static int existMailbox(char *mailboxId,mailbox_t mailbox);
 
 void initMessageQueue() {
 	 mailboxList = newList();
-	 createMutualExclusion(MUTEX_NAME,getProcessID());
+	 createMutualExclusion(MUTEX_NAME,getProcessId());
 }
 
 int createMailbox(const char *mailboxId) {
-	lock(MUTEX_NAME,getProcessID());
+	lock(MUTEX_NAME,getProcessId());
 	if(!contains(mailboxList,&existMailbox,mailboxId)) addElement(mailboxList,newMailbox(mailboxId),sizeof(mailboxStruct_t));
-	unlock(MUTEX_NAME,getProcessID());
+	unlock(MUTEX_NAME,getProcessId());
 }
 
 void send(const char *mailboxId,const void *message,const unsigned int messageSize) {
-	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
+	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
 	addElement(mailbox->messageQueue,message,messageSize);
-	semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessID());
-	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
+	semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
+	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 }
 
 void *receive(const char *mailboxId) {
-	semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessID());
-	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
+	semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
+	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
 	void *reference = getFirstElementReferece(mailbox->messageQueue);
 	removeFirst(mailbox->messageQueue);
 
-	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
+	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	return reference;
 }
 
 void closeMailbox(const char *mailboxId) {
-	lock(MUTEX_NAME,getProcessID());
-	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
+	lock(MUTEX_NAME,getProcessId());
+	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
 	removeAndFreeAllElements(mailbox->messageQueue);
 	removeAndFreeFirstElementByCriteria(mailboxList,&existMailbox,mailboxId);
 
-	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
-	//mutexClose(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
-	unlock(MUTEX_NAME,getProcessID());
+	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	//mutexClose(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	unlock(MUTEX_NAME,getProcessId());
 }
 
 //NECESITO STRING COPY Y STRING LENGTH
@@ -63,8 +63,8 @@ static mailbox_t newMailbox(const char *mailboxId) {
 	newMailbox->mailboxId = allocateMemory(stringLength(mailboxId) + 1);
 	stringCopy(newMailbox->mailboxId,mailboxId);
 	newMailbox->messageQueue = newList();
-	createSemaphore(stringConcatenation(SEMAPHORE_NAME,mailboxId),0,getProcessID());
-	createMutualExclusion(stringConcatenation(MUTEX_NAME,mailboxId),getProcessID());
+	createSemaphore(stringConcatenation(SEMAPHORE_NAME,mailboxId),0,getProcessId());
+	createMutualExclusion(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	return newMailbox;
 }
 

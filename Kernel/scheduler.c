@@ -68,7 +68,7 @@ void terminateCurrentProcess(int returnValue) {
     processControlBlockPtr_t currentPCBFather = getFather(currentPCB);
     giveChildsToFather(currentPCB);
     if(isWaiting(currentPCBFather)) {
-        wakeUp(getPid(getFather(currentPCB)));
+        wakeUp(getProcessIdOf(getFather(currentPCB)));
     }
     setReturnValue(currentPCB, returnValue);
     freeStack(currentPCB);
@@ -113,6 +113,6 @@ processControlBlockPtr_t getCurrentPCB() {
     return consultFirstPCBFromList(scheduler.ready);
 }
 
-uint64_t getProcessID() {
-    return getPid(consultFirstPCBFromList(scheduler.ready));
+uint64_t getProcessId() {
+    return getProcessIdOf(consultFirstPCBFromList(scheduler.ready));
 }

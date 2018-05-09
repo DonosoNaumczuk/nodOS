@@ -46,7 +46,7 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	return newPCB;
 }
 
-uint64_t getPid(processControlBlockPtr_t pcb) {
+uint64_t getProcessIdOf(processControlBlockPtr_t pcb) {
 	return pcb->pid;
 }
 

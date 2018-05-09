@@ -89,7 +89,7 @@ void cleaner(int cant, void ** args) {
 		if(son == NULL) {
 			return;
 		}
-		waitChild(getPid(son));
+		waitChild(getProcessIdOf(son));
 	}
 }
 

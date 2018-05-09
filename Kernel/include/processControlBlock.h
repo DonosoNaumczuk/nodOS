@@ -19,7 +19,7 @@ typedef struct processControlBlock_t * processControlBlockPtr_t;
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs);
 processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs);
 void * getStackPointer(processControlBlockPtr_t pcb);
-uint64_t getPid(processControlBlockPtr_t pcb);
+uint64_t getProcessIdOf(processControlBlockPtr_t pcb);
 processControlBlockPtr_t getFather(processControlBlockPtr_t pcb);
 processControlBlockListPtr_t getSons(processControlBlockPtr_t pcb);
 int isThisPid(processControlBlockPtr_t pcb, long int pid);

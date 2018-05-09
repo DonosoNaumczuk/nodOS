@@ -3,32 +3,57 @@
 #include <stdint.h>
 #include <int80.h>
 
-#define WRITE 0
-#define READ 1
-#define WRITE_PIXEL 2
-#define GET_RESOLUTION_X 3
-#define GET_RESOLUTION_Y 4
-#define TIME 5
-#define CLEAR 6
-//process
-#define TERMINATE_PROCESS 7
-#define SLEEP_PROCESS 8
-#define WAIT_CHILD_PROCESS 9
-#define WAKE_UP_PROCESS 10
-#define CREATE_PROCESS 11
-#define GET_PID 12
-//mailbox
-#define SEND_MAILBOX       13
-#define RECEIVE_MAILBOX    14
-#define CREATE_MAILBOX     15
-#define DESTROY_MAILBOX    16
-//memory Allocator
-#define ALLOCATE_MEMORY    17
-#define FREE               18
+/* Read and Write */
+#define WRITE 					 0
+#define READ 					 1
 
+/* Write Pixel */
+#define WRITE_PIXEL 			 2
 
-#define KEYBOARD_IN_ID 0
-#define SCREEN_IN_ID 1
+/* Get Resolution */
+#define GET_RESOLUTION_X		 3
+#define GET_RESOLUTION_Y 		 4
+
+/* Time */
+#define TIME 					 5
+
+/* Clear */
+#define CLEAR 					 6
+
+/* Process */
+#define TERMINATE_PROCESS 		 7
+#define SLEEP_PROCESS 			 8
+#define WAIT_CHILD_PROCESS 		 9
+#define WAKE_UP_PROCESS 		10
+#define CREATE_PROCESS 			11
+#define GET_PID 				12
+
+/* Mailbox */
+#define SEND_MAILBOX       		13
+#define RECEIVE_MAILBOX    		14
+#define CREATE_MAILBOX     		15
+#define DESTROY_MAILBOX    		16
+
+/* Memory Allocator */
+#define ALLOCATE_MEMORY    		17
+#define FREE               		18
+
+/* Mutual Exclusion */
+#define CREATE_MUTEX			19
+#define LOCK_MUTEX				20
+#define UNLOCK_MUTEX			21
+#define LOCK_IF_UNLOCKED_MUTEX	22
+#define TERMINATE_MUTEX			23
+
+/* Semaphore */
+#define CREATE_SEMAPHORE		24
+#define SEMAPHORE_WAIT			25
+#define SEMAPHORE_POST			26
+#define SEMAPHORE_TRY_WAIT		27
+#define TERMIANTE_SEMAPHORE		28
+
+#define KEYBOARD_IN_ID			 0
+#define SCREEN_IN_ID 		 	 1
 
 void write(char * string, uint64_t length, char color);
 void read(int in_id, char * buffer, int qty_to_read);
