@@ -32,7 +32,8 @@ int graphLinear(int argumentQuantity, void **argumentVector);
 int test(int argumentQuantity, void** argumentVector);
 int printHelp(int argumentQuantity, void **argumentVector);
 int exit_(unsigned char* arguments);
-void setArguments(void ** argVector, unsigned char *arguments, uint64_t *processType);
+void setArguments(void ** argVector, unsigned char *arguments,
+ 						uint64_t *processType,	char *processName);
 int isBackground(char *arguments);
 int getStartOfBackgroundParameter(char *arguments);
 

@@ -10,32 +10,59 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	int cmdID;
 	cmdID = readCommand(buffer,&argumentsStart);
 	unsigned char* arguments = buffer + argumentsStart;
-	void ** argVector = allocateMemory(sizeof(void*) * 2);
+	void ** argVector = allocateMemory(sizeof(void*) * 3);
 	uint64_t processId;
 	uint64_t processType;
 	switch(cmdID) {
 		case TIME:
-			setArguments(argVector, arguments, &processType);
+			setArguments(argVector, arguments, &processType, "time");
 			processId = createProcess(&printTime, 1, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
-			else
+			else {
 				return 0;
+			}
 		case EXIT:
 		return	exit_(arguments);
 		case QUADRATIC:
-			processId = createProcess(&graphQuadratic, 1, &arguments);
-			return	waitChild(processId);
-		case LINEAR:
+			setArguments(argVector, arguments, &processType, "quadratic");
+			processId = createProcess(&graphQuadratic, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 
-			processId = createProcess(&graphLinear, 1, &arguments);
-			return	waitChild(processId);
+		case LINEAR:
+			setArguments(argVector, arguments, &processType, "linear");
+			processId = createProcess(&graphLinear, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 		case HELP:
-			processId = createProcess(&printHelp, 1, &arguments);
-			return waitChild(processId);
+			setArguments(argVector, arguments, &processType, "help");
+			processId = createProcess(&printHelp, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+			
 		case TEST:
-			processId = createProcess(&test, 1, &arguments);
+			// setArguments(argVector, arguments, &processType);
+			// processId = createProcess(&printTime, 1, argVector);
+			// if(processType == FOREGROUND) {
+			// 	return	waitChild(processId);
+			// }
+			// else
+			// 	return 0;
+			processId = createProcess(&test, 1, argVector);
 			return waitChild(processId);
 		case CLEAN_SCREEN:
 				cleanScreen();
@@ -155,8 +182,13 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 }
 
 int exit_(unsigned char* arguments) {
-	if(*arguments == 0)	return	-1;
-	else 	return	ARGS_ERROR;
+	if(*arguments == 0)	{
+		return	-1;
+	}
+	else {
+		printf("bye bye.\n");
+		return	ARGS_ERROR;
+	}
 }
 
 void printArgs(int *args, int size) {//evans
@@ -165,13 +197,16 @@ void printArgs(int *args, int size) {//evans
 	}
 }
 
-void setArguments(void ** argVector, unsigned char *arguments, uint64_t *processType) {
+void setArguments(void ** argVector, unsigned char *arguments,
+ 						uint64_t *processType,	char *processName) {
 	*processType = FOREGROUND;
+
 	if(isBackground(arguments)) {
 		*processType = BACKGROUND;
 	}
 	*argVector = processType;
-	*(argVector + 1) = arguments;
+	*(argVector + 1) = processName;
+	*(argVector + 2) = arguments;
 	return;
 }
 
