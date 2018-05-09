@@ -63,3 +63,7 @@ void closeMailbox(const char *mailboxId) {
 int printAllProcess() {
      return _int_80(PRINT_ALL_PROCESS, 0, 0, 0);
 }
+
+void terminateProcess(uint64_t pid) {
+	return _int_80(TERMINATE_PROCESS_BY_ID, 0, 0, 0);
+}
