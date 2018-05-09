@@ -67,7 +67,11 @@ void addProcessToScheduler(processControlBlockPtr_t pcb) {
 }
 
 void terminateCurrentProcess(int returnValue) {
-    processControlBlockPtr_t currentPCB = getCurrentPCB();
+    terminateAProcess(returnValue, getCurrentPCB());
+}
+
+void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
+    processControlBlockPtr_t currentPCB = pcb;
     processControlBlockPtr_t currentPCBFather = getFather(currentPCB);
     giveChildsToFather(currentPCB);
     if(isWaiting(currentPCBFather)) {
@@ -77,6 +81,18 @@ void terminateCurrentProcess(int returnValue) {
     freeStack(currentPCB);
     setState(currentPCB, PROCESS_TERMINATE);
     _force_context_switch();
+}
+
+void terminateAProcessByPid(uint8_t pid) {
+    if(pid != 1 && pid != 2) {
+        processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.ready, pid);
+        if(pcb == NULL) {
+            pcb = PCBFromListByPID(scheduler.waiting, pid);
+        }
+        if(pcb != NULL) {
+            terminateAProcess(-1, pcb);
+        }
+    }
 
 }
 
