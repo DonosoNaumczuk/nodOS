@@ -8,6 +8,7 @@
 #include  <shell.h>
 #include  <exceptionSample.h>
 #include  <syscall.h>
+#include <colors.h>
 
 #define   MAX_CMD_LONG   18
 

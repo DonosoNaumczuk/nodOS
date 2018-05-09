@@ -1,10 +1,8 @@
 #include <shell.h>
 #include <syscall.h>
-#define GREEN 49
-#define WHITE 0x0F
-#define DARK_GREY 46
-void printLogo();
+#include <colors.h>
 
+void printLogo();
 
 int main() {
      printLogo();
@@ -38,7 +36,7 @@ printf("                                                                        
 printf("                                                                                                               \n");
 changeFontColor(DARK_GREY);
 printf("                                                                                                               \n");
-printf("                                                                               I have a bad feeling about this.\n");
+printf("                                          I    H A V E    A    B A D    F E E L I N G    A B O U T    T H I S .\n");
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");

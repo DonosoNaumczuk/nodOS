@@ -1,7 +1,5 @@
 #include <commandHandler.h>
 
-
-
 void printArgs(int *args, int size);
 
 
@@ -217,6 +215,7 @@ int exit_(unsigned char* arguments) {
 }
 
 void printExitMessage() {
+changeFontColor(DARK_GREY);
 printf("                                                                                                                              \n");
 printf("   bbbbbbbb                                                        bbbbbbbb                                                   \n");
 printf("   b::::::b                                                        b::::::b                                                   \n");
@@ -242,6 +241,12 @@ printf("                       y:::::y                                          
 printf("                      yyyyyyy                                                         yyyyyyy                                 \n");
 printf("                                                                                                                              \n");
 printf("                                                                                                                              \n");
+changeFontColor(WHITE);
+printf("\nExit: ");
+changeFontColor(GREEN);
+printf("nodOs ");
+changeFontColor(WHITE);
+printf("finished succesfully. See you soon!\n");
 }
 
 void setArguments(void ** argVector, unsigned char *arguments,
