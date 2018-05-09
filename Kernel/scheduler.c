@@ -129,20 +129,6 @@ processControlBlockPtr_t getCurrentPCB() {
     return consultFirstPCBFromList(scheduler.ready);
 }
 
-<<<<<<< HEAD
 uint64_t getProcessId() {
     return getProcessIdOf(consultFirstPCBFromList(scheduler.ready));
-=======
-uint64_t getProcessID() {
-    return getPid(getCurrentPCB());
-}
-
-void printAllProcess() {
-    printWithColor("The id of the process that are ready are:", 41, 10);
-    printListPid(scheduler.ready);
-    printWithColor("The id of the process that are waiting are:", 43, 10);
-    printListPid(scheduler.waiting);
-    printWithColor("The id of the process that are terminated are:", 46, 10);
-    printListPid(scheduler.terminated);
->>>>>>> dc721b9f0c2b26e0333bd00d232e76bea6c3e3fa
 }
