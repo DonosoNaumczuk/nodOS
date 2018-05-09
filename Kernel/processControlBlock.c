@@ -33,6 +33,7 @@ typedef struct processControlBlock_t {
     processControlBlockListPtr_t childs;
 	char *name;
 	int returnValue;
+	int foreground;
     void *stackPointer;
 } processControlBlock_t;
 
@@ -43,11 +44,22 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
 	}
-	if(*((uint64_t *)(*processArgs)) == TRUE && getProcessIdOf(parent) == getForegroundPid()) {
-		setForeground(newPCB);
+	if(*((uint64_t *)(*processArgs)) == TRUE && isForeground(parent)) {
+		newPCB->foreground = TRUE;
+	}
+	else {
+		newPCB->foreground = FALSE;
 	}
 	addProcessToScheduler(newPCB);
 	return newPCB;
+}
+
+void setForeground(processControlBlockPtr_t pcb) {
+	pcb->foreground = TRUE;
+}
+
+int isForeground(processControlBlockPtr_t pcb) {
+	return pcb->foreground;
 }
 
 uint64_t getProcessIdOf(processControlBlockPtr_t pcb) {
@@ -174,7 +186,7 @@ void printPCB(processControlBlockPtr_t pcb) {
 		printWithColor("     ", 5, 0x0F);
 		printHexa(pcb->pid);
 		printWithColor("     ", 5, 0x0F);
-		if(pcb-> pid == getForegroundPid()) {
+		if(pcb->foreground) {
 			printWithColor("Foreground", 10, 0x0F);
 		}
 		else {

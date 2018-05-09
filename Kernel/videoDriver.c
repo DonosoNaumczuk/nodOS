@@ -31,7 +31,7 @@ uint32_t getYResolution() {
 }
 
 void printPixel(int x, int y, char color) {
-	if(getForegroundPid() == getProcessId()) {
+	if(isCurrentForeground()) {
 		*(framebuffer_start_address+(-y+y_resolution/2)*x_resolution+x+x_resolution/2) = color;
 	}
 }
@@ -111,7 +111,7 @@ void printHexa(uint64_t n){
 }
 
 void printFont(uint8_t * address, char font, char color) {
-	if(getForegroundPid() == getProcessId()) {
+	if(isCurrentForeground()) {
 		char bits[] = {font&0X80,font&0X40,font&0X20,font&0X10,font&0X08,font&0X04,font&0X02,font&0X01};
 		for (int i = 0; i < 8; ++i) {
 			if(bits[i]) {
@@ -135,7 +135,7 @@ void moveup() {
 }
 
 void newLine() {
-	if(getForegroundPid() == getProcessId()) {
+	if(isCurrentForeground()) {
 		if(currentVideo_y!=max_word_y-1) {
 			currentVideo_x = 0;
 			currentVideo_y++;
@@ -147,7 +147,7 @@ void newLine() {
 }
 
 void clear() {
-	if(getForegroundPid() == getProcessId()) {
+	if(isCurrentForeground()) {
 		for (int i = 0; i < y_resolution; ++i) {
 			for (int j = 0; j < x_resolution; ++j) {
 				*(framebuffer_start_address+i*x_resolution+j) = 0x00;
