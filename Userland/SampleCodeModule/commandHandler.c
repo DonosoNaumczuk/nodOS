@@ -184,13 +184,43 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	{
 		changeFontColor(49);
-		printf("bye bye.\n");
+		//printf("bye bye.\n");
+		printExitMessage();
 		return	-1;
 	}
 	else {
 		return	ARGS_ERROR;
 	}
 }
+
+void printExitMessage() {
+printf("                                                                                                                              \n");
+printf("   bbbbbbbb                                                        bbbbbbbb                                                   \n");
+printf("   b::::::b                                                        b::::::b                                                   \n");
+printf("   b::::::b                                                        b::::::b                                                   \n");
+printf("   b::::::b                                                        b::::::b                                                   \n");
+printf("    b:::::b                                                         b:::::b                                                   \n");
+printf("    b:::::bbbbbbbbb yyyyyyy           yyyyyyy eeeeeeeeeeee          b:::::bbbbbbbbb yyyyyyy           yyyyyyy eeeeeeeeeeee    \n");
+printf("    b::::::::::::::bby:::::y         y:::::yee::::::::::::ee        b::::::::::::::bby:::::y         y:::::yee::::::::::::ee  \n");
+printf("    b::::::::::::::::by:::::y       y:::::ye::::::eeeee:::::ee      b::::::::::::::::by:::::y       y:::::ye::::::eeeee:::::ee\n");
+printf("    b:::::bbbbb:::::::by:::::y     y:::::ye::::::e     e:::::e      b:::::bbbbb:::::::by:::::y     y:::::ye::::::e     e:::::e\n");
+printf("    b:::::b    b::::::b y:::::y   y:::::y e:::::::eeeee::::::e      b:::::b    b::::::b y:::::y   y:::::y e:::::::eeeee::::::e\n");
+printf("    b:::::b     b:::::b  y:::::y y:::::y  e:::::::::::::::::e       b:::::b     b:::::b  y:::::y y:::::y  e:::::::::::::::::e \n");
+printf("    b:::::b     b:::::b   y:::::y:::::y   e::::::eeeeeeeeeee        b:::::b     b:::::b   y:::::y:::::y   e::::::eeeeeeeeeee  \n");
+printf("    b:::::b     b:::::b    y:::::::::y    e:::::::e                 b:::::b     b:::::b    y:::::::::y    e:::::::e           \n");
+printf("    b:::::bbbbbb::::::b     y:::::::y     e::::::::e                b:::::bbbbbb::::::b     y:::::::y     e::::::::e          \n");
+printf("    b::::::::::::::::b       y:::::y       e::::::::eeeeeeee        b::::::::::::::::b       y:::::y       e::::::::eeeeeeee  \n");
+printf("    b:::::::::::::::b       y:::::y         ee:::::::::::::e        b:::::::::::::::b       y:::::y         ee:::::::::::::e  \n");
+printf("    bbbbbbbbbbbbbbbb       y:::::y            eeeeeeeeeeeeee        bbbbbbbbbbbbbbbb       y:::::y            eeeeeeeeeeeeee  \n");
+printf("                          y:::::y                                                         y:::::y                             \n");
+printf("                         y:::::y                                                         y:::::y                              \n");
+printf("                        y:::::y                                                         y:::::y                               \n");
+printf("                       y:::::y                                                         y:::::y                                \n");
+printf("                      yyyyyyy                                                         yyyyyyy                                 \n");
+printf("                                                                                                                              \n");
+printf("                                                                                                                              \n");
+}
+
 
 void printArgs(int *args, int size) {//evans
 	for (int  i = 0; i < size; i++) {

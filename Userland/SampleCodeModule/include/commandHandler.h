@@ -36,6 +36,6 @@ void setArguments(void ** argVector, unsigned char *arguments,
  						uint64_t *processType,	char *processName);
 int isBackground(char *arguments);
 int getStartOfBackgroundParameter(char *arguments);
-
+void printExitMessage();
 
 #endif
