@@ -66,10 +66,6 @@ uint64_t getTime(int time);
 void cleanScreen();
 uint64_t createProcess(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector);
 int waitChild(uint64_t processId);
-int createMailbox(const char *mailboxId);
-void send(const char *mailboxId, const void *message, const unsigned int messageSize);
-void * receive(const char *mailboxId);
-void closeMailbox(const char *mailboxId);
 int printAllProcess();
 
 #endif
