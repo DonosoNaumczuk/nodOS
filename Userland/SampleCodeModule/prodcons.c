@@ -92,7 +92,7 @@ void incrementProducer(prodcons_t *producerStruct) {
 
 	void * arguments[4];
 	int mode = FOREGROUND;
-	int *id = allocateMemory()
+	int *id = allocateMemory(sizeof(*id));
 	*id = getNullId(producerStruct);
 	arguments[0] = &mode;
 	arguments[1] = "producer";
@@ -129,7 +129,8 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 
 	void * arguments[4];
 	int mode = FOREGROUND;
-	int id = getNullId(consumerStruct);
+	int *id = allocateMemory(sizeof(*id));
+	*id = getNullId(consumerStruct);
 	arguments[0] = &mode;
 	arguments[1] = "consumer";
 	arguments[2] = consumerStruct;
@@ -192,6 +193,8 @@ int producer(int argc, void ** args) {
 	producerStruct->list[id] = NULL;
 	*producerStruct->size--;
 
+	printCriticalZone(producerStruct->criticalZone);
+
 	unlock(MUTEX_CONS);
 	unlock(MUTEX_PROD);
 	semaphorePost(SEM_EMPTY);
@@ -210,6 +213,8 @@ int consumer(int argc, void ** args) {
 	/* Terminate */
 	consumerStruct->list[id] = NULL;
 	*consumerStruct->size--;
+
+	printCriticalZone(consumerStruct->criticalZone);
 
 	unlock(MUTEX_CONS);
 	unlock(MUTEX_PROD);
