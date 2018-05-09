@@ -38,9 +38,12 @@ typedef struct processControlBlock_t {
 static long int pidCounter = 1;
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
-	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity, processArgs);
+	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity-1, processArgs+1);
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
+	}
+	if(*((uint64_t *)(*processArgs)) == TRUE && getPid(parent) == getForegroundPid()) {
+		setForeground(newPCB);
 	}
 	addProcessToScheduler(newPCB);
 	return newPCB;

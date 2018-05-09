@@ -25,5 +25,8 @@ int waitChild(uint64_t pid);
 processControlBlockPtr_t getASonOfCurrentProcess();
 uint64_t getProcessID();
 processControlBlockPtr_t getCurrentPCB();
+void printAllProcess();
+void setForeground(processControlBlockPtr_t pid);
+uint64_t getForegroundPid();
 
 #endif
