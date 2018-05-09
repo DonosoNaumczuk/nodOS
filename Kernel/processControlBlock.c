@@ -43,7 +43,7 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
 	}
-	if(*((uint64_t *)(*processArgs)) == TRUE && getPid(parent) == getForegroundPid()) {
+	if(*((uint64_t *)(*processArgs)) == TRUE && getProcessIdOf(parent) == getForegroundPid()) {
 		setForeground(newPCB);
 	}
 	addProcessToScheduler(newPCB);
@@ -163,4 +163,36 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
     stackFrame->base 	=	0x000;
 
     return (void *)stackFrame;
+}
+
+void printPCB(processControlBlockPtr_t pcb) {
+	if(pcb != NULL) {
+		char * aux = pcb->name;
+		while(*aux != 0) {
+			printCharWithColor(aux, 0x0F);
+		}
+		printWithColor("     ", 5, 0x0F);
+		printHexa(pcb->pid);
+		printWithColor("     ", 5, 0x0F);
+		if(pcb-> pid == getForegroundPid()) {
+			printWithColor("Foreground", 10, 0x0F);
+		}
+		else {
+			printWithColor("Background", 10, 0x0F);
+		}
+		printWithColor("     ", 5, 0x0F);
+		if(pcb->state == PROCESS_READY) {
+			printWithColor("Ready", 5, 0x0F);
+		}
+		else if(pcb->state == PROCESS_BLOCKED) {
+			printWithColor("Block", 5, 0x0F);
+		}
+		else if(pcb->state == PROCESS_WAITING) {
+			printWithColor("Waiting", 7, 0x0F);
+		}
+		else if(pcb->state == PROCESS_TERMINATE) {
+			printWithColor("Terminated", 5, 0x0F);
+		}
+
+	}
 }

@@ -60,3 +60,6 @@ void closeMailbox(const char *mailboxId) {
      _int_80(DESTROY_MAILBOX, mailboxId, 0, 0);
 }
 
+int printAllProcess() {
+     return _int_80(PRINT_ALL_PROCESS, 0, 0, 0);
+}

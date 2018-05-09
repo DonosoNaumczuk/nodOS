@@ -51,6 +51,8 @@
 #define SEMAPHORE_POST			26
 #define SEMAPHORE_TRY_WAIT		27
 #define TERMIANTE_SEMAPHORE		28
+/* ps*/
+#define PRINT_ALL_PROCESS       29
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -68,5 +70,6 @@ int createMailbox(const char *mailboxId);
 void send(const char *mailboxId, const void *message, const unsigned int messageSize);
 void * receive(const char *mailboxId);
 void closeMailbox(const char *mailboxId);
+int printAllProcess();
 
 #endif

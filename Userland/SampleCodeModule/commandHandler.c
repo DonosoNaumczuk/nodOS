@@ -64,10 +64,29 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 				return 0;
 			}
 
-
 		case CLEAN_SCREEN:
 				cleanScreen();
 			return;
+
+		case SEMAPHORE:
+			setArguments(argVector, arguments, &processType, "semaphore");
+			processId = createProcess(&semaphoreShow, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+		case PROCESS_LIST:
+			setArguments(argVector, arguments, &processType, "ps");
+			processId = createProcess(&ps, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+
 	}
 	return 1;
 }
@@ -92,7 +111,9 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
 	if(strncmp("test",cmd,4) == 0)			return	TEST;
-	if(strncmp("clean", cmd, 5) == 0) 	return	CLEAN_SCREEN;
+	if(strncmp("clean", cmd, 5) == 0) 	    return	CLEAN_SCREEN;
+	if(strncmp("semaphore", cmd, 9) == 0)   return SEMAPHORE;
+	if(strncmp("ps", cmd, 2) == 0)			return PROCESS_LIST;
 	return INVALID;
 }
 
@@ -178,18 +199,49 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	printf("          * exit : exit \n");
 	printf("          * clean : clears the Screen \n");
 	printf("          * test zerodiv/opcode : execute a dedicate test for the selected exception\n");
+	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
+	printf("          * ps : lists all proces information\n")
 	return VALID_CMD;
 }
 
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	{
+		cleanScreen();
 		changeFontColor(49);
-		printf("bye bye.\n");
+		printExitMessage();
 		return	-1;
 	}
 	else {
 		return	ARGS_ERROR;
 	}
+}
+
+void printExitMessage() {
+printf("                                                                                                                              \n");
+printf("   bbbbbbbb                                                        bbbbbbbb                                                   \n");
+printf("   b::::::b                                                        b::::::b                                                   \n");
+printf("   b::::::b                                                        b::::::b                                                   \n");
+printf("   b::::::b                                                        b::::::b                                                   \n");
+printf("    b:::::b                                                         b:::::b                                                   \n");
+printf("    b:::::bbbbbbbbb yyyyyyy           yyyyyyy eeeeeeeeeeee          b:::::bbbbbbbbb yyyyyyy           yyyyyyy eeeeeeeeeeee    \n");
+printf("    b::::::::::::::bby:::::y         y:::::yee::::::::::::ee        b::::::::::::::bby:::::y         y:::::yee::::::::::::ee  \n");
+printf("    b::::::::::::::::by:::::y       y:::::ye::::::eeeee:::::ee      b::::::::::::::::by:::::y       y:::::ye::::::eeeee:::::ee\n");
+printf("    b:::::bbbbb:::::::by:::::y     y:::::ye::::::e     e:::::e      b:::::bbbbb:::::::by:::::y     y:::::ye::::::e     e:::::e\n");
+printf("    b:::::b    b::::::b y:::::y   y:::::y e:::::::eeeee::::::e      b:::::b    b::::::b y:::::y   y:::::y e:::::::eeeee::::::e\n");
+printf("    b:::::b     b:::::b  y:::::y y:::::y  e:::::::::::::::::e       b:::::b     b:::::b  y:::::y y:::::y  e:::::::::::::::::e \n");
+printf("    b:::::b     b:::::b   y:::::y:::::y   e::::::eeeeeeeeeee        b:::::b     b:::::b   y:::::y:::::y   e::::::eeeeeeeeeee  \n");
+printf("    b:::::b     b:::::b    y:::::::::y    e:::::::e                 b:::::b     b:::::b    y:::::::::y    e:::::::e           \n");
+printf("    b:::::bbbbbb::::::b     y:::::::y     e::::::::e                b:::::bbbbbb::::::b     y:::::::y     e::::::::e          \n");
+printf("    b::::::::::::::::b       y:::::y       e::::::::eeeeeeee        b::::::::::::::::b       y:::::y       e::::::::eeeeeeee  \n");
+printf("    b:::::::::::::::b       y:::::y         ee:::::::::::::e        b:::::::::::::::b       y:::::y         ee:::::::::::::e  \n");
+printf("    bbbbbbbbbbbbbbbb       y:::::y            eeeeeeeeeeeeee        bbbbbbbbbbbbbbbb       y:::::y            eeeeeeeeeeeeee  \n");
+printf("                          y:::::y                                                         y:::::y                             \n");
+printf("                         y:::::y                                                         y:::::y                              \n");
+printf("                        y:::::y                                                         y:::::y                               \n");
+printf("                       y:::::y                                                         y:::::y                                \n");
+printf("                      yyyyyyy                                                         yyyyyyy                                 \n");
+printf("                                                                                                                              \n");
+printf("                                                                                                                              \n");
 }
 
 void setArguments(void ** argVector, unsigned char *arguments,
@@ -228,4 +280,12 @@ int getStartOfBackgroundParameter(char * arguments) {
 
 	}
 	return -1;
+}
+
+// int semaphoreShow(int argumentQuantity, void **argumentVector) {
+// 	uint64_t createProcess()
+// }
+
+int ps(int argumentQuantity, void **argumentVector) {
+	return printAllProcess();
 }

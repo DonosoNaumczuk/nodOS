@@ -72,5 +72,8 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return semaphoreTryWait(rsi, getProcessId());
 	 	case TERMIANTE_SEMAPHORE:
 			return terminateSemaphore(rsi, getProcessId());
+		case PRINT_ALL_PROCESS:
+			printAllProcess();
+			return 0;
 	}
 }
