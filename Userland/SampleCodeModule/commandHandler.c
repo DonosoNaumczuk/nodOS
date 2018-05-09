@@ -86,7 +86,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case CULO_SUCIO:
 			setArguments(argVector, arguments, &processType, "culoSucio");
-			processId = createProcess(&ps, 1, argVector);
+			processId = createProcess(&culoSucio, 1, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -302,3 +302,8 @@ int getStartOfBackgroundParameter(char * arguments) {
 int ps(int argumentQuantity, void **argumentVector) {
 	return printAllProcess();
 }
+
+int culoSucio(int argumentQuantity, void ** argumentVector) {
+	processId = createProcess(&pinitDeck, 3, argVector);
+	processId = createProcess(&initPlayers, 3, argVector);
+} 
