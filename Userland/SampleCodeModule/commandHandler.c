@@ -165,7 +165,6 @@ int test(int argumentQuantity, void** argumentVector) {
 	else return ARGS_ERROR;
 	int cmpRes = 0;
 	if((cmpRes = strcmp("zerodiv", buffer)) == 0)		divide0();
-	else if((cmpRes = strcmp("overflow", buffer)) == 0)	overflow();
 	else if ((cmpRes = strcmp("opcode", buffer)) == 0)	invalidop();
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
@@ -178,7 +177,7 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	printf("          * linear a b xScale yScale : print a linear function [ax + b]\n");
 	printf("          * exit : exit \n");
 	printf("          * clean : clears the Screen \n");
-	printf("          * test zerodiv/opcode/overflow : execute a dedicate test for the selected exception\n");
+	printf("          * test zerodiv/opcode : execute a dedicate test for the selected exception\n");
 	return VALID_CMD;
 }
 
