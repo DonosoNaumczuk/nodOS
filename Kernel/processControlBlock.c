@@ -44,7 +44,8 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
 	}
-	if(*((uint64_t *)(*processArgs)) == TRUE && isForeground(parent)) {
+
+	if(*((uint64_t *)(*processArgs)) != FALSE && isForeground(parent)) {
 		newPCB->foreground = TRUE;
 	}
 	else {

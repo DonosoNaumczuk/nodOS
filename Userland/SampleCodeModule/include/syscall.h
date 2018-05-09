@@ -53,6 +53,7 @@
 #define TERMIANTE_SEMAPHORE		28
 /* ps*/
 #define PRINT_ALL_PROCESS       29
+#define TERMINATE_PROCESS_BY_ID 30
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -90,6 +91,8 @@ void * receive(const char *mailboxId);
 void closeMailbox(const char *mailboxId);
 
 int printAllProcess();
+
+void terminateProcess(uint64_t pid);
 
 
 #endif

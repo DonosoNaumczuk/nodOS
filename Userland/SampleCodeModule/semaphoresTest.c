@@ -5,16 +5,24 @@ int semaphoreShow(int argumentQuantity, void **argumentVector) {
 	char *relatorSem = "relator";
 	char *kungFurySem = "kungFury";
 	char *hackerManSem = "hackerMan";
-	void **arguments;
+	void ** argument = allocateMemory(sizeof(void*) * 3);
+	int mode = 1;
+	int mode2 = 1;
+	int mode3 = 1;
+
 	createSemaphore(relatorSem, 0);
 	createSemaphore(kungFurySem, 0);
 	createSemaphore(hackerManSem, 0);
-	*arguments = relatorSem;
-	*(arguments + 1) = kungFurySem;
-	*(arguments + 2) = hackerManSem;
-	pid[0] = createProcess(&relator, 3, arguments);
-	pid[1] = createProcess(&kungFury, 3, arguments);
-	pid[2] = createProcess(&hackerMan, 3, arguments);
+	argument[0] = &mode;
+	argument[1] = relatorSem;
+	argument[2] = relatorSem;
+	argument[3] = kungFurySem;
+	argument[4] = hackerManSem;
+	pid[0] = createProcess(&relator, 5, argument);
+	argument[1] = kungFurySem;
+	pid[1] = createProcess(&kungFury, 5, argument);
+	argument[1] = hackerManSem;
+	pid[2] = createProcess(&hackerMan, 5, argument);
 	waitChild(pid[0]);
 	waitChild(pid[1]);
 	waitChild(pid[2]);
@@ -93,6 +101,6 @@ int hackerMan(int argumentQuantity, void ** argumentVector) {
 	semaphoreWait(hackerManSem);
 	printf("Hacker Man: It means that with the right computer algorithms, I can hack you back in time. Just like a time machine.\n");
 	semaphorePost(kungFurySem);
-	return 0;		
+	return 0;
 
 }
