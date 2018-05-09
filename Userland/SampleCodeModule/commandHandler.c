@@ -63,11 +63,30 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-			
 
 		case CLEAN_SCREEN:
 				cleanScreen();
 			return;
+		
+		case SEMAPHORE:
+			setArguments(argVector, arguments, &processType, "semaphore");
+			processId = createProcess(&semaphoreShow, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+		case PROCESS_LIST:
+			setArguments(argVector, arguments, &processType, "ps");
+			processId = createProcess(&ps, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+
 	}
 	return 1;
 }
@@ -92,7 +111,9 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
 	if(strncmp("test",cmd,4) == 0)			return	TEST;
-	if(strncmp("clean", cmd, 5) == 0) 	return	CLEAN_SCREEN;
+	if(strncmp("clean", cmd, 5) == 0) 	    return	CLEAN_SCREEN;
+	if(strncmp("semaphore", cmd, 9) == 0)   return SEMAPHORE;
+	if(strncmp("ps", cmd, 2) == 0)			return PROCESS_LIST;
 	return INVALID;
 }
 
@@ -178,13 +199,15 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	printf("          * exit : exit \n");
 	printf("          * clean : clears the Screen \n");
 	printf("          * test zerodiv/opcode : execute a dedicate test for the selected exception\n");
+	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
+	printf("          * ps : lists all proces information\n")
 	return VALID_CMD;
 }
 
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	{
+		cleanScreen();
 		changeFontColor(49);
-		//printf("bye bye.\n");
 		printExitMessage();
 		return	-1;
 	}
@@ -264,4 +287,12 @@ int getStartOfBackgroundParameter(char * arguments) {
 
 	}
 	return -1;
+}
+
+// int semaphoreShow(int argumentQuantity, void **argumentVector) {
+// 	uint64_t createProcess()
+// }
+
+int ps(int argumentQuantity, void **argumentVector) {
+	return printAllProcess();
 }
