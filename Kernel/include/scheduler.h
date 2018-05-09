@@ -27,5 +27,6 @@ uint64_t getProcessId();
 processControlBlockPtr_t getCurrentPCB();
 int isCurrentForeground();
 void printAllProcess();
+void terminateAProcess(int returnValue, processControlBlockPtr_t pcb);
 
 #endif
