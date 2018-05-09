@@ -13,7 +13,6 @@ int mutex_lock(uint8_t * arg);
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
 static int isFirst = TRUE;
-static processControlBlockPtr_t currentForegroundProcess = NULL;
 
 void initializeScheduler() {
     scheduler.ready = initializePCBList();
@@ -21,14 +20,6 @@ void initializeScheduler() {
     scheduler.terminated = initializePCBList();
     createMutualExclusion(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
     lockIfUnlocked(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
-}
-
-void setForeground(processControlBlockPtr_t pid) {
-    currentForegroundProcess = pid;
-}
-
-uint64_t getForegroundPid() {
-    return currentForegroundProcess == NULL ? 0 : getProcessIdOf(currentForegroundProcess);
 }
 
 void startScheduler() {
@@ -84,9 +75,6 @@ void terminateCurrentProcess(int returnValue) {
     }
     setReturnValue(currentPCB, returnValue);
     freeStack(currentPCB);
-    if(getForegroundPid() == getProcessId()) {
-        setForeground(currentPCBFather);
-    }
     setState(currentPCB, PROCESS_TERMINATE);
     _force_context_switch();
 
@@ -133,7 +121,13 @@ uint64_t getProcessId() {
     return getProcessIdOf(consultFirstPCBFromList(scheduler.ready));
 }
 
+int isCurrentForeground() {
+    return isForeground(getCurrentPCB());
+}
+
 void printAllProcess() {
+    printWithColor("N A M E             |   I D   |     M O D E      |  S T A T E\n", 62, 0x0F);
+    printWithColor("-------------------------------------------------------------\n", 62, 0x0F);
     printList(scheduler.ready);
     printList(scheduler.waiting);
     printList(scheduler.terminated);
