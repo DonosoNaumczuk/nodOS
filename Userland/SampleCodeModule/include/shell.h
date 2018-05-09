@@ -13,5 +13,10 @@
 int shell();
 void receiveTest();
 void sendTest();
+void sendTest2();
+void receiveTest2();
+void sendTest3();
+void receiveTest3();
+
 
 #endif
