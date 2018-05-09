@@ -34,8 +34,8 @@ void clearBSS(void * bssAddress, uint64_t bssSize) {
 void * getStackBase() {
 	return (void*)(
 		(uint64_t)&endOfKernel
-		+ PageSize * 8				//The size of the stack itself, 32KiB
-		- sizeof(uint64_t)			//Begin at the top of the stack
+		+ PageSize * 8				/* The size of the stack itself, 32KiB */
+		- sizeof(uint64_t)			/* Begin at the top of the stack */
 	);
 }
 
@@ -51,11 +51,7 @@ void * initializeKernelBinary() {
 	initializeVideoDriver();
 	initialPrint();
 	_setBinaryTime();
-	if(initializeMemoryAllocator(getStackBase()) == ERROR_STATE) {
-		printWithColor("Error initializating memory allocator\n", 38, 49);
-		/* evans: We must finish all the execution here... */
-	} //evans: check if this is the
-   	  //base address and do the #define
+	initializeMemoryAllocator(getStackBase());
 	initMutualExclusion();
 	initSemaphores(SCHEDULER_PROCESS_ID);
 	initMessageQueue();
@@ -70,16 +66,15 @@ void goToEntryPoint() {
 }
 
 void initialPrint() {
-	printWithColor("Welcome to nodOS", 16, 49);
+	printWithColor("Initializing nodOS Kernel...", 28, 49);
 	newLine();
 	printWithColor("Dammiano Donoso_Naumczuk Izaguirre Negro_Caino", 46, 22);
-	newLine();
 	newLine();
 }
 
 void init(int cant, void ** args) {
 	while(1) {
-		_hlt(); //evans check if halt?
+		_hlt();
 	}
 }
 

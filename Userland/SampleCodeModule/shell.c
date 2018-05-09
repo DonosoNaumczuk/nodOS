@@ -10,11 +10,16 @@
 #define LEFT_ARROW		135
 #define RIGHT_ARROW		136
 
-#define	EXIT_CMD	   -1
-#define	VALID_CMD 		0
-#define INVALID_CMD		1
-#define	ERROR_CMD		2
-#define	ARGS_ERROR		3
+#define	EXIT_CMD	   	 -1
+#define	VALID_CMD 		  0
+#define INVALID_CMD		  1
+#define	ERROR_CMD		  2
+#define	ARGS_ERROR		  3
+
+#define PROMPT 							"nodOS:$    "
+#define INVALID_COMMAND_STR 			"Error: Invalid command\n"
+#define COMMAND_EXECUTED_WITH_ERROR_STR "Error: Command executed with error\n"
+#define COMMAND_NOT_EXECUTED_ARGS_STR 	"Error: Command not executed because of arguments error\n"
 
 void clearLine(unsigned int lineLong){
 	int i;
@@ -48,14 +53,14 @@ int shell(){
 	clearHist(hist);
 
 	while(!exitFlag){
-		printf("nodOS:$    ");
+		printf(PROMPT);
 		while((currentChar = getchar()) != '\n'){
-			if(currentChar == '\b'){	//BACKSPACE
+			if(currentChar == '\b'){	/* BACKSPACE */
 				if(index>0){
 					buffer[--index] = 0;
 					printf("\b");
 				}
-			}else if(currentChar == UP_ARROW || currentChar == DOWN_ARROW){		//ANY ARROW
+			}else if(currentChar == UP_ARROW || currentChar == DOWN_ARROW){		/* ANY ARROW */
 
 				if(currentChar == UP_ARROW){
 					if(histAccessIndex > 0)	histAccessIndex--;
@@ -79,9 +84,9 @@ int shell(){
 		}
 		printf("\n");
 		switch (commandInterpreter(buffer,index)){
-			case INVALID_CMD: 	printf("-------------------------INVALID COMMAND---------------------------\n");	break;
-			case ERROR_CMD: 	printf("--------------------COMMAND EXECUTED WITH ERROR--------------------\n");	break;
-			case ARGS_ERROR:	printf("------------COMMAND NOT EXECUTED BECUASE ARGUMENTS ERROR-----------\n");	break;
+			case INVALID_CMD: 	printf(INVALID_COMMAND_STR);	break;
+			case ERROR_CMD: 	printf(COMMAND_EXECUTED_WITH_ERROR_STR);	break;
+			case ARGS_ERROR:	printf(COMMAND_NOT_EXECUTED_ARGS_STR);	break;
 			case EXIT_CMD:		exitFlag = 1;	break;
 			case VALID_CMD:		break;
 		}
@@ -94,37 +99,4 @@ int shell(){
 		index = 0;
 	}
 	return 0;
-}
-//evans
-void receiveTest() {
-	createMailbox("mailboxTest");
-	char * result = receive("mailboxTest");
-	printf("Devolvio: %s\n", result);
-}
-
-//evans
-void sendTest() {
-	createMailbox("mailboxTest");
-	send("mailboxTest","hola como va.\n", 15);
-}
-//evans
-void sendTest2() {
-	createMailbox("mailboxTest2");
-	send("mailboxTest2","segundo mensaje.\n", 18);
-}
-//evans
-void receiveTest2() {
-	createMailbox("mailboxTest2");
-	printf("recibio: %s\n",receive("mailboxTest2"));
-}
-
-void sendTest3() {
-	createMailbox("mailboxTest3");
-	send("mailboxTest3", "mensaje", 8);
-
-}
-
-void receiveTest3() {
-	createMailbox("mailboxTest3");
-		printf("recibio: %s\n",receive("mailboxTest3"));
 }
