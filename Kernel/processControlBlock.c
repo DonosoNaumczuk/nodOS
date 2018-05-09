@@ -67,7 +67,6 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->stackPointer = allocateMemory(SIZE_OF_STACK);
     newPCB->state = PROCESS_READY;
 	newPCB->name = (char *)(*processArgs);
-	printWithColor(newPCB->name,4,10);
 
     newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-1, processArgs+1);
 
