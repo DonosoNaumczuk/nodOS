@@ -132,3 +132,9 @@ processControlBlockPtr_t getCurrentPCB() {
 uint64_t getProcessId() {
     return getProcessIdOf(consultFirstPCBFromList(scheduler.ready));
 }
+
+void printAllProcess() {
+    printList(scheduler.ready);
+    printList(scheduler.waiting);
+    printList(scheduler.terminated);
+}

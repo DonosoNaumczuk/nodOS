@@ -36,6 +36,7 @@
 #define WAKE_UP_PROCESS 		10
 #define CREATE_PROCESS 			11
 #define GET_PID 				12
+#define PRINT_ALL_PROCESS       29
 
 /* Mailbox */
 #define SEND_MAILBOX       		13
