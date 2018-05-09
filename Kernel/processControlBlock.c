@@ -164,3 +164,35 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
 
     return (void *)stackFrame;
 }
+
+void printPCB(processControlBlockPtr_t pcb) {
+	if(pcb != NULL) {
+		char * aux = pcb->name;
+		while(*aux != 0) {
+			printCharWithColor(aux, 0x0F);
+		}
+		printWithColor("     ", 5, 0x0F);
+		printHexa(pcb->pid);
+		printWithColor("     ", 5, 0x0F);
+		if(pcb-> pid == getForegroundPid()) {
+			printWithColor("Foreground", 10, 0x0F);
+		}
+		else {
+			printWithColor("Background", 10, 0x0F);
+		}
+		printWithColor("     ", 5, 0x0F);
+		if(pcb->state == PROCESS_READY) {
+			printWithColor("Ready", 5, 0x0F);
+		}
+		else if(pcb->state == PROCESS_BLOCKED) {
+			printWithColor("Block", 5, 0x0F);
+		}
+		else if(pcb->state == PROCESS_WAITING) {
+			printWithColor("Waiting", 7, 0x0F);
+		}
+		else if(pcb->state == PROCESS_TERMINATE) {
+			printWithColor("Terminated", 5, 0x0F);
+		}
+
+	}
+}

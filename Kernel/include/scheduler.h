@@ -28,5 +28,6 @@ processControlBlockPtr_t getCurrentPCB();
 void printAllProcess();
 void setForeground(processControlBlockPtr_t pid);
 uint64_t getForegroundPid();
+void printAllProcess();
 
 #endif
