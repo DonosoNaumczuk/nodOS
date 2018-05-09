@@ -11,6 +11,7 @@
 #include  <colors.h>
 #include  <semaphore.h>
 #include  <semaphoreTest.h>
+#include <culosucio.h>
 
 #define   MAX_CMD_LONG   18
 
@@ -45,5 +46,6 @@ int isBackground(char *arguments);
 int getStartOfBackgroundParameter(char *arguments);
 void printExitMessage();
 int ps(int argumentQuantity, void **argumentVector);
+int culoSucio(int argumentQuantity, void ** argumentVector);
 
 #endif

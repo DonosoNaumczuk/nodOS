@@ -12,6 +12,7 @@
 #define WINNER_CARD 37
 
 void initDeck();
+void initPlayers();
 
 
 

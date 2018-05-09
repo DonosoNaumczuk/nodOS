@@ -74,7 +74,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 			else {
 				return 0;
-			}		
+			}
 		case PROCESS_LIST:
 			setArguments(argVector, arguments, &processType, "ps");
 			processId = createProcess(&ps, 1, argVector);
@@ -122,7 +122,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("clean", cmd, 5) == 0) 	    return	CLEAN_SCREEN;
 	if(strncmp("semaphore", cmd, 9) == 0)   return SEMAPHORE;
 	if(strncmp("ps", cmd, 2) == 0)			return PROCESS_LIST;
-	if(strncmp("culoSucio", cmd, 9) == 0).  return CULO_SUCIO;
+	if(strncmp("culoSucio", cmd, 9) == 0)   return CULO_SUCIO;
 	return INVALID;
 }
 
@@ -304,6 +304,9 @@ int ps(int argumentQuantity, void **argumentVector) {
 }
 
 int culoSucio(int argumentQuantity, void ** argumentVector) {
-	processId = createProcess(&pinitDeck, 3, argVector);
-	processId = createProcess(&initPlayers, 3, argVector);
-} 
+	uint64_t processId1,processId2;
+	processId1 = createProcess(&initDeck, 3, argumentVector);
+	processId2 = createProcess(&initPlayers, 3, argumentVector);
+	waitChild(processId1);
+	waitChild(processId2);
+}
