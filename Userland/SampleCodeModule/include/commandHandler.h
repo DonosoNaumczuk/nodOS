@@ -20,6 +20,9 @@
 #define   ECHO            5
 #define   TEST            6
 #define   CLEAN_SCREEN    7
+#define   SEMAPHORE		  8
+#define   PROCESS_LIST	  9
+
 #define   FOREGROUND	  1
 #define	  BACKGROUND	  0
 
