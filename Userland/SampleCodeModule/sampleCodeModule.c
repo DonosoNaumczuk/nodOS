@@ -1,41 +1,24 @@
 #include <shell.h>
 #include <syscall.h>
+#define GREEN 49
+#define WHITE 0x0F
+#define DARK_GREY 46
 void printLogo();
-                                                                                     
+
 
 int main() {
      printLogo();
      shell();
 
-     // createProcess(&sendTest, 0, NULL); //evans
-     // createProcess(&sendTest, 0, NULL); //evans
-     // createProcess(&sendTest, 0, NULL); //evans
-     // createProcess(&receiveTest, 0, NULL); //evans
-     // createProcess(&receiveTest, 0, NULL); //evans
-     // createProcess(&receiveTest, 0, NULL); //evans
-     // createProcess(&sendTest3, 0, NULL); //evans
-     // createProcess(&receiveTest3, 0, NULL); //evans
-     // createProcess(&sendTest3, 0, NULL); //ev
-
-     // createProcess(&receiveTest2, 0, NULL); //evans
-     // createProcess(&sendTest, 0, NULL); //evans
-     // createProcess(&sendTest3, 0, NULL); //evans
-     // createProcess(&receiveTest, 0, NULL); //evans
-     // createProcess(&sendTest2, 0, NULL); //evans
-     // createProcess(&receiveTest3, 0, NULL); //evans
-     // createProcess(&sendTest3, 0, NULL); //evans
-     // createProcess(&receiveTest3, 0, NULL); //evans
-     // createProcess(&sendTest3, 0, NULL); //evans
-     
      return 0;
 }
 
 void printLogo(){
-changeFontColor(49);
+changeFontColor(GREEN);
 printf("\n\n");
 printf("                                                                                                               \n");
 printf("                                                                 dddddddd                                      \n");
-printf("                          W E L C O M E    T O                   d::::::d     OOOOOOOOO        SSSSSSSSSSSSSSS \n");
+printf("                               W E L C O M E    T O              d::::::d     OOOOOOOOO        SSSSSSSSSSSSSSS \n");
 printf("                                                                 d::::::d   OO:::::::::OO    SS:::::::::::::::S\n");
 printf("                                                                 d::::::d OO:::::::::::::OO S:::::SSSSSS::::::S\n");
 printf("                                                                 d:::::d O:::::::OOO:::::::OS:::::S     SSSSSSS\n");
@@ -53,10 +36,11 @@ printf("                    n::::n    n::::n oo:::::::::::oo   d:::::::::ddd::::
 printf("                    nnnnnn    nnnnnn   ooooooooooo      ddddddddd   ddddd     OOOOOOOOO      SSSSSSSSSSSSSSS   \n");
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");
+changeFontColor(DARK_GREY);
+printf("                                                                                                               \n");
+printf("                                                                               I have a bad feeling about this.\n");
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");
 printf("                                                                                                               \n");
-printf("                                                                                                               \n");
-printf("                                                                                                               \n");
-changeFontColor(0x0F);
+changeFontColor(WHITE);
 }

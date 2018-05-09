@@ -53,7 +53,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-			
+
 		case TEST:
 			setArguments(argVector, arguments, &processType, "test");
 			processId = createProcess(&test, 1, argVector);
@@ -63,7 +63,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-			
+
 
 		case CLEAN_SCREEN:
 				cleanScreen();
@@ -189,12 +189,6 @@ int exit_(unsigned char* arguments) {
 	}
 	else {
 		return	ARGS_ERROR;
-	}
-}
-
-void printArgs(int *args, int size) {//evans
-	for (int  i = 0; i < size; i++) {
-		printf("args[%d] = %d\n", i, args[i]);
 	}
 }
 
