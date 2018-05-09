@@ -126,6 +126,8 @@ int isCurrentForeground() {
 }
 
 void printAllProcess() {
+    printWithColor("N A M E             |   I D   |     M O D E      |  S T A T E\n", 62, 0x0F);
+    printWithColor("-------------------------------------------------------------\n", 62, 0x0F);
     printList(scheduler.ready);
     printList(scheduler.waiting);
     printList(scheduler.terminated);

@@ -53,7 +53,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-			
+
 		case TEST:
 			setArguments(argVector, arguments, &processType, "test");
 			processId = createProcess(&test, 1, argVector);
@@ -67,8 +67,8 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		case CLEAN_SCREEN:
 				cleanScreen();
 			return;
-		
-		case SEMAPHORE:
+
+		/*case SEMAPHORE:
 			setArguments(argVector, arguments, &processType, "semaphore");
 			processId = createProcess(&semaphoreShow, 1, argVector);
 			if(processType == FOREGROUND) {
@@ -76,7 +76,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 			else {
 				return 0;
-			}
+			}*/
 		case PROCESS_LIST:
 			setArguments(argVector, arguments, &processType, "ps");
 			processId = createProcess(&ps, 1, argVector);
@@ -200,7 +200,7 @@ int printHelp(int argumentQuantity, void **argumentVector) {
 	printf("          * clean : clears the Screen \n");
 	printf("          * test zerodiv/opcode : execute a dedicate test for the selected exception\n");
 	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
-	printf("          * ps : lists all proces information\n")
+	printf("          * ps : lists all proces information\n");
 	return VALID_CMD;
 }
 
