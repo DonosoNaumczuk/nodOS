@@ -33,3 +33,11 @@ int strncmp(unsigned char* s1,unsigned char* s2,unsigned int n){
 	}
 	return	res;
 }
+
+int strLength(unsigned char *string) {
+	int i = 0;
+	while(string[i] != 0) {
+		i++;
+	}
+	return i;
+}

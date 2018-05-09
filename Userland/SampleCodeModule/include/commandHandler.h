@@ -19,7 +19,9 @@
 #define   HELP            4
 #define   ECHO            5
 #define   TEST            6
-#define   CLEAN_SCREEN     7
+#define   CLEAN_SCREEN    7
+#define   FOREGROUND	  1
+#define	  BACKGROUND	  0
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size);
 int printTime(int argumentQuantity, void **argumentVector);
@@ -30,6 +32,9 @@ int graphLinear(int argumentQuantity, void **argumentVector);
 int test(int argumentQuantity, void** argumentVector);
 int printHelp(int argumentQuantity, void **argumentVector);
 int exit_(unsigned char* arguments);
+void setArguments(void ** argVector, unsigned char *arguments, uint64_t *processType);
+int isBackground(char *arguments);
+uint8_t getStartOfBackgroundParameter(char *arguments);
 
 
 #endif
