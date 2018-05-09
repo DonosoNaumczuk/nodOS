@@ -25,6 +25,7 @@
 #define   CLEAN_SCREEN    7
 #define   SEMAPHORE		  8
 #define   PROCESS_LIST	  9
+#define   CULO_SUCIO	  10
 
 #define   FOREGROUND	  1
 #define	  BACKGROUND	  0

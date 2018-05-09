@@ -74,7 +74,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 			else {
 				return 0;
-			}
+			}		
 		case PROCESS_LIST:
 			setArguments(argVector, arguments, &processType, "ps");
 			processId = createProcess(&ps, 1, argVector);
@@ -84,6 +84,16 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
+		case CULO_SUCIO:
+			setArguments(argVector, arguments, &processType, "culoSucio");
+			processId = createProcess(&ps, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+
 
 	}
 	return 1;
@@ -112,6 +122,7 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("clean", cmd, 5) == 0) 	    return	CLEAN_SCREEN;
 	if(strncmp("semaphore", cmd, 9) == 0)   return SEMAPHORE;
 	if(strncmp("ps", cmd, 2) == 0)			return PROCESS_LIST;
+	if(strncmp("culoSucio", cmd, 9) == 0).  return CULO_SUCIO;
 	return INVALID;
 }
 
