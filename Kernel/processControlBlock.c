@@ -33,6 +33,7 @@ typedef struct processControlBlock_t {
     processControlBlockListPtr_t childs;
 	char *name;
 	int returnValue;
+	int foreground;
     void *stackPointer;
 } processControlBlock_t;
 
@@ -43,11 +44,22 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
 	}
-	if(*((uint64_t *)(*processArgs)) == TRUE && getProcessIdOf(parent) == getForegroundPid()) {
-		setForeground(newPCB);
+	if(*((uint64_t *)(*processArgs)) == TRUE && isForeground(parent)) {
+		newPCB->foreground = TRUE;
+	}
+	else {
+		newPCB->foreground = FALSE;
 	}
 	addProcessToScheduler(newPCB);
 	return newPCB;
+}
+
+void setForeground(processControlBlockPtr_t pcb) {
+	pcb->foreground = TRUE;
+}
+
+int isForeground(processControlBlockPtr_t pcb) {
+	return pcb->foreground;
 }
 
 uint64_t getProcessIdOf(processControlBlockPtr_t pcb) {
@@ -168,31 +180,38 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
 void printPCB(processControlBlockPtr_t pcb) {
 	if(pcb != NULL) {
 		char * aux = pcb->name;
-		while(*aux != 0) {
-			printCharWithColor(aux, 0x0F);
+		int i = 0;
+		while(*aux != 0 && i < 20) {
+			printWithColor(aux, 1, 0x0F);
+			aux++;
+			i++;
 		}
-		printWithColor("     ", 5, 0x0F);
+		while (i < 20) {
+			printWithColor(" ", 1, 0x0F);
+			i++;
+		}
+		printWithColor("|    ", 5, 0x0F);
 		printHexa(pcb->pid);
-		printWithColor("     ", 5, 0x0F);
-		if(pcb-> pid == getForegroundPid()) {
+		printWithColor("    |    ", 9, 0x0F);
+		if(pcb->foreground) {
 			printWithColor("Foreground", 10, 0x0F);
 		}
 		else {
 			printWithColor("Background", 10, 0x0F);
 		}
-		printWithColor("     ", 5, 0x0F);
+		printWithColor("    |    ", 9, 0x0F);
 		if(pcb->state == PROCESS_READY) {
-			printWithColor("Ready", 5, 0x0F);
+			printWithColor("Ready     ", 10, 0x0F);
 		}
 		else if(pcb->state == PROCESS_BLOCKED) {
-			printWithColor("Block", 5, 0x0F);
+			printWithColor("Block     ", 10, 0x0F);
 		}
 		else if(pcb->state == PROCESS_WAITING) {
-			printWithColor("Waiting", 7, 0x0F);
+			printWithColor("Waiting   ", 10, 0x0F);
 		}
 		else if(pcb->state == PROCESS_TERMINATE) {
-			printWithColor("Terminated", 5, 0x0F);
+			printWithColor("Terminated", 10, 0x0F);
 		}
-
+		newLine();
 	}
 }

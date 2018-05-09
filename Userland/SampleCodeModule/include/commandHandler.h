@@ -8,7 +8,9 @@
 #include  <shell.h>
 #include  <exceptionSample.h>
 #include  <syscall.h>
-#include <colors.h>
+#include  <colors.h>
+#include  <semaphore.h>
+#include  <semaphoreTest.h>
 
 #define   MAX_CMD_LONG   18
 
@@ -41,6 +43,6 @@ void setArguments(void ** argVector, unsigned char *arguments,
 int isBackground(char *arguments);
 int getStartOfBackgroundParameter(char *arguments);
 void printExitMessage();
-void ps(int argumentQuantity, void **argumentVector);
+int ps(int argumentQuantity, void **argumentVector);
 
 #endif

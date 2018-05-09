@@ -37,5 +37,7 @@ int isThisPid(processControlBlockPtr_t pcb, long int pid);
 void setStackPointer(processControlBlockPtr_t pcb, void * stackPointer);
 void setReturnValue(processControlBlockPtr_t pcb, int returnValue);
 void printPCB(processControlBlockPtr_t pcb);
+void setForeground(processControlBlockPtr_t pcb);
+int isForeground(processControlBlockPtr_t pcb);
 
 #endif
