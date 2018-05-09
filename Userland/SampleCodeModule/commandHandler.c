@@ -66,7 +66,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 				cleanScreen();
 			return;
 
-		/*case SEMAPHORE:
+		case SEMAPHORE:
 			setArguments(argVector, arguments, &processType, "semaphore");
 			processId = createProcess(&semaphoreShow, 1, argVector);
 			if(processType == FOREGROUND) {
@@ -74,7 +74,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 			else {
 				return 0;
-			}*/
+			}
 		case PROCESS_LIST:
 			setArguments(argVector, arguments, &processType, "ps");
 			processId = createProcess(&ps, 1, argVector);
