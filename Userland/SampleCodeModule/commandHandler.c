@@ -77,6 +77,16 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
+		case PROCESS_LIST:
+			setArguments(argVector, arguments, &processType, "ps");
+			processId = createProcess(&ps, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+
 	}
 	return 1;
 }
@@ -282,3 +292,7 @@ int getStartOfBackgroundParameter(char * arguments) {
 // int semaphoreShow(int argumentQuantity, void **argumentVector) {
 // 	uint64_t createProcess()
 // }
+
+int ps(int argumentQuantity, void **argumentVector) {
+	return printAllProcess();
+}
