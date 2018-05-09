@@ -31,6 +31,7 @@ typedef struct processControlBlock_t {
     uint8_t state;
     struct processControlBlock_t *parent;
     processControlBlockListPtr_t childs;
+	char *name;
 	int returnValue;
     void *stackPointer;
 } processControlBlock_t;
@@ -65,8 +66,10 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->childs = initializePCBList();
     newPCB->stackPointer = allocateMemory(SIZE_OF_STACK);
     newPCB->state = PROCESS_READY;
+	newPCB->name = (char *)(*processArgs);
+	printWithColor(newPCB->name,4,10);
 
-    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity, processArgs);
+    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-1, processArgs+1);
 
     return newPCB;
 }
