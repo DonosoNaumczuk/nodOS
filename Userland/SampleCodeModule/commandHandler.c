@@ -176,16 +176,19 @@ void setArguments(void ** argVector, unsigned char *arguments, uint64_t *process
 }
 
 int isBackground(char * arguments) {
-	uint8_t index = getStartOfBackgroundParameter(arguments);
+	int index = getStartOfBackgroundParameter(arguments);
+	if(index == -1) {
+		return 0;
+	}
 	return strncmp(arguments + index, "-b", strLength("-b")) == 0;
 }
 
-uint8_t getStartOfBackgroundParameter(char * arguments) {
+int getStartOfBackgroundParameter(char * arguments) {
 	int i;
 	for(i = 0; arguments[i] != 0; i++);
 	if(i > 0 ) {
 		i = i - 1;
-		while(i > 0 && arguments[i] != ' ') {
+		while(i > 0 && arguments[i] == ' ') {
 			i--;
 		}
 		if(i >= (strLength("-b") - 1)) {

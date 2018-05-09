@@ -9,7 +9,7 @@
 #include  <exceptionSample.h>
 #include  <syscall.h>
 
-#define   MAX_CMD_LONG   15
+#define   MAX_CMD_LONG   18
 
 #define   INVALID        -1
 #define   EXIT            0
@@ -34,7 +34,7 @@ int printHelp(int argumentQuantity, void **argumentVector);
 int exit_(unsigned char* arguments);
 void setArguments(void ** argVector, unsigned char *arguments, uint64_t *processType);
 int isBackground(char *arguments);
-uint8_t getStartOfBackgroundParameter(char *arguments);
+int getStartOfBackgroundParameter(char *arguments);
 
 
 #endif
