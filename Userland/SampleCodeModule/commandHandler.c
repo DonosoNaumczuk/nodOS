@@ -68,11 +68,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 				cleanScreen();
 			return;
 
-<<<<<<< HEAD
 		/*case SEMAPHORE:
-=======
-		case SEMAPHORE:
->>>>>>> 6c47a6ba9a60b12e5dafe555b53af05cff2d101c
 			setArguments(argVector, arguments, &processType, "semaphore");
 			processId = createProcess(&semaphoreShow, 1, argVector);
 			if(processType == FOREGROUND) {
