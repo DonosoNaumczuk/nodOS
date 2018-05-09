@@ -57,19 +57,39 @@
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
 
+#include <syscall.h>
+
 void write(char * string, uint64_t length, char color);
+
 void read(int in_id, char * buffer, int qty_to_read);
+
 void printPixel(uint32_t x, uint32_t y, char color);
+
 uint64_t getResolutionX();
+
 uint64_t getResolutionY();
+
 uint64_t getTime(int time);
+
 void cleanScreen();
+
 uint64_t createProcess(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector);
+
 int waitChild(uint64_t processId);
+
+void * allocateMemory(uint64_t bytesToAllocate);
+
+uint32_t freeMemory(void * addressToFree);
+
 int createMailbox(const char *mailboxId);
+
 void send(const char *mailboxId, const void *message, const unsigned int messageSize);
+
 void * receive(const char *mailboxId);
+
 void closeMailbox(const char *mailboxId);
+
 int printAllProcess();
+
 
 #endif
