@@ -28,24 +28,7 @@ int semaphoreShow(int argumentQuantity, void **argumentVector) {
 	waitChild(pid[2]);
 	return 0;
 }
-// Hacker Man: I was able to triangulate the cell phone signal and trace the caller. His name is Adolf Hitler.
-// Kung Fury: Hitler. He's the worst criminal of all time.
 
-// Hacker Man: Do you know him, sir?
-// Kung Fury: I guess you could say that. In the 1940s, Hitler was a kung-fu champion. He was so good at kung-fu, that he decided to change his name to 'Kung Führer'. But he didn't stop there. He knew the Kung Fury prophecy, and wanted to claim the throne, so he and his posse of Nazi soldiers conducted experiments for years. They were never able to figure how to master the art of Kung Fury. Then one day, he disappeared from the face of the Earth. And no one has seen him ever since, until now. I guess if he figured he can find the Chosen One and kill him, He will become Kung Fury himself. He must have traveled in time in order to get here, which is probably why he disappeared in the first place.
-
-// Hacker Man: So what are you gonna do?
-// Kung Fury: My job. I'm gonna go back in time to Nazi Germany and kill Hitler once and for all.
-
-// Hacker Man: So, uh, how are you gonna do that?
-// Kung Fury: I'm not sure. I need some sort of time machine.
-
-// [Hackerman thinks]
-// Hacker Man: Wait a minute. Using an RX modulator, I might be able to conduct a mainframe cell direct and hack the uplink to the download.
-// Kung Fury: What the hell does that mean?
-
-// Hacker Man: It means that with the right computer algorithms, I can hack you back in time. Just like a time machine.
-// Kung Fury: Well then. It's hacking time.
 int relator(int argumentQuantity, void ** argumentVector) {
 	char *relatorSem = (char *)(argumentVector[0]);
 	char *kungFurySem = (char *)(argumentVector[1]);
@@ -54,7 +37,7 @@ int relator(int argumentQuantity, void ** argumentVector) {
 	changeFontColor(RED);
 	printf("Relator: ");
 	changeFontColor(WHITE);
-	printf("[Hackerman thinks]\n");	
+	printf("[Hackerman thinks]\n");
 	changeFontColor(WHITE);
 	semaphorePost(hackerManSem);
 	return 0;
@@ -74,7 +57,7 @@ int kungFury(int argumentQuantity, void ** argumentVector) {
 	changeFontColor(GREEN);
 	printf("Kung Fury: ");
 	changeFontColor(WHITE);
-	printf(" I guess you could say that. In the 1940s, Hitler was a kung-fu champion. He was so good at kung-fu, that he decided to change his name to 'Kung Führer'. But he didn't stop there. He knew the Kung Fury prophecy, and wanted to claim the throne, so he and his posse of Nazi soldiers conducted experiments for years. They were never able to figure how to master the art of Kung Fury. Then one day, he disappeared from the face of the Earth. And no one has seen him ever since, until now. I guess if he figured he can find the Chosen One and kill him, He will become Kung Fury himself. He must have traveled in time in order to get here, which is probably why he disappeared in the first place.\n");
+	printf(" I guess you could say that. In the 1940s, Hitler was a kung-fu champion. He was so good at kung-fu, that he decided to change his name to 'Kung Führer'. But he didn't stop there. He knew the Kung Fury prophecy, and wanted to claim the throne, so he and his posse of Nazi soldiers conducted experiments for years.\nThey were never able to figure how to master the art of Kung Fury. Then one day, he disappeared from the face of the Earth. And no one has seen him ever since, until now. I guess if he figured he can find the Chosen One and kill him, He will become Kung Fury himself. He must have traveled in time in order to get here, which is probably why he disappeared in the first place.\n");
 	semaphorePost(hackerManSem);
 	semaphoreWait(kungFurySem);
 	changeFontColor(GREEN);
@@ -99,7 +82,7 @@ int kungFury(int argumentQuantity, void ** argumentVector) {
 	printf("Kung Fury: ");
 	changeFontColor(WHITE);
 	printf(" Well then. It's hacking time.\n");
-	
+
 	return 0;
 }
 
