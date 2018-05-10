@@ -95,7 +95,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case PRODUCTOR_CONSUMER:
 			setArguments(argVector, arguments, &processType, "prodcons");
-			clean();
+			cleanScreen();
 			processId = createProcess(&prodcons, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
