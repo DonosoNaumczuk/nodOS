@@ -91,7 +91,7 @@ void incrementProducer(prodcons_t *producerStruct) {
 	arguments[2] = producerStruct;
 	arguments[3] = id;
 	producerStruct->list[*id] = createProcess(&producer, 4, arguments);
-	(*(producerStruct->size))++;
+	(*size)++;
 	unlock(MUTEX_PROD);
 }
 
@@ -107,7 +107,7 @@ void decrementProducer(prodcons_t *producerStruct) {
 	}
 
 	terminateProcess(producerStruct->list[getNotNullId(producerStruct)]);
-	(*(producerStruct->size))--;
+	(*size)--;
 
 	changeFontColor(BLUE);
 	printf("You killed an inocent producer :(\n");
@@ -137,7 +137,7 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 	arguments[2] = consumerStruct;
 	arguments[3] = &id;
 	consumerStruct->list[*id] = createProcess(&consumer, 4, arguments);
-	(*(consumerStruct->size))++;
+	(*size)++;
 	unlock(MUTEX_CONS);
 }
 
@@ -153,7 +153,7 @@ void decrementConsumer(prodcons_t *consumerStruct) {
 	}
 
 	terminateProcess(consumerStruct->list[getNotNullId(consumerStruct)]);
-	(*(consumerStruct->size))--;
+	(*size)--;
 
 	changeFontColor(BLUE);
 	printf("You killed an inocent consumer :(\n");
@@ -188,6 +188,7 @@ int producer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new producer. I want to write %d!\n", id);
+	printf("Producers = %d\n", *(producerStruct->size));
 
 	semaphoreWait(SEM_FULL);
 	lock(MUTEX_PROD);
@@ -203,11 +204,10 @@ int producer(int argc, void ** args) {
 	producerStruct->list[id] = NULL;
 	(*(producerStruct->size))--;
 
-	printf("Can write %d! Goodbye!\n", id);
+	printf("I wrote %d! Goodbye!\n", id);
+	printf("Producers = %d\n", *(producerStruct->size));
 
 	printCriticalZone(producerStruct->criticalZone);
-
-	printf("Producers = %d\n", *(producerStruct->size));
 
 	unlock(MUTEX_CONS);
 	unlock(MUTEX_PROD);
@@ -220,6 +220,7 @@ int consumer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new consumer. I want to consume!\n");
+	printf("Consumers = %d\n", *(consumerStruct->size));
 
 	semaphoreWait(SEM_EMPTY);
 	lock(MUTEX_PROD);
@@ -236,11 +237,11 @@ int consumer(int argc, void ** args) {
 	consumerStruct->list[id] = NULL;
 	(*(consumerStruct->size))--;
 
-	printf("Can consume %d! Goodbye!\n", consumedInt);
+	printf("I consumed %d! Goodbye!\n", consumedInt);
+	printf("Consumers = %d\n", *(consumerStruct->size));
 
 	printCriticalZone(consumerStruct->criticalZone);
 
-	printf("Consumers = %d\n", *(consumerStruct->size));
 
 	unlock(MUTEX_CONS);
 	unlock(MUTEX_PROD);
