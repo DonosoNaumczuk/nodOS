@@ -48,10 +48,18 @@ void prodcons() {
 	}
 
 	if(c == QUIT) {
+		terminateMutualExclusion(MUTEX_CONS);
+		terminateMutualExclusion(MUTEX_PROD);
+		terminateSemaphore(SEM_FULL);
+		terminateSemaphore(SEM_EMPTY);
 		printf("Program finished with quit command succesfully\n");
 		return 0;
 	}
 
+	terminateMutualExclusion(MUTEX_CONS);
+	terminateMutualExclusion(MUTEX_PROD);
+	terminateSemaphore(SEM_FULL);
+	terminateSemaphore(SEM_EMPTY);
 	return -1;
 }
 
@@ -112,7 +120,7 @@ void decrementProducer(prodcons_t *producerStruct) {
 	changeFontColor(BLUE);
 	printf("You killed an inocent producer :(\n");
 	changeFontColor(WHITE);
-	printf("Producers = %d\n", *(producerStruct->size));
+	printf("Producers quantity = %d\n\n", *(producerStruct->size));
 
 	unlock(MUTEX_PROD);
 }
@@ -158,7 +166,7 @@ void decrementConsumer(prodcons_t *consumerStruct) {
 	changeFontColor(BLUE);
 	printf("You killed an inocent consumer :(\n");
 	changeFontColor(WHITE);
-	printf("Consumers = %d\n", *(consumerStruct->size));
+	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
 	unlock(MUTEX_CONS);
 }
@@ -188,7 +196,7 @@ int producer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new producer. I want to write %d!\n", id);
-	printf("Producers = %d\n", *(producerStruct->size));
+	printf("Producers = %d\n\n", *(producerStruct->size));
 
 	semaphoreWait(SEM_FULL);
 	lock(MUTEX_PROD);
@@ -205,7 +213,7 @@ int producer(int argc, void ** args) {
 	(*(producerStruct->size))--;
 
 	printf("I wrote %d! Goodbye!\n", id);
-	printf("Producers = %d\n", *(producerStruct->size));
+	printf("Producers quantity = %d\n\n", *(producerStruct->size));
 
 	printCriticalZone(producerStruct->criticalZone);
 
@@ -220,7 +228,7 @@ int consumer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new consumer. I want to consume!\n");
-	printf("Consumers = %d\n", *(consumerStruct->size));
+	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
 	semaphoreWait(SEM_EMPTY);
 	lock(MUTEX_PROD);
@@ -238,10 +246,9 @@ int consumer(int argc, void ** args) {
 	(*(consumerStruct->size))--;
 
 	printf("I consumed %d! Goodbye!\n", consumedInt);
-	printf("Consumers = %d\n", *(consumerStruct->size));
+	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
 	printCriticalZone(consumerStruct->criticalZone);
-
 
 	unlock(MUTEX_CONS);
 	unlock(MUTEX_PROD);
@@ -260,5 +267,5 @@ void printMenu() {
 	putChar(DEC_CONS);
 	printf(": Decrement consumers\n");
 	putChar(QUIT);
-	printf(": Quit\n");
+	printf(": Quit\n\n\n");
 }
