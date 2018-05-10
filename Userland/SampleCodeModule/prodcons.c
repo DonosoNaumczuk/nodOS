@@ -17,13 +17,13 @@ void prodcons() {
 	int producers[MAX_PRODCONS] = {0};
 	uint64_t producersQty = 0;
 
-	prodcons_t *consumerStruct = allocateMemory(1);//evans
+	prodcons_t *consumerStruct = allocateMemory(sizeof(prodcons_t));
 	consumerStruct->list = consumers;
 	consumerStruct->size = &consumersQty;
 	consumerStruct->criticalZone = criticalZone;
 	consumerStruct->index = &index;
 
-	prodcons_t *producerStruct = allocateMemory(1);//evans
+	prodcons_t *producerStruct = allocateMemory(sizeof(prodcons_t));
 	producerStruct->list = producers;
 	producerStruct->size = &producersQty;
 	producerStruct->criticalZone = criticalZone;
@@ -46,6 +46,13 @@ void prodcons() {
 				break;
 		}
 	}
+
+	if(c == QUIT) {
+		printf("Program finished with quit command succesfully\n");
+		return 0;
+	}
+
+	return -1;
 }
 
 void printCriticalZone(char *criticalZone) {
@@ -72,7 +79,7 @@ void incrementProducer(prodcons_t *producerStruct) {
 		return;
 	}
 
-	void ** arguments = allocateMemory(sizeof(void*)*4);
+	void ** arguments = allocateMemory(sizeof(void*) * 4);
 	int mode = FOREGROUND;
 	int *id = allocateMemory(sizeof(*id));
 	*id = getNullId(producerStruct);
@@ -81,7 +88,7 @@ void incrementProducer(prodcons_t *producerStruct) {
 	arguments[2] = producerStruct;
 	arguments[3] = id;
 	producerStruct->list[*id] = createProcess(&producer, 4, arguments);
-	*producerStruct->size++;
+	(*(producerStruct->size))++;
 	unlock(MUTEX_PROD);
 }
 
@@ -95,7 +102,7 @@ void decrementProducer(prodcons_t *producerStruct) {
 	}
 
 	terminateProcess(producerStruct->list[getNotNullId(producerStruct)]);
-	*producerStruct->size--;
+	(*(producerStruct->size))--;
 
 	unlock(MUTEX_PROD);
 }
@@ -109,7 +116,7 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 		return;
 	}
 
-	void ** arguments = allocateMemory(sizeof(void*)*4);;
+	void ** arguments = allocateMemory(sizeof(void*) * 4);;
 	int mode = FOREGROUND;
 	int *id = allocateMemory(sizeof(*id));
 	*id = getNullId(consumerStruct);
@@ -118,7 +125,7 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 	arguments[2] = consumerStruct;
 	arguments[3] = &id;
 	consumerStruct->list[*id] = createProcess(&consumer, 4, arguments);
-	*consumerStruct->size++;
+	(*(consumerStruct->size))++;
 	unlock(MUTEX_CONS);
 }
 
@@ -132,7 +139,7 @@ void decrementConsumer(prodcons_t *consumerStruct) {
 	}
 
 	terminateProcess(consumerStruct->list[getNotNullId(consumerStruct)]);
-	*consumerStruct->size--;
+	(*(consumerStruct->size))--;
 
 	unlock(MUTEX_CONS);
 }
@@ -173,7 +180,7 @@ int producer(int argc, void ** args) {
 
 	/* Terminate */
 	producerStruct->list[id] = NULL;
-	*producerStruct->size--;
+	(*(producerStruct->size))--;
 
 	printCriticalZone(producerStruct->criticalZone);
 
@@ -200,7 +207,7 @@ int consumer(int argc, void ** args) {
 
 	/* Terminate */
 	consumerStruct->list[id] = NULL;
-	*consumerStruct->size--;
+	(*(consumerStruct->size))--;
 
 	printCriticalZone(consumerStruct->criticalZone);
 
