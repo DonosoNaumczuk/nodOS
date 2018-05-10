@@ -93,6 +93,15 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
+		case PRODUCTOR_CONSUMER:
+			setArguments(argVector, arguments, &processType, "prodcons");
+			processId = createProcess(&prodcons, 1, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 
 
 	}
@@ -123,6 +132,8 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("semaphore", cmd, 9) == 0)   return SEMAPHORE;
 	if(strncmp("ps", cmd, 2) == 0)			return PROCESS_LIST;
 	if(strncmp("culoSucio", cmd, 9) == 0)   return CULO_SUCIO;
+	if(strncmp("prodcons", cmd, 8) == 0)   return PRODUCTOR_CONSUMER;
+
 	return INVALID;
 }
 

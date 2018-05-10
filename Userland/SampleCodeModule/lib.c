@@ -122,7 +122,7 @@ int scanf(const char* c, ...){
 				break;
 			case 's':
 			if(flag){
-					j += copyString(buffer+j,va_arg(args,char*));
+					j += copyString(buffer+j, va_arg(args,char*));
 					ret++;
 					flag = 0;
 				} else {
