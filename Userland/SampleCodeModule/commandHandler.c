@@ -95,7 +95,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case PRODUCTOR_CONSUMER:
 			setArguments(argVector, arguments, &processType, "prodcons");
-			clean();
+			cleanScreen();
 			processId = createProcess(&prodcons, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -239,7 +239,6 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	{
 		cleanScreen();
-		changeFontColor(49);
 		printExitMessage();
 		return	-1;
 	}
