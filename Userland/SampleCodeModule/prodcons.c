@@ -47,20 +47,22 @@ void prodcons() {
 		}
 	}
 
-	if(c == QUIT) {
-		terminateMutualExclusion(MUTEX_CONS);
-		terminateMutualExclusion(MUTEX_PROD);
-		terminateSemaphore(SEM_FULL);
-		terminateSemaphore(SEM_EMPTY);
-		printf("Program finished with quit command succesfully\n");
-		return 0;
-	}
-
+	terminateAll(producerStruct);
+	terminateAll(consumerStruct);
 	terminateMutualExclusion(MUTEX_CONS);
 	terminateMutualExclusion(MUTEX_PROD);
 	terminateSemaphore(SEM_FULL);
 	terminateSemaphore(SEM_EMPTY);
-	return -1;
+	printf("Program finished with quit command succesfully\n");
+	return 0;
+}
+
+void terminateAll(prodcons_t prodcons) {
+	for(int i = 0; i < MAX_PRODCONS; i++) {
+		if(prodcons->list[i] != NULL) {
+			terminateProcess(prodcons->list[i]);
+		}
+	}
 }
 
 void printCriticalZone(char *criticalZone) {
