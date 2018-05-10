@@ -4,6 +4,7 @@
 
 #include <lib.h>
 #include <syscall.h>
+#include <colors.h>
 
 #define QUIT 	 		 'q'
 #define INC_PROD 		 'p'
@@ -11,7 +12,7 @@
 #define INC_CONS 		 'c'
 #define DEC_CONS 		 'x'
 #define MAX_PRODCONS 	 10
-#define BUFFER_SIZE 	100
+#define BUFFER_SIZE 	 20
 #define NULL 	 	 	  0
 #define EMPTY_SPACE		 '-'
 #define MUTEX_PROD		"producerMutex"
