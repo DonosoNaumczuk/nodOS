@@ -1,4 +1,4 @@
-	#include <memoryAllocator.h>
+#include <memoryAllocator.h>
 
 typedef struct {
     void * memoryBaseAddress;
@@ -182,7 +182,7 @@ uint32_t freeMemory(void * addressToFree) {
 		if(memoryAllocator.heap[heapIndex] == USED_MEMORY) {
 			memoryAllocator.heap[heapIndex] = FREE_MEMORY;
 			if(leftChildIndex < heapNodeQuantity && rightChildIndex < heapNodeQuantity
-				&& memoryAllocator.heap[leftChildIndex] == FREE_MEMORY && 
+				&& memoryAllocator.heap[leftChildIndex] == FREE_MEMORY &&
 				memoryAllocator.heap[rightChildIndex] == FREE_MEMORY) {
 				return OK_STATE;
 			}
