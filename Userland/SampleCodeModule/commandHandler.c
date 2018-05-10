@@ -64,7 +64,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 
 		case CLEAN_SCREEN:
 				cleanScreen();
-			return;
+			return 0;
 
 		case SEMAPHORE:
 			setArguments(argVector, arguments, &processType, "semaphore");
@@ -103,9 +103,9 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-		case KILL:
-			setArguments(argVector, arguments, &processType, "kill");
-			processId = createProcess(&kill, 3, argVector);
+		case TERMINATE_PROCESS:
+			setArguments(argVector, arguments, &processType, "terminate");
+			processId = createProcess(&terminate, 3, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -132,17 +132,17 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 
 	if(strcmp("time",cmd) == 0)				return	TIME;
 	if(strcmp("help",cmd) == 0)				return	HELP;
-	if(strncmp("quadratic", cmd, 14) == 0)	return	QUADRATIC;
-	if(strncmp("linear",cmd,11) == 0)		return	LINEAR;
+	if(strncmp("quadratic", cmd, 14) == 0)		return	QUADRATIC;
+	if(strncmp("linear",cmd,11) == 0)			return	LINEAR;
 	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
 	if(strncmp("test",cmd,4) == 0)			return	TEST;
-	if(strncmp("clean", cmd, 5) == 0) 	    return	CLEAN_SCREEN;
-	if(strncmp("semaphore", cmd, 9) == 0)   return  SEMAPHORE;
+	if(strncmp("clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
+	if(strncmp("semaphore", cmd, 9) == 0)   	return  SEMAPHORE;
 	if(strncmp("ps", cmd, 2) == 0)			return  PROCESS_LIST;
-	if(strncmp("culoSucio", cmd, 9) == 0)   return  CULO_SUCIO;
-	if(strncmp("prodcons", cmd, 8) == 0)    return  PRODUCTOR_CONSUMER;
-	if(strncmp("kill", cmd, 4) == 0)   	    return  KILL;
+	if(strncmp("culoSucio", cmd, 9) == 0)   	return  CULO_SUCIO;
+	if(strncmp("prodcons", cmd, 8) == 0)    	return  PRODUCTOR_CONSUMER;
+	if(strncmp("terminate", cmd, 9) == 0)   	return  TERMINATE_PROCESS;
 
 	return INVALID;
 }
@@ -232,7 +232,7 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
 	printf("          * ps : lists all proces information\n");
 	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
-	printf("          * kill processID: terminate the process with the given id \n");
+	printf("          * terminate processID: terminate the process with the given id \n");
 	return VALID_CMD;
 }
 
@@ -333,7 +333,24 @@ int culoSucio(int argumentQuantity, void ** argumentVector) {
 	waitChild(processId2);
 }
 
-int kill(int argumentQuantity, void ** argumentVector) {
-	uint64_t pid = *(uint64_t *)(*argumentVector);
+uint64_t stringToPid(unsigned char *pidString) {
+	int i = 0;
+	uint64_t num = 0;
+	while(pidString[i] < '0'){
+		i++;
+	}
+	while(pidString[i] != 0){
+		num = num * 10 + pidString[i] -'0';
+		i++;
+	}
+	return num;
+}
+
+int terminate(int argumentQuantity, void ** argumentVector) {
+	unsigned char *pidString = (unsigned char*)(*argumentVector);
+	
+	uint64_t pid = stringToPid(pidString);
+	
 	terminateProcess(pid);
 }
+

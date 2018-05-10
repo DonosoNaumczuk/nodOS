@@ -16,23 +16,23 @@
 
 #define   MAX_CMD_LONG   18
 
-#define   INVALID           -1
-#define   EXIT               0
-#define   TIME               1
-#define   QUADRATIC          2
-#define   LINEAR             3
-#define   HELP               4
-#define   ECHO               5
-#define   TEST               6
-#define   CLEAN_SCREEN       7
+#define   INVALID            -1
+#define   EXIT                0
+#define   TIME                1
+#define   QUADRATIC           2
+#define   LINEAR              3
+#define   HELP                4
+#define   ECHO                5
+#define   TEST                6
+#define   CLEAN_SCREEN        7
 #define   SEMAPHORE		     8
 #define   PROCESS_LIST	     9
-#define   CULO_SUCIO	     10
-#define	  PRODUCTOR_CONSUMER 11
-#define	  KILL				 12
+#define   CULO_SUCIO	    10
+#define	PRODUCTOR_CONSUMER 11
+#define	TERMINATE_PROCESS  12
 
 #define   FOREGROUND	  1
-#define	  BACKGROUND	  0
+#define	BACKGROUND	  0
 
 int  commandInterpreter(unsigned char buffer[],	unsigned int size);
 int printTime(int argumentQuantity, void **argumentVector);
@@ -50,6 +50,7 @@ int getStartOfBackgroundParameter(char *arguments);
 void printExitMessage();
 int ps(int argumentQuantity, void **argumentVector);
 int culoSucio(int argumentQuantity, void ** argumentVector);
-int kill(int argumentQuantity, void ** argumentVector);
+int terminate(int argumentQuantity, void ** argumentVector);
+uint64_t stringToPid(unsigned char *pidString);
 
 #endif

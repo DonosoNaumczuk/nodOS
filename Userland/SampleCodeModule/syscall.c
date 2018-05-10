@@ -49,5 +49,6 @@ int printAllProcess() {
 }
 
 void terminateProcess(uint64_t pid) {
-	return _int_80(TERMINATE_PROCESS_BY_ID, 0, 0, 0);
+     return _int_80(TERMINATE_PROCESS_BY_ID, pid, 0, 0);
 }
+	
