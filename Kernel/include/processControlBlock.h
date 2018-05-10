@@ -25,7 +25,7 @@ processControlBlockListPtr_t getSons(processControlBlockPtr_t pcb);
 int isThisPid(processControlBlockPtr_t pcb, long int pid);
 int isTerminate(processControlBlockPtr_t pcb);
 int isWaiting(processControlBlockPtr_t pcb);
-int isBlocked(processControlBlockPtr_t pcb);
+int isBlockedByPCB(processControlBlockPtr_t pcb);
 int isReady(processControlBlockPtr_t pcb);
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress);
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,

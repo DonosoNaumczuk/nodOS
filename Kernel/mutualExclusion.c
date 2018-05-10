@@ -91,7 +91,10 @@ int unlock(char *mutexId, uint64_t processId) {
 
 	if(mutex->ownerProcessId == processId) {
 		if(size(mutex->sleepingProcessesId) > 0) {
-			uint64_t processId = dequeueProcessId(mutex->sleepingProcessesId);
+			uint64_t processId;
+			do {
+				 processId = dequeueProcessId(mutex->sleepingProcessesId);
+			} while(!isBlocked(processId) && size(mutex->sleepingProcessesId) > 0);
 
 			/* Mutex will still locked but now the owner is other process.
 			   So only that process can unlock the mutex and any other process
@@ -169,7 +172,7 @@ static uint64_t dequeueProcessId(listObject_t processQueue) {
 	getFirstElement(processQueue, &processId);
 
 	removeAndFreeFirst(processQueue);
-	
+
 	return processId;
 }
 

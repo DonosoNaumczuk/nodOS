@@ -85,7 +85,10 @@ int semaphorePost(char *semaphoreId, uint64_t processId) {
 	lock(semaphore->mutex, processId);
 
 	if(semaphore->counter < 0 && size(semaphore->sleepingProcessesId) > 0) {
-		uint64_t processId = dequeueProcessId(semaphore->sleepingProcessesId);
+		uint64_t processId;
+		do {
+			 processId = dequeueProcessId(semaphore->sleepingProcessesId);
+		} while(!isBlocked(processId) && size(semaphore->sleepingProcessesId) > 0);
 		wakeUp(processId);
 	}
 
@@ -177,7 +180,7 @@ static uint32_t existSemaphore(char *semaphoreId) {
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {
 	uint64_t processId;
-	
+
 	getFirstElement(processQueue, &processId);
 
 	removeFirst(processQueue);

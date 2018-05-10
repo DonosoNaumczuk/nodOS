@@ -58,7 +58,7 @@ void addProcessToScheduler(processControlBlockPtr_t pcb) {
     if(isReady(pcb)) {
         addPCBToList(scheduler.ready, pcb);
     }
-	else if(isWaiting(pcb) || isBlocked(pcb)) {
+	else if(isWaiting(pcb) || isBlockedByPCB(pcb)) {
         addPCBToList(scheduler.waiting, pcb);
     }
     else if(isTerminate(pcb)) {
@@ -73,7 +73,9 @@ void terminateCurrentProcess(int returnValue) {
 void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
     processControlBlockPtr_t currentPCB = pcb;
     processControlBlockPtr_t currentPCBFather = getFather(currentPCB);
-    giveChildsToFather(currentPCB);
+    processControlBlockPtr_t PCBCleaner = getPCBByPid(2);
+    giveChildsToFather(PCBCleaner);
+    addProcessToScheduler(PCBCleaner);
     if(isWaiting(currentPCBFather)) {
         wakeUp(getProcessIdOf(getFather(currentPCB)));
     }
@@ -87,6 +89,9 @@ void terminateAProcessByPid(uint64_t pid) {
     if(pid != 1 && pid != 2) {
         processControlBlockPtr_t pcb = getPCBByPid(pid);
         if(pcb != NULL) {
+            if(getProcessIdOf(pcb) != getProcessId()) {
+                addPCBToList(scheduler.terminated, pcb);
+            }
             terminateAProcess(-1, pcb);
         }
     }
@@ -100,12 +105,13 @@ processControlBlockPtr_t getPCBByPid(uint64_t pid) {
     return pcb;
 }
 
-int isThisPidBlock(uint64_t pid) {
-    processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.ready, pid);
+int isBlocked(uint64_t pid) {
+    processControlBlockPtr_t pcb = getPCBByPid(pid);
     if(pcb == NULL) {
         return 0;
     }
-    return isBlocked(pcb);
+    addProcessToScheduler(pcb);
+    return isBlockedByPCB(pcb);
 }
 
 void sleepCurrent(int condition) {
