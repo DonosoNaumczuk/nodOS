@@ -83,17 +83,29 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
     _force_context_switch();
 }
 
-void terminateAProcessByPid(uint8_t pid) {
+void terminateAProcessByPid(uint64_t pid) {
     if(pid != 1 && pid != 2) {
-        processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.ready, pid);
-        if(pcb == NULL) {
-            pcb = PCBFromListByPID(scheduler.waiting, pid);
-        }
+        processControlBlockPtr_t pcb = getPCBByPid(pid);
         if(pcb != NULL) {
             terminateAProcess(-1, pcb);
         }
     }
+}
 
+processControlBlockPtr_t getPCBByPid(uint64_t pid) {
+    processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.ready, pid);
+    if(pcb == NULL) {
+        pcb = PCBFromListByPID(scheduler.waiting, pid);
+    }
+    return pcb;
+}
+
+int isThisPidBlock(uint64_t pid) {
+    processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.ready, pid);
+    if(pcb == NULL) {
+        return 0;
+    }
+    return isBlocked(pcb);
 }
 
 void sleepCurrent(int condition) {

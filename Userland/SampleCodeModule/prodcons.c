@@ -57,7 +57,7 @@ void prodcons() {
 	return 0;
 }
 
-void terminateAll(prodcons_t prodcons) {
+void terminateAll(prodcons_t *prodcons) {
 	for(int i = 0; i < MAX_PRODCONS; i++) {
 		if(prodcons->list[i] != NULL) {
 			terminateProcess(prodcons->list[i]);
@@ -145,7 +145,7 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 	arguments[0] = &mode;
 	arguments[1] = "consumer";
 	arguments[2] = consumerStruct;
-	arguments[3] = &id;
+	arguments[3] = id;
 	consumerStruct->list[*id] = createProcess(&consumer, 4, arguments);
 	(*size)++;
 	unlock(MUTEX_CONS);

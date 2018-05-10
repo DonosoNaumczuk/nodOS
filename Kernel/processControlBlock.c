@@ -192,6 +192,9 @@ void printPCB(processControlBlockPtr_t pcb) {
 			i++;
 		}
 		printWithColor("|    ", 5, 0x0F);
+		if(pcb->pid < 16) {
+			printHexa(0);
+		}
 		printHexa(pcb->pid);
 		printWithColor("    |    ", 9, 0x0F);
 		if(pcb->foreground) {

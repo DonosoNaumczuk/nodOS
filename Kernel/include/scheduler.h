@@ -28,5 +28,8 @@ processControlBlockPtr_t getCurrentPCB();
 int isCurrentForeground();
 void printAllProcess();
 void terminateAProcess(int returnValue, processControlBlockPtr_t pcb);
+void terminateAProcessByPid(uint64_t pid);
+processControlBlockPtr_t getPCBByPid(uint64_t pid);
+int isThisPidBlock(uint64_t pid);
 
 #endif
