@@ -105,7 +105,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case KILL:
 			setArguments(argVector, arguments, &processType, "kill");
-			processId = createProcess(&prodcons, 3, argVector);
+			processId = createProcess(&kill, 3, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
