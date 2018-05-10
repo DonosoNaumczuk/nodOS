@@ -11,22 +11,24 @@
 #include  <colors.h>
 #include  <semaphore.h>
 #include  <semaphoreTest.h>
-#include <culosucio.h>
+#include  <culosucio.h>
+#include  <prodcons.h>
 
 #define   MAX_CMD_LONG   18
 
-#define   INVALID        -1
-#define   EXIT            0
-#define   TIME            1
-#define   QUADRATIC       2
-#define   LINEAR          3
-#define   HELP            4
-#define   ECHO            5
-#define   TEST            6
-#define   CLEAN_SCREEN    7
-#define   SEMAPHORE		  8
-#define   PROCESS_LIST	  9
-#define   CULO_SUCIO	  10
+#define   INVALID           -1
+#define   EXIT               0
+#define   TIME               1
+#define   QUADRATIC          2
+#define   LINEAR             3
+#define   HELP               4
+#define   ECHO               5
+#define   TEST               6
+#define   CLEAN_SCREEN       7
+#define   SEMAPHORE		     8
+#define   PROCESS_LIST	     9
+#define   CULO_SUCIO	     10
+#define	  PRODUCTOR_CONSUMER 11
 
 #define   FOREGROUND	  1
 #define	  BACKGROUND	  0
