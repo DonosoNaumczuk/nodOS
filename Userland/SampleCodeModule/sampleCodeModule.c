@@ -1,13 +1,14 @@
 #include <shell.h>
 #include <syscall.h>
 #include <colors.h>
+#include <prodcons.h>
 
 void printLogo();
 
 int main() {
-     printLogo();
-     shell();
-
+     //printLogo();
+     //shell();
+     prodcons();
      return 0;
 }
 

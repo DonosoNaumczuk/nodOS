@@ -222,10 +222,10 @@ int copyString(char* string, char* to){
 
 int pow(int base,unsigned int exponent){
 	if(exponent == 0)	return	1;
-	while(exponent > 1){
+	while(exponent > 1) {
 		base*=base;
 		exponent--;
-	} 
+	}
 	return base;
 }
 
@@ -233,7 +233,6 @@ int	charToInt(unsigned char* string){
 	unsigned int digits = 0;
 	unsigned int index  = 0;
 	int res = 0;
-	
 	while((string[digits] != 0) && (string[digits] != ' '))	digits++;
 	while(index < (digits - 1)){
 		res += (string[digits - index - 1] - '0')*pow(10,index);
@@ -247,5 +246,3 @@ int	charToInt(unsigned char* string){
 void changeFontColor(int newColor) {
 	color = newColor;
 }
-
-
