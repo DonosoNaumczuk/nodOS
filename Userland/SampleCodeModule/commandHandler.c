@@ -14,7 +14,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	switch(cmdID) {
 		case TIME:
 			setArguments(argVector, arguments, &processType, "time");
-			processId = createProcess(&printTime, 1, argVector);
+			processId = createProcess(&printTime, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -25,7 +25,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 		return	exit_(arguments);
 		case QUADRATIC:
 			setArguments(argVector, arguments, &processType, "quadratic");
-			processId = createProcess(&graphQuadratic, 1, argVector);
+			processId = createProcess(&graphQuadratic, 7, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -35,7 +35,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 
 		case LINEAR:
 			setArguments(argVector, arguments, &processType, "linear");
-			processId = createProcess(&graphLinear, 1, argVector);
+			processId = createProcess(&graphLinear, 6, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -44,7 +44,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case HELP:
 			setArguments(argVector, arguments, &processType, "help");
-			processId = createProcess(&printHelp, 1, argVector);
+			processId = createProcess(&printHelp, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -54,7 +54,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 
 		case TEST:
 			setArguments(argVector, arguments, &processType, "test");
-			processId = createProcess(&test, 1, argVector);
+			processId = createProcess(&test, 3, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -68,7 +68,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 
 		case SEMAPHORE:
 			setArguments(argVector, arguments, &processType, "semaphore");
-			processId = createProcess(&semaphoreShow, 1, argVector);
+			processId = createProcess(&semaphoreShow, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -77,7 +77,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case PROCESS_LIST:
 			setArguments(argVector, arguments, &processType, "ps");
-			processId = createProcess(&ps, 1, argVector);
+			processId = createProcess(&ps, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -86,7 +86,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case CULO_SUCIO:
 			setArguments(argVector, arguments, &processType, "culoSucio");
-			processId = createProcess(&culoSucio, 1, argVector);
+			processId = createProcess(&culoSucio, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
@@ -95,7 +95,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case PRODUCTOR_CONSUMER:
 			setArguments(argVector, arguments, &processType, "prodcons");
-			processId = createProcess(&prodcons, 1, argVector);
+			processId = createProcess(&prodcons, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
 			}
