@@ -6,9 +6,9 @@
 void printLogo();
 
 int main() {
-     //printLogo();
-     //shell();
-     prodcons();
+     printLogo();
+     shell();
+     //prodcons();
      return 0;
 }
 
