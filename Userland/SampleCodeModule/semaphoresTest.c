@@ -57,7 +57,7 @@ int kungFury(int argumentQuantity, void ** argumentVector) {
 	changeFontColor(GREEN);
 	printf("Kung Fury: ");
 	changeFontColor(WHITE);
-	printf(" I guess you could say that. In the 1940s, Hitler was a kung-fu champion. He was so good at kung-fu, that he decided to change his name to 'Kung Führer'. But he didn't stop there. He knew the Kung Fury prophecy, and wanted to claim the throne, so he and his posse of Nazi soldiers conducted experiments for years.\nThey were never able to figure how to master the art of Kung Fury. Then one day, he disappeared from the face of the Earth. And no one has seen him ever since, until now. I guess if he figured he can find the Chosen One and kill him, He will become Kung Fury himself. He must have traveled in time in order to get here, which is probably why he disappeared in the first place.\n");
+	printf(" I guess you could say that. In the 1940s, Hitler was a kung-fu champion. He was so good at kung-fu, that he decided to change his name to 'Kung Fuhrer'. But he didn't stop there. He knew the Kung Fury prophecy, and wanted to claim the throne,\nso he and his posse of Nazi soldiers conducted experiments for years.\nThey were never able to figure how to master the art of Kung Fury. Then one day, he disappeared from the face of the Earth. And no one has seen him ever since, until now. I guess if he figured he can find the Chosen One and kill him, He will become Kung \nFury himself. He must have traveled in time in order to get here, which is probably why he disappeared in the first place.\n");
 	semaphorePost(hackerManSem);
 	semaphoreWait(kungFurySem);
 	changeFontColor(GREEN);
