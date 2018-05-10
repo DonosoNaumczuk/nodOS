@@ -62,8 +62,10 @@ void printCharWithColor(char character, char color) {
 }
 
 void printWithColor(char * string, uint64_t length, char color) {
-	for (int i = 0; i < length; ++i) {
-		printCharWithColor(string[i],color);
+	if(isCurrentForeground()) {
+		for (int i = 0; i < length; ++i) {
+			printCharWithColor(string[i],color);
+		}
 	}
 }
 
@@ -111,14 +113,13 @@ void printHexa(uint64_t n){
 }
 
 void printFont(uint8_t * address, char font, char color) {
-	if(isCurrentForeground()) {
+	
 		char bits[] = {font&0X80,font&0X40,font&0X20,font&0X10,font&0X08,font&0X04,font&0X02,font&0X01};
 		for (int i = 0; i < 8; ++i) {
 			if(bits[i]) {
 				*(address+i)=color;
 			}
 		}
-	}
 }
 
 void moveup() {
