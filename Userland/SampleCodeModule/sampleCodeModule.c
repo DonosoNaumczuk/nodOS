@@ -8,10 +8,6 @@ void printLogo();
 int main() {
      printLogo();
      shell();
-<<<<<<< HEAD
-=======
-     //prodcons();
->>>>>>> 39ef9ddbf241699b6c74a352e3a3579d8124d84b
      return 0;
 }
 

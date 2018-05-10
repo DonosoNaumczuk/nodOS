@@ -210,7 +210,7 @@ int producer(int argc, void ** args) {
 
 	/* Terminate */
 	producerStruct->list[id] = NULL;
-	(*(producerStruct->size))--;
+	(*(producerStruct->size)) = (*(producerStruct->size)) - 1;
 
 	printf("I wrote %d! Goodbye!\n", id);
 	printf("Producers quantity = %d\n\n", *(producerStruct->size));
@@ -243,7 +243,7 @@ int consumer(int argc, void ** args) {
 
 	/* Terminate */
 	consumerStruct->list[id] = NULL;
-	(*(consumerStruct->size))--;
+	(*(consumerStruct->size)) = (*(consumerStruct->size)) - 1;
 
 	printf("I consumed %d! Goodbye!\n", consumedInt);
 	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
