@@ -53,7 +53,9 @@ int shell(){
 	clearHist(hist);
 
 	while(!exitFlag){
+		changeFontColor(LIGHT_GREY);
 		printf(PROMPT);
+		changeFontColor(WHITE);
 		while((currentChar = getchar()) != '\n'){
 			if(currentChar == '\b'){	/* BACKSPACE */
 				if(index>0){

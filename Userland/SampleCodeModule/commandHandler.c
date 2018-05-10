@@ -239,7 +239,6 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 int exit_(unsigned char* arguments) {
 	if(*arguments == 0)	{
 		cleanScreen();
-		changeFontColor(49);
 		printExitMessage();
 		return	-1;
 	}
