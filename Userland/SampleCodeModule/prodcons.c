@@ -68,7 +68,7 @@ void printCriticalZone(char *criticalZone) {
 	printf("Critical zone buffer = ");
 	printf("[ ");
 	printf(criticalZone);
-	printf(" ]\n");
+	printf(" ]\n\n\n");
 	changeFontColor(WHITE);
 }
 
@@ -196,7 +196,7 @@ int producer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new producer. I want to write %d!\n", id);
-	printf("Producers = %d\n\n", *(producerStruct->size));
+	printf("Producers quantity= %d\n\n", *(producerStruct->size));
 
 	semaphoreWait(SEM_FULL);
 	lock(MUTEX_PROD);
@@ -213,7 +213,7 @@ int producer(int argc, void ** args) {
 	(*(producerStruct->size)) = (*(producerStruct->size)) - 1;
 
 	printf("I wrote %d! Goodbye!\n", id);
-	printf("Producers quantity = %d\n\n", *(producerStruct->size));
+	printf("Producers quantity = %d\n", *(producerStruct->size));
 
 	printCriticalZone(producerStruct->criticalZone);
 
@@ -246,7 +246,7 @@ int consumer(int argc, void ** args) {
 	(*(consumerStruct->size)) = (*(consumerStruct->size)) - 1;
 
 	printf("I consumed %d! Goodbye!\n", consumedInt);
-	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
+	printf("Consumers quantity = %d\n", *(consumerStruct->size));
 
 	printCriticalZone(consumerStruct->criticalZone);
 
