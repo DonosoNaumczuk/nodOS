@@ -52,7 +52,7 @@ int relator(int argumentQuantity, void ** argumentVector) {
 	char *hackerManSem = (char *)(argumentVector[2]);
 	semaphoreWait(relatorSem);
 	changeFontColor(RED);
-	printf("relator: ");
+	printf("Relator: ");
 	changeFontColor(WHITE);
 	printf("[Hackerman thinks]\n");	
 	changeFontColor(WHITE);

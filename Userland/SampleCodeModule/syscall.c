@@ -44,7 +44,6 @@ uint32_t freeMemory(void * addressToFree) {
      return _int_80(FREE, addressToFree, 0, 0);
 }
 
-
 int printAllProcess() {
      return _int_80(PRINT_ALL_PROCESS, 0, 0, 0);
 }

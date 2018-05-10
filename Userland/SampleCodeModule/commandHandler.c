@@ -95,6 +95,7 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			}
 		case PRODUCTOR_CONSUMER:
 			setArguments(argVector, arguments, &processType, "prodcons");
+			clean();
 			processId = createProcess(&prodcons, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -102,7 +103,15 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-
+		case KILL:
+			setArguments(argVector, arguments, &processType, "kill");
+			processId = createProcess(&kill, 3, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 
 	}
 	return 1;
@@ -129,10 +138,11 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strcmp("exit",cmd) == 0)				return	EXIT;
 	if(strncmp("test",cmd,4) == 0)			return	TEST;
 	if(strncmp("clean", cmd, 5) == 0) 	    return	CLEAN_SCREEN;
-	if(strncmp("semaphore", cmd, 9) == 0)   return SEMAPHORE;
-	if(strncmp("ps", cmd, 2) == 0)			return PROCESS_LIST;
-	if(strncmp("culoSucio", cmd, 9) == 0)   return CULO_SUCIO;
-	if(strncmp("prodcons", cmd, 8) == 0)   return PRODUCTOR_CONSUMER;
+	if(strncmp("semaphore", cmd, 9) == 0)   return  SEMAPHORE;
+	if(strncmp("ps", cmd, 2) == 0)			return  PROCESS_LIST;
+	if(strncmp("culoSucio", cmd, 9) == 0)   return  CULO_SUCIO;
+	if(strncmp("prodcons", cmd, 8) == 0)    return  PRODUCTOR_CONSUMER;
+	if(strncmp("kill", cmd, 4) == 0)   	    return  KILL;
 
 	return INVALID;
 }
@@ -221,6 +231,8 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * test zerodiv/opcode : execute a dedicate test for the selected exception\n");
 	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
 	printf("          * ps : lists all proces information\n");
+	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
+	printf("          * kill processID: terminate the process with the given id \n");
 	return VALID_CMD;
 }
 
@@ -320,4 +332,9 @@ int culoSucio(int argumentQuantity, void ** argumentVector) {
 	processId2 = createProcess(&initPlayers, 3, argumentVector);
 	waitChild(processId1);
 	waitChild(processId2);
+}
+
+int kill(int argumentQuantity, void ** argumentVector) {
+	uint64_t pid = *(uint64_t *)(*argumentVector);
+	terminateProcess(pid);
 }

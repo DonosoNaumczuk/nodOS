@@ -29,6 +29,7 @@
 #define   PROCESS_LIST	     9
 #define   CULO_SUCIO	     10
 #define	  PRODUCTOR_CONSUMER 11
+#define	  KILL				 12
 
 #define   FOREGROUND	  1
 #define	  BACKGROUND	  0
@@ -49,5 +50,6 @@ int getStartOfBackgroundParameter(char *arguments);
 void printExitMessage();
 int ps(int argumentQuantity, void **argumentVector);
 int culoSucio(int argumentQuantity, void ** argumentVector);
+int kill(int argumentQuantity, void ** argumentVector);
 
 #endif
