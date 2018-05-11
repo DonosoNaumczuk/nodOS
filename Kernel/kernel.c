@@ -46,6 +46,7 @@ void * initializeKernelBinary() {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
 	};
+
 	loadModules(&endOfKernelBinary, moduleAddresses);
 	clearBSS(&bss, &endOfKernel - &bss);
 	initializeVideoDriver();
@@ -62,7 +63,7 @@ void * initializeKernelBinary() {
 }
 
 void goToEntryPoint() {
-		((EntryPoint)sampleCodeModuleAddress)();
+	((EntryPoint)sampleCodeModuleAddress)();
 }
 
 void initialPrint() {

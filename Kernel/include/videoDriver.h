@@ -13,6 +13,7 @@ void deleteCurrent();
 uint32_t getXResolution();
 uint32_t getYResolution();
 void printHexa(uint64_t n);
+void printDecimal(uint64_t n);
 void cursorBlink();
 void clearCursor();
 uint8_t	cursorIsOn();

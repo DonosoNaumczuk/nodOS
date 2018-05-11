@@ -179,7 +179,8 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
 }
 
 void printPCB(processControlBlockPtr_t pcb) {
-	if(pcb != NULL) {
+	
+     if(pcb != NULL) {
 		char * aux = pcb->name;
 		int i = 0;
 		while(*aux != 0 && i < 20) {
@@ -192,10 +193,10 @@ void printPCB(processControlBlockPtr_t pcb) {
 			i++;
 		}
 		printWithColor("|    ", 5, 0x0F);
-		if(pcb->pid < 16) {
-			printHexa(0);
+		if(pcb->pid < 10) {
+			printDecimal(0);
 		}
-		printHexa(pcb->pid);
+		printDecimal(pcb->pid);
 		printWithColor("    |    ", 9, 0x0F);
 		if(pcb->foreground) {
 			printWithColor("Foreground", 10, 0x0F);
