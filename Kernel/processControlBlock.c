@@ -40,17 +40,7 @@ typedef struct processControlBlock_t {
 static long int pidCounter = 1;
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
-	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity-1, processArgs+1);
-	if(parent != NULL) {
-		addPCBToList(parent->childs, newPCB);
-	}
-
-	if(*((uint64_t *)(*processArgs)) != FALSE && isForeground(parent)) {
-		newPCB->foreground = TRUE;
-	}
-	else {
-		newPCB->foreground = FALSE;
-	}
+	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity, processArgs);
 	addProcessToScheduler(newPCB);
 	return newPCB;
 }
@@ -81,7 +71,18 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->state = PROCESS_READY;
 	newPCB->name = (char *)(*processArgs);
 
-    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-1, processArgs+1);
+    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-2, processArgs+2);
+	
+	if(parent != NULL) {
+		addPCBToList(parent->childs, newPCB);
+	}
+
+	if(*((uint64_t *)(*processArgs)) != FALSE && isForeground(parent)) {
+		newPCB->foreground = TRUE;
+	}
+	else {
+		newPCB->foreground = FALSE;
+	}
 
     return newPCB;
 }
