@@ -233,7 +233,6 @@ int consumer(int argc, void ** args) {
 	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
 	semaphoreWait(SEM_EMPTY);
-	printf("Salio del semaphore\n");
 	lock(MUTEX_PROD);
 	lock(MUTEX_CONS);
 
