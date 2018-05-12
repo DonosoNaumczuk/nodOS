@@ -69,10 +69,10 @@ processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *co
     newPCB->childs = initializePCBList();
     newPCB->stackPointer = allocateMemory(SIZE_OF_STACK);
     newPCB->state = PROCESS_READY;
-	newPCB->name = (char *)(*processArgs);
+	newPCB->name = (char *)(processArgs[1]);
 
     newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-2, processArgs+2);
-	
+
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
 	}
@@ -180,7 +180,7 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
 }
 
 void printPCB(processControlBlockPtr_t pcb) {
-	
+
      if(pcb != NULL) {
 		char * aux = pcb->name;
 		int i = 0;
