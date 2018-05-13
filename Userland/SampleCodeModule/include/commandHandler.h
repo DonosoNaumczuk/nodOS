@@ -11,7 +11,6 @@
 #include  <colors.h>
 #include  <semaphore.h>
 #include  <semaphoreTest.h>
-#include  <culosucio.h>
 #include  <prodcons.h>
 
 #define   MAX_CMD_LONG   18
@@ -27,9 +26,8 @@
 #define   CLEAN_SCREEN        7
 #define   SEMAPHORE		     8
 #define   PROCESS_LIST	     9
-#define   CULO_SUCIO	    10
-#define	PRODUCTOR_CONSUMER 11
-#define	TERMINATE_PROCESS  12
+#define	PRODUCTOR_CONSUMER 10
+#define	TERMINATE_PROCESS  11
 
 #define   FOREGROUND	  1
 #define	BACKGROUND	  0
