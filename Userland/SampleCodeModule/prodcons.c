@@ -1,5 +1,7 @@
 #include <prodcons.h>
 
+void terminateAll(prodcons_t *prodcons);
+
 void prodcons() {
 	printMenu();
 	createMutualExclusion(MUTEX_CONS);
@@ -14,8 +16,8 @@ void prodcons() {
 
 	uint64_t consumers[MAX_PRODCONS] = {0};
 	int consumersQty = 0;
-	int producers[MAX_PRODCONS] = {0};
-	uint64_t producersQty = 0;
+	uint64_t producers[MAX_PRODCONS] = {0};
+	int producersQty = 0;
 
 	prodcons_t *consumerStruct = allocateMemory(sizeof(prodcons_t));
 	consumerStruct->list = consumers;
@@ -54,7 +56,6 @@ void prodcons() {
 	terminateSemaphore(SEM_FULL);
 	terminateSemaphore(SEM_EMPTY);
 	printf("Program finished with quit command succesfully\n");
-	return 0;
 }
 
 void terminateAll(prodcons_t *prodcons) {
