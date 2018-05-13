@@ -15,7 +15,7 @@ static uint32_t mutex_lock(uint32_t *status);
 static uint32_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
 static int mutexCompare(char *mutexId, mutex_t *mutex);
-static mutex_t *getMutex(mutexId);
+static mutex_t *getMutex(char *mutexId);
 static void removeMutex(char *mutexId);
 
 static listObject_t mutexes;
@@ -161,7 +161,7 @@ static void removeMutex(char *mutexId) {
 	removeAndFreeFirstElementByCriteria(mutexes, &mutexCompare, mutexId);
 }
 
-static mutex_t *getMutex(mutexId) {
+static mutex_t *getMutex(char *mutexId) {
 	return (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
 		   &mutexCompare, mutexId);
 }
