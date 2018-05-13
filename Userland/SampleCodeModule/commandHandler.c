@@ -84,20 +84,12 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 			else {
 				return 0;
 			}
-		case CULO_SUCIO:
-			setArguments(argVector, arguments, &processType, "culoSucio");
-			processId = createProcess(&culoSucio, 2, argVector);
-			if(processType == FOREGROUND) {
-				return	waitChild(processId);
-			}
-			else {
-				return 0;
-			}
+		
 		case PRODUCTOR_CONSUMER:
 			setArguments(argVector, arguments, &processType, "prodcons");
-			cleanScreen();
 			processId = createProcess(&prodcons, 2, argVector);
 			if(processType == FOREGROUND) {
+				cleanScreen();
 				return	waitChild(processId);
 			}
 			else {
@@ -140,7 +132,6 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	if(strncmp("clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
 	if(strncmp("semaphore", cmd, 9) == 0)   	return  SEMAPHORE;
 	if(strncmp("ps", cmd, 2) == 0)			return  PROCESS_LIST;
-	if(strncmp("culoSucio", cmd, 9) == 0)   	return  CULO_SUCIO;
 	if(strncmp("prodcons", cmd, 8) == 0)    	return  PRODUCTOR_CONSUMER;
 	if(strncmp("terminate", cmd, 9) == 0)   	return  TERMINATE_PROCESS;
 
@@ -323,14 +314,6 @@ int getStartOfBackgroundParameter(char * arguments) {
 
 int ps(int argumentQuantity, void **argumentVector) {
 	return printAllProcess();
-}
-
-int culoSucio(int argumentQuantity, void ** argumentVector) {
-	uint64_t processId1,processId2;
-	processId1 = createProcess(&initDeck, 3, argumentVector);
-	processId2 = createProcess(&initPlayers, 3, argumentVector);
-	waitChild(processId1);
-	waitChild(processId2);
 }
 
 uint64_t stringToPid(unsigned char *pidString) {
