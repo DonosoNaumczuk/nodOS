@@ -28,12 +28,28 @@ void cleanScreen() {
 	_int_80(CLEAR,0,0,0);
 }
 
+uint64_t terminateCurrentProcess() {
+     return _int_80(TERMINATE_PROCESS, 0, 0, 0);
+}
+     
 uint64_t createProcess(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector) {
      return _int_80(CREATE_PROCESS, codeAddress, parametersQuantity, parametersVector);
 }
 
+int sleepProcess() {
+     return _int_80(SLEEP_PROCESS, 0, 0, 0);
+}
+
+int wakeUpProcess() {
+     return _int_80(WAKE_UP_PROCESS, 0, 0, 0);
+}
+
 int waitChild(uint64_t processId) {
      return _int_80(WAIT_CHILD_PROCESS, processId, 0, 0);
+}
+
+int getPid() {
+     return _int_80(GET_PID, 0, 0, 0);
 }
 
 void * allocateMemory(uint64_t bytesToAllocate) {
@@ -51,4 +67,3 @@ int printAllProcess() {
 void terminateProcess(uint64_t pid) {
      return _int_80(TERMINATE_PROCESS_BY_ID, pid, 0, 0);
 }
-	
