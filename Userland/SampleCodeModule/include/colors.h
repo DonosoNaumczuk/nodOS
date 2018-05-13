@@ -12,7 +12,7 @@
 #define VIOLET 		0x22
 #define PINK		0x3E
 #define AQUAMARINE 	0x33
-#define LIGHT_GREY	0x1A
+#define LIGHT_GREY	0x1C
 #define DARK_GREY 	0x16
 
 #endif
