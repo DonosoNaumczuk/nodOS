@@ -17,14 +17,13 @@ typedef struct list_t{
 static int copyElement(void *buffer,void *element,unsigned int elementSize);
 
 listObject_t newList() {
-	listObject_t list = allocateMemory(sizeof(struct list_t));
+	listObject_t list = allocateMemory(sizeof(list_t));
 	list->head = NULL;
 	list->size = 0;
 	return list;
 }
 
 int addElement(listObject_t list,const void *element,const unsigned int size) {
-
 	if(list == NULL) return NULL_LIST_ERROR;
     if(element == NULL) return NULL_ELEMENT_ERROR;
     if(size == 0)  return SIZE_ERROR;
@@ -167,7 +166,7 @@ int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*
 		auxPrev=NULL;
 
 		while (aux != NULL) {
-			if((*compareTo)(reference,aux->element)) {
+			if((*compareTo)(reference,aux->element) == 0) {
 				aux2 = aux->next;
 				freeMemory(aux->element);
 				freeMemory(aux);
@@ -200,7 +199,7 @@ int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*)
 		auxPrev=NULL;
 
 		while (aux != NULL) {
-			if((*compareTo)(reference,aux->element)) {
+			if((*compareTo)(reference,aux->element) == 0) {
 				aux2 = aux->next;
 				freeMemory(aux);
 				if(firstLoop == 1){
