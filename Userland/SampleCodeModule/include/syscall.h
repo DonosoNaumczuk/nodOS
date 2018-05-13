@@ -24,7 +24,7 @@
 #define TERMINATE_PROCESS 		 7
 #define SLEEP_PROCESS 			 8
 #define WAIT_CHILD_PROCESS 		 9
-#define WAKE_UP_PROCESS 		10
+#define WAKE_UP_PROCESS 		     10
 #define CREATE_PROCESS 			11
 #define GET_PID 				12
 
@@ -46,14 +46,14 @@
 #define TERMINATE_MUTEX			23
 
 /* Semaphore */
-#define CREATE_SEMAPHORE		24
+#define CREATE_SEMAPHORE		     24
 #define SEMAPHORE_WAIT			25
 #define SEMAPHORE_POST			26
 #define SEMAPHORE_TRY_WAIT		27
 #define TERMIANTE_SEMAPHORE		28
 /* ps*/
-#define PRINT_ALL_PROCESS       29
-#define TERMINATE_PROCESS_BY_ID 30
+#define PRINT_ALL_PROCESS          29
+#define TERMINATE_PROCESS_BY_ID    30
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -74,9 +74,17 @@ uint64_t getTime(int time);
 
 void cleanScreen();
 
+uint64_t terminateCurrentProcess();
+
 uint64_t createProcess(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector);
 
+int sleepProcess();
+
+int wakeUpProcess();
+
 int waitChild(uint64_t processId);
+
+int getPid();
 
 void * allocateMemory(uint64_t bytesToAllocate);
 
