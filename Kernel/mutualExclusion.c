@@ -90,16 +90,19 @@ int unlock(char *mutexId, uint64_t processId) {
 	mutex_t *mutex = getMutex(mutexId);
 
 	if(mutex->ownerProcessId == processId) {
-		if(size(mutex->sleepingProcessesId) > 0) {
-			uint64_t processId;
-			do {
-				 processId = dequeueProcessId(mutex->sleepingProcessesId);
-			} while(!isBlocked(processId) && size(mutex->sleepingProcessesId) > 0);
+		uint64_t processId;
+		int blockedProcessFound = FALSE;
 
-			/* Mutex will still locked but now the owner is other process.
-			   So only that process can unlock the mutex and any other process
-			   who try to lock the mutex will fall to sleep.
-			   So cool, isn't it? ;) */
+		while(!blockedProcessFound && (size(mutex->sleepingProcessesId) > 0)) {
+			processId = dequeueProcessId(mutex->sleepingProcessesId);
+			blockedProcessFound = isBlocked(processId);
+		}
+
+		/* Mutex will still locked but now the owner is other process.
+		   So only that process can unlock the mutex and any other process
+		   who try to lock the mutex will fall to sleep.
+		   So cool, isn't it? ;) */
+		if(blockedProcessFound) {
 			mutex->ownerProcessId = processId;
 			wakeUp(processId);
 		}

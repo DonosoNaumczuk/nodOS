@@ -86,10 +86,16 @@ int semaphorePost(char *semaphoreId, uint64_t processId) {
 
 	if(semaphore->counter < 0 && size(semaphore->sleepingProcessesId) > 0) {
 		uint64_t processId;
-		do {
-			 processId = dequeueProcessId(semaphore->sleepingProcessesId);
-		} while(!isBlocked(processId) && size(semaphore->sleepingProcessesId) > 0);
-		wakeUp(processId);
+		int blockedProcessFound = FALSE;
+
+		while(!blockedProcessFound && (size(mutex->sleepingProcessesId) > 0)) {
+			processId = dequeueProcessId(mutex->sleepingProcessesId);
+			blockedProcessFound = isBlocked(processId);
+		}
+
+		if(blockedProcessFound) {
+			wakeUp(processId);
+		}
 	}
 
 	semaphore->counter++;
@@ -156,6 +162,8 @@ int terminateSemaphore(char *semaphoreId, uint64_t processId) {
 
 static void removeSemaphore(char *semaphoreId) {
 	semaphore_t *semaphore = getSemaphore(semaphoreId);
+
+	terminateMutualExclusion(semaphore->mutex);
 
 	removeAndFreeAllElements(semaphore->sleepingProcessesId);
 
