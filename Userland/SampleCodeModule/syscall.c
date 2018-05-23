@@ -40,8 +40,8 @@ int sleepProcess() {
      return _int_80(SLEEP_PROCESS, 0, 0, 0);
 }
 
-int wakeUpProcess() {
-     return _int_80(WAKE_UP_PROCESS, 0, 0, 0);
+int wakeUpProcess(uint64_t processId) {
+     return _int_80(WAKE_UP_PROCESS, processId, 0, 0);
 }
 
 int waitChild(uint64_t processId) {

@@ -80,7 +80,7 @@ uint64_t createProcess(void * codeAddress, uint32_t parametersQuantity, void ** 
 
 int sleepProcess();
 
-int wakeUpProcess();
+int wakeUpProcess(uint64_t processId);
 
 int waitChild(uint64_t processId);
 
