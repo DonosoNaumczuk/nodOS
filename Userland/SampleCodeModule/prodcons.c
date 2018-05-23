@@ -200,29 +200,30 @@ int producer(int argc, void ** args) {
 
 	printf("Hello I'm a new producer. I want to write %d!\n", id);
 	printf("Producers quantity= %d\n\n", *(producerStruct->size));
+	while(1) {
+		semaphoreWait(SEM_FULL);
+		lock(MUTEX_PROD);
+		lock(MUTEX_CONS);
 
-	semaphoreWait(SEM_FULL);
-	lock(MUTEX_PROD);
-	lock(MUTEX_CONS);
+		/* Write on critical zone my id */
+		int index = *producerStruct->index;
+		*producerStruct->index = index + 1;
 
-	/* Write on critical zone my id */
-	int index = *producerStruct->index;
-	*producerStruct->index = index + 1;
+		producerStruct->criticalZone[index] = id + '0';
 
-	producerStruct->criticalZone[index] = id + '0';
+		/* Terminate */
+		producerStruct->list[id] = NULL;
+		(*(producerStruct->size)) = (*(producerStruct->size)) - 1;
 
-	/* Terminate */
-	producerStruct->list[id] = NULL;
-	(*(producerStruct->size)) = (*(producerStruct->size)) - 1;
+		// printf("I wrote %d! Goodbye!\n", id);
+		// printf("Producers quantity = %d\n", *(producerStruct->size));
 
-	printf("I wrote %d! Goodbye!\n", id);
-	printf("Producers quantity = %d\n", *(producerStruct->size));
+		printCriticalZone(producerStruct->criticalZone);
 
-	printCriticalZone(producerStruct->criticalZone);
-
-	unlock(MUTEX_CONS);
-	unlock(MUTEX_PROD);
-	semaphorePost(SEM_EMPTY);
+		unlock(MUTEX_CONS);
+		unlock(MUTEX_PROD);
+		semaphorePost(SEM_EMPTY);
+	}
 	return 0;
 }
 
@@ -233,29 +234,31 @@ int consumer(int argc, void ** args) {
 	printf("Hello I'm a new consumer. I want to consume!\n");
 	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
-	semaphoreWait(SEM_EMPTY);
-	lock(MUTEX_PROD);
-	lock(MUTEX_CONS);
+	while(1) {
+		semaphoreWait(SEM_EMPTY);
+		lock(MUTEX_PROD);
+		lock(MUTEX_CONS);
 
-	/* Read on critical zone writing it as empty */
-	int index = *consumerStruct->index;
-	index--;
-	*consumerStruct->index = index;
-	int consumedInt = consumerStruct->criticalZone[index] - '0';
-	consumerStruct->criticalZone[index] = EMPTY_SPACE;
+		/* Read on critical zone writing it as empty */
+		int index = *consumerStruct->index;
+		index--;
+		*consumerStruct->index = index;
+		int consumedInt = consumerStruct->criticalZone[index] - '0';
+		consumerStruct->criticalZone[index] = EMPTY_SPACE;
 
-	/* Terminate */
-	consumerStruct->list[id] = NULL;
-	(*(consumerStruct->size)) = (*(consumerStruct->size)) - 1;
+		/* Terminate */
+		consumerStruct->list[id] = NULL;
+		(*(consumerStruct->size)) = (*(consumerStruct->size)) - 1;
 
-	printf("I consumed %d! Goodbye!\n", consumedInt);
-	printf("Consumers quantity = %d\n", *(consumerStruct->size));
+		// printf("I consumed %d! Goodbye!\n", consumedInt);
+		// printf("Consumers quantity = %d\n", *(consumerStruct->size));
 
-	printCriticalZone(consumerStruct->criticalZone);
+		printCriticalZone(consumerStruct->criticalZone);
 
-	unlock(MUTEX_CONS);
-	unlock(MUTEX_PROD);
-	semaphorePost(SEM_FULL);
+		unlock(MUTEX_CONS);
+		unlock(MUTEX_PROD);
+		semaphorePost(SEM_FULL);
+	}
 }
 
 void printMenu() {
