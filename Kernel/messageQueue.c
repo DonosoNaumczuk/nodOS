@@ -24,7 +24,7 @@ int createMailbox(const char *mailboxId) {
 	unlock(MUTEX_NAME,getProcessId());
 }
 
-void send(const char *mailboxId,const void *message,const unsigned int messageSize) {
+void send(const char *mailboxId, const void *message, const unsigned int messageSize) {
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
 	addElement(mailbox->messageQueue,message,messageSize);

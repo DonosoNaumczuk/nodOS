@@ -33,33 +33,33 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return 0;
 		case CREATE_PROCESS: {
 			processControlBlockPtr_t parent = getCurrentPCB();
-			processControlBlockPtr_t child = createProcess(parent, rsi, rdx, rcx);
+			processControlBlockPtr_t child = createProcess(parent, (void *)rsi, rdx, (void **)rcx);
 			return getProcessIdOf(child);
 		}
 		case GET_PID:
 			return getProcessId();
 		case SEND_MAILBOX:
-			send(rsi, rdx, rcx);
+			send((char*)rsi, (void *)rdx, rcx);
 			return 0;
 		case RECEIVE_MAILBOX:
-			return receive(rsi);
+			return (uint64_t)receive((char *)rsi);
 		case CREATE_MAILBOX:
-			return createMailbox(rsi);
+			return createMailbox((char *)rsi);
 		case DESTROY_MAILBOX:
-			closeMailbox(rsi);
+			closeMailbox((char*)rsi);
 			return 0;
 		case ALLOCATE_MEMORY:
-			return allocateMemory(rsi);
+			return (uint64_t)allocateMemory(rsi);
 		case FREE:
-			return freeMemory(rsi);
+			return freeMemory((void *)rsi);
 	 	case CREATE_MUTEX:
-			return createMutualExclusion(rsi, getProcessId());
+			return createMutualExclusion((char *)rsi, getProcessId());
 	 	case LOCK_MUTEX:
-			return lock(rsi, getProcessId());
+			return lock((char *)rsi, getProcessId());
 	 	case UNLOCK_MUTEX:
-			return unlock(rsi, getProcessId());
+			return unlock((char *)rsi, getProcessId());
 	 	case LOCK_IF_UNLOCKED_MUTEX:
-			return lockIfUnlocked(rsi, getProcessId());
+			return lockIfUnlocked((char *)rsi, getProcessId());
 	 	case TERMINATE_MUTEX:
 			return terminateMutualExclusion(rsi, getProcessId());
 	 	case CREATE_SEMAPHORE:
