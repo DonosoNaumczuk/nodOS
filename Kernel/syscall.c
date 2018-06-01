@@ -61,17 +61,17 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 	 	case LOCK_IF_UNLOCKED_MUTEX:
 			return lockIfUnlocked((char *)rsi, getProcessId());
 	 	case TERMINATE_MUTEX:
-			return terminateMutualExclusion(rsi, getProcessId());
+			return terminateMutualExclusion((char *)rsi, getProcessId());
 	 	case CREATE_SEMAPHORE:
-			return createSemaphore(rsi, rdx, getProcessId());
+			return createSemaphore((char *)rsi, rdx, getProcessId());
 	 	case SEMAPHORE_WAIT:
-			return semaphoreWait(rsi, getProcessId());
+			return semaphoreWait((char *)rsi, getProcessId());
 	 	case SEMAPHORE_POST:
-			return semaphorePost(rsi, getProcessId());
+			return semaphorePost((char *)rsi, getProcessId());
 	 	case SEMAPHORE_TRY_WAIT:
-			return semaphoreTryWait(rsi, getProcessId());
+			return semaphoreTryWait((char *)rsi, getProcessId());
 	 	case TERMIANTE_SEMAPHORE:
-			return terminateSemaphore(rsi, getProcessId());
+			return terminateSemaphore((char *)rsi, getProcessId());
 		case PRINT_ALL_PROCESS:
 			printAllProcess();
 			return 0;
@@ -79,4 +79,5 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			terminateAProcessByPid(rsi);
 			return 0;
 	}
+	return 0;
 }
