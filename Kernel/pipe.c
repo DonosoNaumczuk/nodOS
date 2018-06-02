@@ -1,10 +1,19 @@
 #include <pipe.h>
 
+#define EMPTY_BUFFER -2
+#define FULL_SEM_PREFIX "__pipe__full__sem__"
+#define EMPTY_SEM_PREFIX  "__pipe__empty__sem__"
+#define WRITE_MUTEX_PREFIX "__pipe__write__mutex__"
+#define READ_MUTEX_PREFIX "__pipe__read__mutex__"
+#define LIST_MUTEX_PREFIX "__pipe__list__mutex__"
+#define NON_BLOCKING 1
+#define WITH_BLOCKING 0
+
 /* Write and read are atomic, but independently.
    A process can read while other is writing, or viceversa.
-   That synchronization holds on the user. */
+   That synchronization holds on the user.
 
-/* What happen if isNonBlocking is TRUE? That means that if
+   What happen if isNonBlocking is TRUE? That means that if
    buffer is empty or full, you will get a the number of bytes
    that rest to write or EMPTY_BUFFER instead of beign blocked. */
 
@@ -40,7 +49,7 @@ void initPipe(uint64_t processId) {
 	createMutualExclusion(MUTEX_PIPE_MASTER_ID, processId);
 }
 
-int createPipe(char *pipeId, uint32_t byteSize, uint32_t isNonBlocking,
+int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	 		   uint64_t processId) {
 	lock(MUTEX_PIPE_MASTER_ID, processId);
 
@@ -63,6 +72,14 @@ int createPipe(char *pipeId, uint32_t byteSize, uint32_t isNonBlocking,
 	char *readMutex					= getMutexReadId(pipeId);
 	char *fullSemaphore				= getSemaphoreFullId(pipeId);
 	char *emptySemaphore			= getSemaphoreEmptyId(pipeId);
+
+	createMutualExclusion(pipe.mutex, processId);
+	createMutualExclusion(pipe.writeMutex, processId);
+	createMutualExclusion(pipe.readMutex, processId);
+	createSemaphore(pipe.fullSemaphore, pipe.byteSize, processId);
+	createSemaphore(pipe.emptySemaphore, 0, processId);
+
+	addElement(pipes, (void *) &pipe, sizeof(pipe_t));
 
 	unlock(MUTEX_PIPE_MASTER_ID, processId);
 }
@@ -140,40 +157,71 @@ int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize,
  	return i;
 }
 
+static uint32_t existPipe(char *pipeId) {
+	return contains(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
+}
+
+static int pipeCompare(char *pipeId, pipe_t *pipe) {
+	return stringCompare(pipeId, pipe->id);
+}
+
+static pipe_t *getPipe(char *pipeId) {
+	return (pipe_t *) getFirstElementReferenceByCriteria(pipes,
+		   (int (*)(const void *, const void *)) &pipeCompare,
+		    pipeId);
+}
+
 int terminatePipe(char *pipeId, uint64_t processId) {
+	lock(MUTEX_PIPE_MASTER_ID, processId);
+
 	if(!existPipe(pipeId)) {
+		unlock(MUTEX_PIPE_MASTER_ID, processId);
 		return ERROR_STATE;
 	}
+
+	removePipe(pipeId, processId);
+
+	unlock(MUTEX_PIPE_MASTER_ID, processId);
+
+	return OK_STATE;
 }
 
-static uint32_t existPipe(char *pipeId) {
-	return contains(semaphores, &pipeCompare, semaphoreId);
+static void removePipe(char *pipeId, uint64_t processId) {
+	pipe_t *pipe = getPipe(pipeId);
+
+	freeMemory(pipe->buffer);
+
+	removeAndFreeAllElements(pipe->waitingForRead);
+	removeAndFreeAllElements(pipe->waitingForWrite);
+	freeList(pipe->waitingForRead);
+	freeList(pipe->waitingForWrite);
+
+	terminateMutualExclusion(pipe->mutex, processId);
+	terminateMutualExclusion(pipe->writeMutex, processId);
+	terminateMutualExclusion(pipe->readMutex, processId);
+
+	terminateSemaphore(pipe->fullSemaphore);
+	terminateSemaphore(pipe->emptySemaphore);
+
+	removeAndFreeFirstElementByCriteria(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
 }
-
-static int pipeCompare(void *pipeId, void *pipe) {
-
-}
-
-static pipe_t *getPipe(char *pipeId);
-
-static void removePipe(char *pipeId);
 
 char *getMutexListId(char *pipeId) {
-
+	return stringConcatenation(LIST_MUTEX_PREFIX, pipeId);
 }
 
 char *getMutexWriteId(char *pipeId) {
-
+	return stringConcatenation(WRITE_MUTEX_PREFIX, pipeId);
 }
 
 char *getMutexReadId(char *pipeId) {
-
+	return stringConcatenation(READ_MUTEX_PREFIX, pipeId);
 }
 
 char *getSemaphoreFullId(char *pipeId) {
-
+	return stringConcatenation(FULL_SEM_PREFIX, pipeId);
 }
 
 char *getSemaphoreEmptyId(char *pipeId) {
-
+	return stringConcatenation(EMPTY_SEM_PREFIX, pipeId);
 }
