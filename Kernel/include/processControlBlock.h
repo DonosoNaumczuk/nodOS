@@ -39,5 +39,6 @@ void setReturnValue(processControlBlockPtr_t pcb, int returnValue);
 void printPCB(processControlBlockPtr_t pcb);
 void setForeground(processControlBlockPtr_t pcb);
 int isForeground(processControlBlockPtr_t pcb);
+int getReturnValue(processControlBlockPtr_t son);
 
 #endif

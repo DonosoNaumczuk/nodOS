@@ -139,7 +139,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),co
 	return ELEMENT_DOESNT_EXIST;
 }
 
-void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+void *getFirstElementReferenceByCriteria(listObject_t list, int (*compareTo)(void * ,void * ), const void *reference) {
 	if(list == NULL) return NULL;
 	if(compareTo == NULL) return NULL;
 
@@ -153,7 +153,7 @@ void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void
 	return NULL;
 }
 
-int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+int removeAndFreeFirstElementByCriteria(listObject_t list, int (*compareTo)(void*,void*), const void *reference) {
 	node_t aux;
 	node_t auxPrev;
 	node_t aux2;
