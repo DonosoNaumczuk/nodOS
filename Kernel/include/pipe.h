@@ -19,6 +19,7 @@
 #define WITH_BLOCKING 			 0
 
 void initPipes(uint64_t processId);
+
 int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	 		   uint64_t processId);
 int writeOnPipe(char *pipeId, void *data, uint32_t byteSize,

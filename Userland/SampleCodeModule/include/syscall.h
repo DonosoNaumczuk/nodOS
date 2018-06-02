@@ -55,6 +55,9 @@
 #define PRINT_ALL_PROCESS          29
 #define TERMINATE_PROCESS_BY_ID    30
 
+/* Pipes */
+#define CREATE_PIPE                31
+
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
 
@@ -101,6 +104,8 @@ void closeMailbox(const char *mailboxId);
 int printAllProcess();
 
 void terminateProcess(uint64_t pid);
+
+int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking);
 
 
 #endif

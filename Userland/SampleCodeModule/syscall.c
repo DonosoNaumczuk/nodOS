@@ -68,3 +68,7 @@ int printAllProcess() {
 void terminateProcess(uint64_t pid) {
      _int_80(TERMINATE_PROCESS_BY_ID, pid, 0, 0);
 }
+
+int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking) {
+     return _int_80(CREATE_PIPE, (uint64_t) pipeId, byteSize, isNonBlocking);
+}
