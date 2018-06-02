@@ -146,7 +146,7 @@ int scanf(const char* c, ...){
 	return ret;
 }
 
-int isNumber(char n){
+int isNumber(char n) {
 	if(n=='1'||n=='2'||n=='3'||n=='4'||n=='5'||n=='6'||n=='7'||n=='8'||n=='9'||n=='0')
 		return 1;
 	return 0;

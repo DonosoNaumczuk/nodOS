@@ -1,4 +1,5 @@
 #include <commandHandler.h>
+#include <lib.h>
 
 void printArgs(int *args, int size);
 
@@ -6,7 +7,7 @@ void printArgs(int *args, int size);
 int  commandInterpreter(unsigned char buffer[],	unsigned int length){
 	unsigned int argumentsStart;
 	int cmdID;
-	cmdID = readCommand(buffer, &argumentsStart, length);
+	cmdID = readCommand(buffer, (int *) &argumentsStart, length);
 	unsigned char* arguments = buffer + argumentsStart;
 	void ** argVector = allocateMemory(sizeof(void*) * 3);
 	uint64_t processId;
@@ -124,18 +125,18 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
 	
-	if(strcmp("time", cmd) == 0)				return	TIME;
-	if(strcmp("help", cmd) == 0)				return	HELP;
-	if(strncmp("quadratic", cmd, 14) == 0)		return	QUADRATIC;
-	if(strncmp("linear", cmd, 11) == 0)		return	LINEAR;
-	if(strncmp("echo", cmd, 4) == 0)			return	ECHO;
-	if(strcmp("exit", cmd) == 0)				return	EXIT;
-	if(strncmp("test", cmd, 4) == 0)			return	TEST;
-	if(strncmp("clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
-	if(strncmp("semaphore", cmd, 9) == 0)   	return  SEMAPHORE;
-	if(strncmp("ps", cmd, 2) == 0)			return  PROCESS_LIST;
-	if(strncmp("prodcons", cmd, 8) == 0)    	return  PRODUCTOR_CONSUMER;
-	if(strncmp("terminate", cmd, 9) == 0)   	return  TERMINATE_PROCESS;
+	if(strcmp((unsigned char *) "time", cmd) == 0)				return	TIME;
+	if(strcmp((unsigned char *) "help", cmd) == 0)				return	HELP;
+	if(strncmp((unsigned char *) "quadratic", cmd, 14) == 0)		return	QUADRATIC;
+	if(strncmp((unsigned char *) "linear", cmd, 11) == 0)			return	LINEAR;
+	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return	ECHO;
+	if(strcmp((unsigned char *) "exit", cmd) == 0)				return	EXIT;
+	if(strncmp((unsigned char *) "test", cmd, 4) == 0)			return	TEST;
+	if(strncmp((unsigned char *) "clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
+	if(strncmp((unsigned char *) "semaphore", cmd, 9) == 0)   		return  SEMAPHORE;
+	if(strncmp((unsigned char *) "ps", cmd, 2) == 0)				return  PROCESS_LIST;
+	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    		return  PRODUCTOR_CONSUMER;
+	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   		return  TERMINATE_PROCESS;
 
 	return INVALID;
 }
@@ -208,8 +209,8 @@ int test(int argumentQuantity, void ** argumentVector) {
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
-	if((cmpRes = strcmp("zerodiv", buffer)) == 0)		divide0();
-	else if ((cmpRes = strcmp("opcode", buffer)) == 0)	invalidop();
+	if((cmpRes = strcmp((unsigned char *) "zerodiv", buffer)) == 0)		divide0();
+	else if ((cmpRes = strcmp((unsigned char *) "opcode", buffer)) == 0)	invalidop();
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
