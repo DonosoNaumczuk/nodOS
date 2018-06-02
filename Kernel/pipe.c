@@ -1,21 +1,26 @@
 #include <pipe.h>
 
-#define EMPTY_BUFFER -2
-#define FULL_SEM_PREFIX "__pipe__full__sem__"
-#define EMPTY_SEM_PREFIX  "__pipe__empty__sem__"
-#define WRITE_MUTEX_PREFIX "__pipe__write__mutex__"
-#define READ_MUTEX_PREFIX "__pipe__read__mutex__"
-#define LIST_MUTEX_PREFIX "__pipe__list__mutex__"
-#define NON_BLOCKING 1
-#define WITH_BLOCKING 0
+typedef struct {
+	char *id;
+	uint32_t status;
+	sint64_t ownerProcessId;
+	listObject_t sleepingProcessesId;
+} mutex_t;
+
+typedef struct {
+	char *id;
+	int counter;
+	char *mutex;
+	listObject_t sleepingProcessesId;
+} semaphore_t;
 
 /* Write and read are atomic, but independently.
-   A process can read while other is writing, or viceversa.
-   That synchronization holds on the user.
+A process can read while other is writing, or viceversa.
+That synchronization holds on the user.
 
-   What happen if isNonBlocking is TRUE? That means that if
-   buffer is empty or full, you will get a the number of bytes
-   that rest to write or EMPTY_BUFFER instead of beign blocked. */
+What happen if isNonBlocking is TRUE? That means that if
+buffer is empty or full, you will get a the number of bytes
+that rest to write or EMPTY_BUFFER instead of beign blocked. */
 
 typedef struct {
 	char *id;
@@ -33,9 +38,19 @@ typedef struct {
 	char *emptySemaphore; /* Semaphore id for empty buffer block */
 } pipe_t;
 
+static uint32_t existPipe(char *pipeId);
+static int pipeCompare(char *pipeId, pipe_t *pipe);
+static pipe_t *getPipe(char *pipeId);
+static void removePipe(char *pipeId, uint64_t processId);
+static char *getMutexListId(char *pipeId);
+static char *getMutexWriteId(char *pipeId);
+static char *getMutexReadId(char *pipeId);
+static char *getSemaphoreFullId(char *pipeId);
+static char *getSemaphoreEmptyId(char *pipeId);
+
 static listObject_t pipes;
 
-void initPipe(uint64_t processId) {
+void initPipes(uint64_t processId) {
 	static int initializations = 0;
 
 	if(initializations > 0) {
@@ -206,22 +221,22 @@ static void removePipe(char *pipeId, uint64_t processId) {
 	removeAndFreeFirstElementByCriteria(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
 }
 
-char *getMutexListId(char *pipeId) {
+static char *getMutexListId(char *pipeId) {
 	return stringConcatenation(LIST_MUTEX_PREFIX, pipeId);
 }
 
-char *getMutexWriteId(char *pipeId) {
+static char *getMutexWriteId(char *pipeId) {
 	return stringConcatenation(WRITE_MUTEX_PREFIX, pipeId);
 }
 
-char *getMutexReadId(char *pipeId) {
+static char *getMutexReadId(char *pipeId) {
 	return stringConcatenation(READ_MUTEX_PREFIX, pipeId);
 }
 
-char *getSemaphoreFullId(char *pipeId) {
+static char *getSemaphoreFullId(char *pipeId) {
 	return stringConcatenation(FULL_SEM_PREFIX, pipeId);
 }
 
-char *getSemaphoreEmptyId(char *pipeId) {
+static char *getSemaphoreEmptyId(char *pipeId) {
 	return stringConcatenation(EMPTY_SEM_PREFIX, pipeId);
 }
