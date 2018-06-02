@@ -118,7 +118,9 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 		i++;
 	}
 
-	if(i >= MAX_CMD_LONG)	return INVALID;
+	if(i >= MAX_CMD_LONG)	{
+		return INVALID;
+	}
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
 

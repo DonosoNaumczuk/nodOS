@@ -13,7 +13,7 @@
 #include  <semaphoreTest.h>
 #include  <prodcons.h>
 
-#define   MAX_CMD_LONG   18
+#define   MAX_CMD_LONG   200
 
 #define   INVALID            -1
 #define   EXIT                0
