@@ -14,7 +14,7 @@ typedef struct list_t{
     int size;
 }list_t;
 
-static int copyElement(void *buffer,void *element,unsigned int elementSize);
+static int copyElement(void *buffer, void *element, unsigned int elementSize);
 
 listObject_t newList() {
 	listObject_t list = allocateMemory(sizeof(struct list_t));
@@ -23,7 +23,7 @@ listObject_t newList() {
 	return list;
 }
 
-int addElement(listObject_t list,const void *element,const unsigned int size) {
+int addElement(listObject_t list, const void *element, const unsigned int size) {
 
 	if(list == NULL) return NULL_LIST_ERROR;
     if(element == NULL) return NULL_ELEMENT_ERROR;
@@ -39,12 +39,14 @@ int addElement(listObject_t list,const void *element,const unsigned int size) {
 	if(list->head == NULL) {
         list->head = newNode;
         newNode->index = 0;
-    }else {
+    }
+    else {
 		aux = list->head;
 		while(aux->next != NULL) {
 			aux = aux->next;
 		}
-        newNode->index = aux->index + 1;
+
+        	newNode->index = aux->index + 1;
 		aux->next = newNode;
     }
 
@@ -55,7 +57,9 @@ int addElement(listObject_t list,const void *element,const unsigned int size) {
 int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     node_t aux;
 
-	if(list == NULL) return NULL_LIST_ERROR;
+	if(list == NULL) {
+		return NULL_LIST_ERROR;
+	}
     if(list->head == NULL) return EMPTY_LIST_ERROR;
 
 	aux = list->head;
@@ -66,10 +70,15 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     return copyElement(buffer,aux->element,aux->size);
 }
 
-int getFirstElement(listObject_t list,void * buffer) {
+int getFirstElement(listObject_t list, void * buffer) {
 
-	if(list == NULL) return NULL_LIST_ERROR;
-    if(list->head == NULL) return EMPTY_LIST_ERROR;
+	if(list == NULL) {
+		return NULL_LIST_ERROR;
+	}
+    	
+    	if(list->head == NULL) {
+    		return EMPTY_LIST_ERROR;
+    	}
 
 	return copyElement(buffer,list->head->element,list->head->size);
 }
@@ -104,7 +113,7 @@ int size(listObject_t list) {
 	return list->size;
 }
 
-int contains(listObject_t list,int (*compareTo)(void*,void*),void *reference) {
+int contains(listObject_t list, int (*compareTo)(const void*, const void*), const void *reference) {
 	if(list == NULL) return FALSE;
 	if(compareTo == NULL) return FALSE;
 
@@ -114,14 +123,14 @@ int contains(listObject_t list,int (*compareTo)(void*,void*),void *reference) {
 	}else {
 		aux = list->head;
 		while(aux != NULL){
-			if((*compareTo)(reference,aux->element) == 0)	return TRUE;
+			if((*compareTo)(reference, aux->element) == 0)	return TRUE;
 			aux = aux->next;
 		}
 	}
 	return FALSE;
 }
 
-int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference,void *buffer) {
+int getFirstElementByCriteria(listObject_t list, int (*compareTo)(const void*, const void*), const void *reference,void *buffer) {
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
 
@@ -131,7 +140,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),co
 	}else {
 		aux = list->head;
 		while (aux != NULL) {
-			if((*compareTo)(reference,aux->element) == 0){
+			if((*compareTo)(reference, aux->element) == 0){
 				return copyElement(buffer,aux->element,aux->size);
 			}
 		}
@@ -139,7 +148,9 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),co
 	return ELEMENT_DOESNT_EXIST;
 }
 
-void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+void *getFirstElementReferenceByCriteria(listObject_t list, 
+	int (*compareTo)(const void * , const void * ), const void *reference) {
+
 	if(list == NULL) return NULL;
 	if(compareTo == NULL) return NULL;
 
@@ -153,7 +164,9 @@ void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void
 	return NULL;
 }
 
-int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+int removeAndFreeFirstElementByCriteria(listObject_t list, 
+	int (*compareTo)(const void * , const void  *), const void *reference) {
+
 	node_t aux;
 	node_t auxPrev;
 	node_t aux2;
@@ -186,7 +199,8 @@ int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*
 	}
 }
 
-int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(const void * , const void * ),
+															const void *reference) {
 	node_t aux;
 	node_t auxPrev;
 	node_t aux2;
@@ -231,7 +245,7 @@ int removeAllElements(listObject_t list) {
 }
 
 static int copyElement(void *buffer,void *element,unsigned int elementSize) {
-	memcpy(buffer,element,elementSize);
+	memcpy(buffer, element, elementSize);
 	return elementSize;
 }
 

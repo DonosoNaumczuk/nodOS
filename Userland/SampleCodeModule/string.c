@@ -4,7 +4,18 @@ void strcpy(unsigned char* s1,unsigned char* s2){
 		s1++;
 		s2++;
 	}
+	*s1 = 0;
 
+}
+
+void strncpy(unsigned char *s1, unsigned char *s2, unsigned int beginning, unsigned int end) {
+	unsigned int i = 0;
+	while(beginning < end && s2[beginning] != 0) {
+		s1[i] = s2[beginning];
+		i++;
+		beginning ++;
+	}
+	s1[i] = 0;
 }
 
 

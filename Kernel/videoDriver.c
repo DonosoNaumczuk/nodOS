@@ -1,7 +1,8 @@
 #include <videoDriver.h>
 #include <font.h>
+#include <scheduler.h>
 
-static const vbe_mode_info * vbeInfo = 0x5C00;
+static const vbe_mode_info * vbeInfo = (vbe_mode_info *)0x5C00;
 static uint8_t * framebuffer_start_address;
 static uint32_t x_resolution;
 static uint32_t y_resolution;
@@ -12,7 +13,7 @@ static uint32_t max_word_y;
 static uint8_t	cursor_on;
 
 void initializeVideoDriver() {
-	framebuffer_start_address = vbeInfo->framebuffer;
+	framebuffer_start_address = (uint8_t *)((uint64_t)vbeInfo->framebuffer);
 	x_resolution = vbeInfo->width;
 	y_resolution = vbeInfo->height;
 	max_word_x = x_resolution/CHAR_WIDTH;
@@ -45,7 +46,7 @@ void printCharWithColor(char character, char color) {
 		deleteCurrent();
 		return;
 	}
-	char * character_font = pixel_map(character);
+	char * character_font = (char *)pixel_map(character);
 	for (int i = 0; i < 16; ++i) {
 		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,*(character_font+i), color);
 	}
@@ -138,6 +139,7 @@ void printDecimal(uint64_t n) {
 	}
 	printWithColor(buffer,digits,0x0F);
 }
+
 void printFont(uint8_t * address, char font, char color) {
 
 		char bits[] = {font&0X80,font&0X40,font&0X20,font&0X10,font&0X08,font&0X04,font&0X02,font&0X01};
@@ -186,7 +188,7 @@ void clear() {
 }
 
 void cursorBlink(){
-	char * character_font = pixel_map('|');
+	char * character_font = (char *)pixel_map('|');
 	char color;
 	color = (cursor_on?0xFF:0x0F);
 	for (int i = 0; i < 16; ++i) {
@@ -197,7 +199,7 @@ void cursorBlink(){
 }
 
 void clearCursor(){
-	char * character_font = pixel_map('|');
+	char * character_font = (char *)pixel_map('|');
 		for (int i = 0; i < 16; ++i) {
 		printFont(framebuffer_start_address+currentVideo_x*CHAR_WIDTH+(currentVideo_y*CHAR_HEIGHT+i)*x_resolution,*(character_font+i), 0xFF);
 	}

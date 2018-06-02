@@ -11,17 +11,17 @@
 #define WRITE_PIXEL 			 2
 
 /* Get Resolution */
-#define GET_RESOLUTION_X		 3
+#define GET_RESOLUTION_X		      3
 #define GET_RESOLUTION_Y 		 4
 
 /* Time */
-#define TIME 					 5
+#define TIME_SYSCALL			 5
 
 /* Clear */
 #define CLEAR 					 6
 
 /* Process */
-#define TERMINATE_PROCESS 		 7
+#define TERMINATE_CURRENT_PROCESS   7
 #define SLEEP_PROCESS 			 8
 #define WAIT_CHILD_PROCESS 		 9
 #define WAKE_UP_PROCESS 		     10

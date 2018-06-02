@@ -1,5 +1,7 @@
 #include <keyboard.h>
 #include <videoDriver.h>
+#include <portIO.h>
+#include <interrupts.h>
 
 unsigned char keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
@@ -42,7 +44,7 @@ void keyboard_handler() {
             return;
         }
 
-        unsigned char mapped_key = keycode_map[keycode];
+        unsigned char mapped_key = keycode_map[(int) keycode];
 
         if(mapped_key == RIGHT_SHIFT)
             right_shift = TRUE;

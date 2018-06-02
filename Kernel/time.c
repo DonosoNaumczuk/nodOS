@@ -39,4 +39,5 @@ uint64_t timeHandler(int c){
 		case YEAR:
 			return _getYear();
 	}
+	return 0;
 }

@@ -1,15 +1,15 @@
 #include <syscall.h>
 
 void write(char * string, uint64_t length, char color){
-	return _int_80(WRITE, string, length, color);
+	_int_80(WRITE, (uint64_t) string, length, color);
 }
 
 void read(int in_id, char * buffer, int qty_to_read) {
-	return _int_80(READ, in_id, buffer, qty_to_read);
+	_int_80(READ, in_id, (uint64_t) buffer, qty_to_read);
 }
 
 void printPixel(uint32_t x, uint32_t y, char color){
-	return _int_80(WRITE_PIXEL, x, y, color);
+	_int_80(WRITE_PIXEL, x, y, color);
 }
 
 uint64_t getResolutionX(){
@@ -21,7 +21,7 @@ uint64_t getResolutionY(){
 }
 
 uint64_t getTime(int time){
-	return _int_80(TIME, time,0,0);
+	return _int_80(TIME_SYSCALL, time,0,0);
 }
 
 void cleanScreen() {
@@ -29,11 +29,12 @@ void cleanScreen() {
 }
 
 uint64_t terminateCurrentProcess() {
-     return _int_80(TERMINATE_PROCESS, 0, 0, 0);
+     return _int_80(TERMINATE_CURRENT_PROCESS, 0, 0, 0);
 }
      
 uint64_t createProcess(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector) {
-     return _int_80(CREATE_PROCESS, codeAddress, parametersQuantity, parametersVector);
+     return _int_80(CREATE_PROCESS, (uint64_t) codeAddress, parametersQuantity,
+                     (uint64_t) parametersVector);
 }
 
 int sleepProcess() {
@@ -53,11 +54,11 @@ int getPid() {
 }
 
 void * allocateMemory(uint64_t bytesToAllocate) {
-     return _int_80(ALLOCATE_MEMORY, bytesToAllocate, 0, 0);
+     return (void * ) _int_80(ALLOCATE_MEMORY, bytesToAllocate, 0, 0);
 }
 
 uint32_t freeMemory(void * addressToFree) {
-     return _int_80(FREE, addressToFree, 0, 0);
+     return _int_80(FREE, (uint64_t) addressToFree, 0, 0);
 }
 
 int printAllProcess() {
@@ -65,5 +66,5 @@ int printAllProcess() {
 }
 
 void terminateProcess(uint64_t pid) {
-     return _int_80(TERMINATE_PROCESS_BY_ID, pid, 0, 0);
+     _int_80(TERMINATE_PROCESS_BY_ID, pid, 0, 0);
 }

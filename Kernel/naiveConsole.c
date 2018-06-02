@@ -9,18 +9,18 @@ static const uint32_t width = 80;
 static const uint32_t height = 25 ;
 
 
-void ncPrintlnWithAttributes(const char * string,const char att){
+void ncPrintlnWithAttributes(const char * string,const char att) {
 	int i;
 
-	for(i=0; string[i] !=0; i++){
-		ncPrintCharWithAttributes(string[i],att);
+	for(i = 0; string[i] != 0; i++){
+		ncPrintCharWithAttributes(string[i], att);
 	}
 
 	ncNewline();
 }
 
 
-void ncPrintCharWithAttributes(char character,char att){
+void ncPrintCharWithAttributes(char character,char att) {
 	*currentVideo = character;
 	currentVideo++;
 	*currentVideo = att;

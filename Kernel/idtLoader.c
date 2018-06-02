@@ -4,6 +4,8 @@
 #include <interrupts.h>
 #include <naiveConsole.h>
 
+static void setup_IDT_entry(int index, uint64_t offset);
+
 /* IDT */
 int_desc_t * idt = (int_desc_t *) 0;
 

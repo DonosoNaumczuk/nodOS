@@ -11,7 +11,7 @@ typedef struct {
 	Set status to locked.
 	Returns TRUE if was currenty locked,
 	otherwise return FALSE, atomically. */
-static uint32_t mutex_lock(uint32_t *status);
+uint32_t mutex_lock(uint32_t *status);
 static uint32_t existMutex(char *mutexId);
 static uint64_t dequeueProcessId(listObject_t processQueue);
 static int mutexCompare(char *mutexId, mutex_t *mutex);
@@ -151,7 +151,7 @@ int terminateMutualExclusion(char *mutexId, uint64_t processId) {
 }
 
 static uint32_t existMutex(char *mutexId) {
-	return contains(mutexes, &mutexCompare, mutexId);
+	return contains(mutexes, (int (*) (const void * , const void * )) &mutexCompare, mutexId);
 }
 
 static void removeMutex(char *mutexId) {
@@ -161,12 +161,13 @@ static void removeMutex(char *mutexId) {
 
 	freeList(mutex->sleepingProcessesId);
 
-	removeAndFreeFirstElementByCriteria(mutexes, &mutexCompare, mutexId);
+	removeAndFreeFirstElementByCriteria(mutexes, (int (*) (const void * , const void * )) &mutexCompare,
+									mutexId);
 }
 
 static mutex_t *getMutex(char *mutexId) {
 	return (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
-		   &mutexCompare, mutexId);
+		   (int (*) (const void * , const void * )) &mutexCompare, mutexId);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {

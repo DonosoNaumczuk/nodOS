@@ -16,8 +16,10 @@ void printHexa(uint64_t n);
 void printDecimal(uint64_t n);
 void cursorBlink();
 void clearCursor();
-uint8_t	cursorIsOn();
+uint8_t cursorIsOn();
 void printPixel(int x, int y, char color);
+void moveup();
+void printFont(uint8_t * address, char font, char color);
 
 #pragma pack(push)
 #pragma pack (1)

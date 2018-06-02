@@ -1,4 +1,7 @@
 #include <prodcons.h>
+#include <mutualExclusion.h>
+#include <semaphore.h>
+#include <null.h>
 
 void terminateAll(prodcons_t *prodcons);
 
@@ -60,7 +63,7 @@ void prodcons() {
 
 void terminateAll(prodcons_t *prodcons) {
 	for(int i = 0; i < MAX_PRODCONS; i++) {
-		if(prodcons->list[i] != NULL) {
+		if(prodcons->list[i] != 0) {
 			terminateProcess(prodcons->list[i]);
 		}
 	}
@@ -176,7 +179,7 @@ void decrementConsumer(prodcons_t *consumerStruct) {
 
 int getNotNullId(prodcons_t *prodcons) {
 	for(int i = 0; i < MAX_PRODCONS; i++) {
-		if(prodcons->list[i] != NULL) {
+		if(prodcons->list[i] != 0) {
 			return i;
 		}
 	}
@@ -186,7 +189,7 @@ int getNotNullId(prodcons_t *prodcons) {
 
 int getNullId(prodcons_t *prodcons) {
 	for(int i = 0; i < MAX_PRODCONS; i++) {
-		if(prodcons->list[i] == NULL) {
+		if(prodcons->list[i] == 0) {
 			return i;
 		}
 	}
@@ -212,7 +215,7 @@ int producer(int argc, void ** args) {
 		producerStruct->criticalZone[index] = id + '0';
 
 		/* Terminate */
-		producerStruct->list[id] = NULL;
+		producerStruct->list[id] = 0;
 		(*(producerStruct->size)) = (*(producerStruct->size)) - 1;
 
 		// printf("I wrote %d! Goodbye!\n", id);
@@ -243,11 +246,11 @@ int consumer(int argc, void ** args) {
 		int index = *consumerStruct->index;
 		index--;
 		*consumerStruct->index = index;
-		int consumedInt = consumerStruct->criticalZone[index] - '0';
+		//int consumedInt = consumerStruct->criticalZone[index] - '0';
 		consumerStruct->criticalZone[index] = EMPTY_SPACE;
 
 		/* Terminate */
-		consumerStruct->list[id] = NULL;
+		consumerStruct->list[id] = 0;
 		(*(consumerStruct->size)) = (*(consumerStruct->size)) - 1;
 
 		// printf("I consumed %d! Goodbye!\n", consumedInt);

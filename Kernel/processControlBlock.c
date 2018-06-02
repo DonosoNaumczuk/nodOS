@@ -160,10 +160,10 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
     stackFrame->r10		=	0x000;
     stackFrame->r9 		=	0x000;
     stackFrame->r8 		=	0x000;
-    stackFrame->rsi		=	processArgs;
+    stackFrame->rsi		=	(uint64_t) processArgs;
     stackFrame->rdi		=	argsQuantity;
-    stackFrame->rbp		=	stackBaseAddress;
-    stackFrame->rdx		=	codeAddress;
+    stackFrame->rbp		=	(uint64_t) stackBaseAddress;
+    stackFrame->rdx		=	(uint64_t) codeAddress;
     stackFrame->rcx		=	0x000;
     stackFrame->rbx		=	0x000;
     stackFrame->rax		=	0x000;
