@@ -4,22 +4,22 @@
 
 static int color = 0x0F;
 
-unsigned char putChar(unsigned char c){
-	write(&c,1,color);
+unsigned char putChar(char c){
+	write(&c, 1, color);
 	return c;
 }
 
 int getchar() {
-	unsigned char c;
+	char c;
 	read(0, &c, 1);
 	return c;
 }
 
-int printf(const char* c, ...){
+int printf(const char* c, ...) {
 	va_list args;
 	va_start(args,c);
 
-	int ret = 0; // return
+	//int ret = 0; // return
 	char aux[MAX];
 	int j = 0;
 	int flag = 0;
@@ -57,7 +57,7 @@ int printf(const char* c, ...){
 				j++;
 		}
 		if(j==MAX){
-			aux[j];
+			//aux[j];
 			write(aux,MAX,color);
 			j = 0;
 		}
@@ -65,6 +65,7 @@ int printf(const char* c, ...){
 	}
 	va_end(args);
 	write(aux,j,color);
+	return 0;
 }
 
 int scanf(const char* c, ...){
@@ -151,7 +152,7 @@ int isNumber(char n){
 	return 0;
 }
 
-int getNumber(int * dir, char * buffer, int * j){
+int getNumber(int * dir, char * buffer, int * j) {
 	int aux = 0;
 	char c;
 	int flag = 1;
@@ -211,7 +212,7 @@ int toBase(int n, char* pnt, int base){
 	return digits;
 }
 
-int copyString(char* string, char* to){
+int copyString(char* string, char* to) {
 	int i;
 	for (i = 0; string[i] != 0; ++i) {
 		to[i] = string[i];
@@ -220,7 +221,7 @@ int copyString(char* string, char* to){
 	return i;
 }
 
-int pow(int base,unsigned int exponent){
+int pow(int base,unsigned int exponent) {
 	if(exponent == 0)	return	1;
 	while(exponent > 1) {
 		base*=base;
@@ -229,7 +230,7 @@ int pow(int base,unsigned int exponent){
 	return base;
 }
 
-int	charToInt(unsigned char* string){
+int	charToInt(unsigned char* string) {
 	unsigned int digits = 0;
 	unsigned int index  = 0;
 	int res = 0;

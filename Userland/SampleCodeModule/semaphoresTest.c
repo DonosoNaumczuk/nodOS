@@ -7,9 +7,7 @@ int semaphoreShow(int argumentQuantity, void **argumentVector) {
 	char *hackerManSem = "hackerMan";
 	void ** argument = allocateMemory(sizeof(void*) * 3);
 	int mode = 1;
-	int mode2 = 1;
-	int mode3 = 1;
-
+	
 	createSemaphore(relatorSem, 0);
 	createSemaphore(kungFurySem, 0);
 	createSemaphore(hackerManSem, 0);
@@ -31,7 +29,6 @@ int semaphoreShow(int argumentQuantity, void **argumentVector) {
 
 int relator(int argumentQuantity, void ** argumentVector) {
 	char *relatorSem = (char *)(argumentVector[0]);
-	char *kungFurySem = (char *)(argumentVector[1]);
 	char *hackerManSem = (char *)(argumentVector[2]);
 	semaphoreWait(relatorSem);
 	changeFontColor(RED);
@@ -87,7 +84,6 @@ int kungFury(int argumentQuantity, void ** argumentVector) {
 }
 
 int hackerMan(int argumentQuantity, void ** argumentVector) {
-	char *relatorSem = (char *)(argumentVector[0]);
 	char *kungFurySem = (char *)(argumentVector[1]);
 	char *hackerManSem = (char *)(argumentVector[2]);
 	changeFontColor(AQUAMARINE);

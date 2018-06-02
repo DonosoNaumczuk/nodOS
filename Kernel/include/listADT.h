@@ -30,11 +30,12 @@ int addElement(listObject_t list, const void *element, const unsigned int size);
 
 int getElementOnIndex(listObject_t list, void *buffer, const unsigned int index);
 
-int getFirstElementByCriteria(listObject_t list,int (*compareTo)(const void*, const void*), const void *reference,void *buffer);
+int getFirstElementByCriteria(listObject_t list,int (*compareTo)(const void * , const void * ),
+                                                             const void * reference, void * buffer);
 
 int getFirstElement(listObject_t list,void * buffer);
 
-void *getFirstElementReferenceByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
+void *getFirstElementReferenceByCriteria(listObject_t list, int (*compareTo)(const void *, const void * ),const void *reference);
 
 void *getFirstElementReferece(listObject_t list);
 
@@ -48,9 +49,11 @@ int removeFirst(listObject_t list);
 
 int removeAndFreeFirst(listObject_t list);
 
-int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
+int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(const void * , const void * ),
+                                                                                const void *reference);
 
-int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference);
+int removeAndFreeFirstElementByCriteria(listObject_t list,int (*compareTo)(const void * , const void * ),
+                                                                                     const void *reference);
 
 int removeAllElements(listObject_t list);
 

@@ -30,7 +30,7 @@ int createMailbox(const char *mailboxId) {
 void send(const char *mailboxId, const void *message, const unsigned int messageSize) {
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,
-							 (int (*)(void *, void *)) &existMailbox,mailboxId);
+							 (int (*)(const void *, const void *)) &existMailbox,mailboxId);
 	addElement(mailbox->messageQueue,message,messageSize);
 	semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
@@ -41,7 +41,7 @@ void *receive(const char *mailboxId) {
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList, 
-						(int (*)(void *, void *)) &existMailbox,mailboxId);
+						(int (*)(const void *, const void *)) &existMailbox,mailboxId);
 	void *reference = getFirstElementReferece(mailbox->messageQueue);
 	removeFirst(mailbox->messageQueue);
 
@@ -54,10 +54,10 @@ void closeMailbox(const char *mailboxId) {
 	lock(stringConcatenation(MUTEX_NAME,mailboxId), getProcessId());
 
 	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList, 
-						(int (*)(void *, void *)) &existMailbox,mailboxId);
+						(int (*)(const void *, const void *)) &existMailbox,mailboxId);
 	removeAndFreeAllElements(mailbox->messageQueue);
 	removeAndFreeFirstElementByCriteria(mailboxList, 
-			(int (*)(void *, void *)) &existMailbox,mailboxId);
+			(int (*)(const void *, const void *)) &existMailbox,mailboxId);
 
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	//mutexClose(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());

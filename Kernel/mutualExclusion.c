@@ -161,12 +161,13 @@ static void removeMutex(char *mutexId) {
 
 	freeList(mutex->sleepingProcessesId);
 
-	removeAndFreeFirstElementByCriteria(mutexes, (int (*) (void * , void * )) &mutexCompare, mutexId);
+	removeAndFreeFirstElementByCriteria(mutexes, (int (*) (const void * , const void * )) &mutexCompare,
+									mutexId);
 }
 
 static mutex_t *getMutex(char *mutexId) {
 	return (mutex_t *) getFirstElementReferenceByCriteria(mutexes,
-		   (int (*) (void * , void * )) &mutexCompare, mutexId);
+		   (int (*) (const void * , const void * )) &mutexCompare, mutexId);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {

@@ -1,4 +1,7 @@
 #include <prodcons.h>
+#include <shell.h>
+#include <mutualExclusion.h>
+#include <semaphore.h>
 
 void terminateAll(prodcons_t *prodcons);
 
