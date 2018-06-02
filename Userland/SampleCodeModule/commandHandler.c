@@ -280,7 +280,7 @@ void setArguments(void ** argVector, unsigned char *arguments,
  						uint64_t *processType,	char *processName) {
 	*processType = FOREGROUND;
 
-	if(isBackground(arguments)) {
+	if(isBackground((char *) arguments)) {
 		*processType = BACKGROUND;
 	}
 	*argVector = processType;
@@ -294,7 +294,7 @@ int isBackground(char * arguments) {
 	if(index == -1) {
 		return 0;
 	}
-	return strncmp(arguments + index, "-b", strLength("-b")) == 0;
+	return strncmp((unsigned char *) (arguments + index), (unsigned char *) "-b", strLength((unsigned char *) "-b")) == 0;
 }
 
 int getStartOfBackgroundParameter(char * arguments) {
@@ -305,8 +305,8 @@ int getStartOfBackgroundParameter(char * arguments) {
 		while(i > 0 && arguments[i] == ' ') {
 			i--;
 		}
-		if(i >= (strLength("-b") - 1)) {
-			i = i - (strLength("-b") - 1);
+		if(i >= (strLength((unsigned char *) "-b") - 1)) {
+			i = i - (strLength((unsigned char *) "-b") - 1);
 			return i;
 		}
 
@@ -338,5 +338,7 @@ int terminate(int argumentQuantity, void ** argumentVector) {
 	uint64_t pid = stringToPid(pidString);
 	
 	terminateProcess(pid);
+
+	return 0;
 }
 
