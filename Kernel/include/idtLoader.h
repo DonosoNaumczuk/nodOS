@@ -1,7 +1,6 @@
 #ifndef _idtLoader_h_
 #define _idtLoader_h_
 
-static void setup_IDT_entry(int index, uint64_t offset);
 void load_idt();
 
 #pragma pack(push)

@@ -42,7 +42,7 @@ void *getFirstElementReferece(listObject_t list);
 
 int size(listObject_t list);
 
-int contains(listObject_t list,int (*compareTo)(void*,void*),void *reference);
+int contains(listObject_t list, int (*compareTo)(void * , void * ), const void *reference);
 
 int removeFirst(listObject_t list);
 

@@ -104,7 +104,7 @@ int size(listObject_t list) {
 	return list->size;
 }
 
-int contains(listObject_t list,int (*compareTo)(void*,void*),void *reference) {
+int contains(listObject_t list, int (*compareTo)(void*,void*), const void *reference) {
 	if(list == NULL) return FALSE;
 	if(compareTo == NULL) return FALSE;
 
