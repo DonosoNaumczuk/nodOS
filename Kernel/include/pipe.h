@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <mutualExclusion.h>
 #include <semaphore.h>
+#include <errors.h>
 
 #define EMPTY_BUFFER 			-2
 #define MUTEX_PIPE_MASTER_ID 	"__pipe__mutex__master__id__"
@@ -13,6 +14,7 @@
 #define WRITE_MUTEX_PREFIX 		"__pipe__write__mutex__"
 #define READ_MUTEX_PREFIX 		"__pipe__read__mutex__"
 #define LIST_MUTEX_PREFIX 		"__pipe__list__mutex__"
+
 #define NON_BLOCKING 			 1
 #define WITH_BLOCKING 			 0
 
