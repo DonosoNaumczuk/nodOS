@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <lib.h>
+#include <memoryAllocator.h>
 
 #define START 0x1000000
 
@@ -72,7 +74,7 @@ int stringLength(const char *string) {
 char *stringConcatenation(const char *s1,const char *s2) {
 	unsigned int s1Length = stringLength(s1);
 	unsigned int s2Length = stringLength(s2);
-	char *result = allocateMemory(s1Length + s2Length + 1);
+	char *result = (char *) allocateMemory(s1Length + s2Length + 1);
 	stringCopy(result,s1);
 	stringCopy(result + s1Length, s2);
 	result[s1Length + s2Length] = 0;

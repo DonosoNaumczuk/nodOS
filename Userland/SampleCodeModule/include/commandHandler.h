@@ -13,8 +13,6 @@
 #include  <semaphoreTest.h>
 #include  <prodcons.h>
 
-#define   MAX_CMD_LONG   18
-
 #define   INVALID            -1
 #define   EXIT                0
 #define   TIME                1
@@ -32,21 +30,21 @@
 #define   FOREGROUND	  1
 #define	BACKGROUND	  0
 
-int  commandInterpreter(unsigned char buffer[],	unsigned int size);
-int printTime(int argumentQuantity, void **argumentVector);
-int readCommand(unsigned char buffer[],int * argumentsStart);
-unsigned int getIntArguments(unsigned char buffer[],int args[],unsigned int total);
-int graphQuadratic(int argumentQuantity, void **argumentVector);
-int graphLinear(int argumentQuantity, void **argumentVector);
-int test(int argumentQuantity, void** argumentVector);
+int  commandInterpreter(unsigned char buffer[], unsigned int size);
+int printTime(int argumentQuantity, void ** argumentVector);
+int readCommand(unsigned char buffer[], int *argumentsStart, unsigned int length);
+unsigned int getIntArguments(unsigned char buffer[], int args[], unsigned int total);
+int graphQuadratic(int argumentQuantity, void ** argumentVector);
+int graphLinear(int argumentQuantity, void ** argumentVector);
+int test(int argumentQuantity, void ** argumentVector);
 int printHelp(int argumentQuantity, void **argumentVector);
-int exit_(unsigned char* arguments);
+int exit_(unsigned char *arguments);
 void setArguments(void ** argVector, unsigned char *arguments,
- 						uint64_t *processType,	char *processName);
+ 						uint64_t *processType, char *processName);
 int isBackground(char *arguments);
 int getStartOfBackgroundParameter(char *arguments);
 void printExitMessage();
-int ps(int argumentQuantity, void **argumentVector);
+int ps(int argumentQuantity, void ** argumentVector);
 int culoSucio(int argumentQuantity, void ** argumentVector);
 int terminate(int argumentQuantity, void ** argumentVector);
 uint64_t stringToPid(unsigned char *pidString);

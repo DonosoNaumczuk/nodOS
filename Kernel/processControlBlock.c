@@ -79,6 +79,7 @@ int getReturnValue(processControlBlockPtr_t son) {
 	return son->returnValue;
 }
 
+<<<<<<< HEAD
 void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
     processControlBlockPtr_t currentPCBFather = getFather(pcb);
     processControlBlockPtr_t PCBCleaner = getPCBByPid(2);
@@ -105,6 +106,40 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
 	}
 
     _force_context_switch();
+=======
+void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
+                 void ** processArgs) {
+	stackFrame_t * stackFrame = (stackFrame_t *)(stackBaseAddress + SIZE_OF_STACK -
+                                 sizeof(stackFrame_t) - 1);
+
+    stackFrame->gs 		=	0x000;
+    stackFrame->fs 		=	0x000;
+    stackFrame->r15		=	0x000;
+    stackFrame->r14		=	0x000;
+    stackFrame->r13		=	0x000;
+    stackFrame->r12		=	0x000;
+    stackFrame->r11		=	0x000;
+    stackFrame->r10		=	0x000;
+    stackFrame->r9 		=	0x000;
+    stackFrame->r8 		=	0x000;
+    stackFrame->rsi		=	(uint64_t) processArgs;
+    stackFrame->rdi		=	argsQuantity;
+    stackFrame->rbp		=	(uint64_t) stackBaseAddress;
+    stackFrame->rdx		=	(uint64_t) codeAddress;
+    stackFrame->rcx		=	0x000;
+    stackFrame->rbx		=	0x000;
+    stackFrame->rax		=	0x000;
+
+    /* Interupt Return Hook */
+    stackFrame->rip 	=	(uint64_t) &startProcess;
+    stackFrame->cs  	=	0x008;
+    stackFrame->rflags 	= 	0x202;
+    stackFrame->rsp 	=	(uint64_t) &(stackFrame->base);
+    stackFrame->ss  	= 	0x000;
+    stackFrame->base 	=	0x000;
+
+    return (void *)stackFrame;
+>>>>>>> 9378dea98b4744b3168fedee00cb05e7b438e2d8
 }
 
 /*void printPCB(processControlBlockPtr_t pcb) {

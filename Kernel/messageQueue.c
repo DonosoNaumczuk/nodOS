@@ -11,22 +11,26 @@ typedef struct mailboxStruct_t{
 static listObject_t mailboxList;
 
 static mailbox_t newMailbox(const char *mailboxId);
-static int existMailbox(char *mailboxId,mailbox_t mailbox);
+static int existMailbox(char *mailboxId, mailbox_t mailbox);
 
 void initMessageQueue() {
 	 mailboxList = newList();
-	 createMutualExclusion(MUTEX_NAME,getProcessId());
+	 createMutualExclusion(MUTEX_NAME, getProcessId());
 }
 
 int createMailbox(const char *mailboxId) {
 	lock(MUTEX_NAME,getProcessId());
-	if(!contains(mailboxList,&existMailbox,mailboxId)) addElement(mailboxList,newMailbox(mailboxId),sizeof(mailboxStruct_t));
+	if(!contains(mailboxList, (int (*)(const void *, const void *)) &existMailbox, mailboxId)) {
+		addElement(mailboxList,newMailbox(mailboxId),sizeof(mailboxStruct_t));
+	}
 	unlock(MUTEX_NAME,getProcessId());
+	return 0;
 }
 
 void send(const char *mailboxId, const void *message, const unsigned int messageSize) {
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
-	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
+	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,
+							 (int (*)(void *, void *)) &existMailbox,mailboxId);
 	addElement(mailbox->messageQueue,message,messageSize);
 	semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
@@ -36,7 +40,8 @@ void *receive(const char *mailboxId) {
 	semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 
-	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
+	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList, 
+						(int (*)(void *, void *)) &existMailbox,mailboxId);
 	void *reference = getFirstElementReferece(mailbox->messageQueue);
 	removeFirst(mailbox->messageQueue);
 
@@ -46,11 +51,13 @@ void *receive(const char *mailboxId) {
 
 void closeMailbox(const char *mailboxId) {
 	lock(MUTEX_NAME,getProcessId());
-	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	lock(stringConcatenation(MUTEX_NAME,mailboxId), getProcessId());
 
-	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,&existMailbox,mailboxId);
+	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList, 
+						(int (*)(void *, void *)) &existMailbox,mailboxId);
 	removeAndFreeAllElements(mailbox->messageQueue);
-	removeAndFreeFirstElementByCriteria(mailboxList,&existMailbox,mailboxId);
+	removeAndFreeFirstElementByCriteria(mailboxList, 
+			(int (*)(void *, void *)) &existMailbox,mailboxId);
 
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 	//mutexClose(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
