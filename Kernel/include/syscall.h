@@ -66,6 +66,9 @@
 
 /* Pipes */
 #define CREATE_PIPE                31
+#define WRITE_PIPE                 32
+#define READ_PIPE                  33
+#define TERMINATE_PIPE             34
 
 uint64_t syscall_dispatcher(uint64_t rax, uint64_t rbx, uint64_t rcx, uint64_t rdx);
 

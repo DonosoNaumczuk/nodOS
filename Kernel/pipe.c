@@ -101,7 +101,7 @@ int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	return OK_STATE;
 }
 
-int writeOnPipe(char *pipeId, void *data, uint32_t byteSize,
+int writeOnPipe(char *pipeId, void * data, uint32_t byteSize,
 	 			uint64_t processId) {
 	if(!existPipe(pipeId) || byteSize <= 0) {
 		return ERROR_STATE;
@@ -134,7 +134,7 @@ int writeOnPipe(char *pipeId, void *data, uint32_t byteSize,
 	return OK_STATE;
 }
 
-int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize,
+int readFromPipe(char *pipeId, void * buffer, uint32_t byteSize,
 	 			 uint64_t processId) {
 	if(!existPipe(pipeId) || byteSize <= 0) {
 		return ERROR_STATE;
@@ -175,7 +175,7 @@ int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize,
 }
 
 static uint32_t existPipe(char *pipeId) {
-	return contains(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
+	return contains(pipes, (int (*)(const void * , const void * )) &pipeCompare, pipeId);
 }
 
 static int pipeCompare(char *pipeId, pipe_t *pipe) {

@@ -57,6 +57,10 @@
 
 /* Pipes */
 #define CREATE_PIPE                31
+#define WRITE_PIPE                 32
+#define READ_PIPE                  33
+#define TERMINATE_PIPE             34
+
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -107,5 +111,10 @@ void terminateProcess(uint64_t pid);
 
 int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking);
 
+int writeOnPipe(char *pipeId, void *data, uint32_t byteSize);
+
+int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize);
+
+int terminatePipe(char *pipeId);
 
 #endif

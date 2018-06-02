@@ -22,9 +22,9 @@ void initPipes(uint64_t processId);
 
 int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	 		   uint64_t processId);
-int writeOnPipe(char *pipeId, void *data, uint32_t byteSize,
+int writeOnPipe(char *pipeId, void * data, uint32_t byteSize,
 	 			uint64_t processId);
-int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize,
+int readFromPipe(char *pipeId, void * buffer, uint32_t byteSize,
 	 			 uint64_t processId);
 int terminatePipe(char *pipeId, uint64_t processId);
 

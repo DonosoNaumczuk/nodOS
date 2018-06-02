@@ -80,7 +80,14 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return 0;
 		case CREATE_PIPE:
 			return createPipe((char *)rsi, (uint32_t) rdx, (uint8_t) rcx, getProcessId());
-			
+		case WRITE_PIPE:
+			return writeOnPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
+		case READ_PIPE:
+			return readFromPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());		
+		case TERMINATE_PIPE:
+			return terminatePipe((char *)rsi, getProcessId());
+
 	}
+
 	return 0;
 }
