@@ -151,7 +151,7 @@ int terminateMutualExclusion(char *mutexId, uint64_t processId) {
 }
 
 static uint32_t existMutex(char *mutexId) {
-	return contains(mutexes, (int (*) (void * , void * )) &mutexCompare, mutexId);
+	return contains(mutexes, (int (*) (const void * , const void * )) &mutexCompare, mutexId);
 }
 
 static void removeMutex(char *mutexId) {

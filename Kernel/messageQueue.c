@@ -20,7 +20,7 @@ void initMessageQueue() {
 
 int createMailbox(const char *mailboxId) {
 	lock(MUTEX_NAME,getProcessId());
-	if(!contains(mailboxList, (int (*)(void *, void *)) &existMailbox, mailboxId)) {
+	if(!contains(mailboxList, (int (*)(const void *, const void *)) &existMailbox, mailboxId)) {
 		addElement(mailboxList,newMailbox(mailboxId),sizeof(mailboxStruct_t));
 	}
 	unlock(MUTEX_NAME,getProcessId());

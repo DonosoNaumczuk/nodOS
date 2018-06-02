@@ -113,7 +113,7 @@ int size(listObject_t list) {
 	return list->size;
 }
 
-int contains(listObject_t list, int (*compareTo)(void*,void*), const void *reference) {
+int contains(listObject_t list, int (*compareTo)(const void*, const void*), const void *reference) {
 	if(list == NULL) return FALSE;
 	if(compareTo == NULL) return FALSE;
 
@@ -123,14 +123,14 @@ int contains(listObject_t list, int (*compareTo)(void*,void*), const void *refer
 	}else {
 		aux = list->head;
 		while(aux != NULL){
-			if((*compareTo)(reference,aux->element) == 0)	return TRUE;
+			if((*compareTo)(reference, aux->element) == 0)	return TRUE;
 			aux = aux->next;
 		}
 	}
 	return FALSE;
 }
 
-int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference,void *buffer) {
+int getFirstElementByCriteria(listObject_t list,int (*compareTo)(const void*, const void*),const void *reference,void *buffer) {
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
 
@@ -140,7 +140,7 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),co
 	}else {
 		aux = list->head;
 		while (aux != NULL) {
-			if((*compareTo)(reference,aux->element) == 0){
+			if((*compareTo)(reference, aux->element) == 0){
 				return copyElement(buffer,aux->element,aux->size);
 			}
 		}
