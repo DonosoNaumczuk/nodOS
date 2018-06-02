@@ -2,7 +2,6 @@
 #include	<string.h>
 #include	<commandHandler.h>
 
-//#define	MAX_CMD_LONG	100
 
 void clearLine(unsigned int lineLong) {
 	int i;
@@ -45,7 +44,7 @@ int shell() {
 		changeFontColor(LIGHT_GREY);
 		printf(PROMPT);
 		changeFontColor(WHITE);
-		while((currentChar = getchar()) != '\n') {
+		while((currentChar = getchar()) != '\n' && currentChar != '|') {
 
 			if(currentChar == '\b') {	/* BACKSPACE */
 			
@@ -98,9 +97,22 @@ int shell() {
 				}
 			}
 		}
+		if(currentChar == '\n') {
+			printf("\n");
+		}
+		else {
+			putChar(currentChar);
+			printf("\n");
 
-		printf("\n");
-		switch (commandInterpreter(buffer,index)) {
+
+			if(index >= 1 && buffer[index - 1] != ' '){
+				//printf(INVALID_COMMAND_STR);
+			}
+			index--;
+			buffer[index] = 0;
+			//makePipe();
+		}
+		switch (commandInterpreter(buffer, index)) {
 			case INVALID_CMD: 	printf(INVALID_COMMAND_STR);	break;
 			case ERROR_CMD: 	printf(COMMAND_EXECUTED_WITH_ERROR_STR);	break;
 			case ARGS_ERROR:	printf(COMMAND_NOT_EXECUTED_ARGS_STR);	break;

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define MAX_CMD_LONG          100
+
 #define	EXIT_CMD	         -1
 #define	VALID_CMD 		0
 #define   INVALID_CMD		1

@@ -14,7 +14,7 @@ typedef struct list_t{
     int size;
 }list_t;
 
-static int copyElement(void *buffer,void *element,unsigned int elementSize);
+static int copyElement(void *buffer, void *element, unsigned int elementSize);
 
 listObject_t newList() {
 	listObject_t list = allocateMemory(sizeof(struct list_t));
@@ -23,7 +23,7 @@ listObject_t newList() {
 	return list;
 }
 
-int addElement(listObject_t list,const void *element,const unsigned int size) {
+int addElement(listObject_t list, const void *element, const unsigned int size) {
 
 	if(list == NULL) return NULL_LIST_ERROR;
     if(element == NULL) return NULL_ELEMENT_ERROR;
@@ -39,12 +39,14 @@ int addElement(listObject_t list,const void *element,const unsigned int size) {
 	if(list->head == NULL) {
         list->head = newNode;
         newNode->index = 0;
-    }else {
+    }
+    else {
 		aux = list->head;
 		while(aux->next != NULL) {
 			aux = aux->next;
 		}
-        newNode->index = aux->index + 1;
+
+        	newNode->index = aux->index + 1;
 		aux->next = newNode;
     }
 
@@ -55,7 +57,9 @@ int addElement(listObject_t list,const void *element,const unsigned int size) {
 int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     node_t aux;
 
-	if(list == NULL) return NULL_LIST_ERROR;
+	if(list == NULL) {
+		return NULL_LIST_ERROR;
+	}
     if(list->head == NULL) return EMPTY_LIST_ERROR;
 
 	aux = list->head;
@@ -66,10 +70,15 @@ int getElementOnIndex(listObject_t list,void *buffer,const unsigned int index) {
     return copyElement(buffer,aux->element,aux->size);
 }
 
-int getFirstElement(listObject_t list,void * buffer) {
+int getFirstElement(listObject_t list, void * buffer) {
 
-	if(list == NULL) return NULL_LIST_ERROR;
-    if(list->head == NULL) return EMPTY_LIST_ERROR;
+	if(list == NULL) {
+		return NULL_LIST_ERROR;
+	}
+    	
+    	if(list->head == NULL) {
+    		return EMPTY_LIST_ERROR;
+    	}
 
 	return copyElement(buffer,list->head->element,list->head->size);
 }
@@ -231,7 +240,7 @@ int removeAllElements(listObject_t list) {
 }
 
 static int copyElement(void *buffer,void *element,unsigned int elementSize) {
-	memcpy(buffer,element,elementSize);
+	memcpy(buffer, element, elementSize);
 	return elementSize;
 }
 

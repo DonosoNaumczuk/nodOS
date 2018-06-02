@@ -3,10 +3,10 @@
 void printArgs(int *args, int size);
 
 
-int  commandInterpreter(unsigned char buffer[],	unsigned int size){
+int  commandInterpreter(unsigned char buffer[],	unsigned int length){
 	unsigned int argumentsStart;
 	int cmdID;
-	cmdID = readCommand(buffer,&argumentsStart);
+	cmdID = readCommand(buffer, &argumentsStart, length);
 	unsigned char* arguments = buffer + argumentsStart;
 	void ** argVector = allocateMemory(sizeof(void*) * 3);
 	uint64_t processId;
@@ -109,11 +109,11 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int size){
 	return 1;
 }
 
-int readCommand(unsigned char buffer[],int * argumentsStart) {
+int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int length) {
 	unsigned char cmd[MAX_CMD_LONG];
 	int i = 0;
 
-	while((i < MAX_CMD_LONG) && (buffer[i] != 0) && (buffer[i] != ' ')){
+	while((i < length) && (i < MAX_CMD_LONG) && (buffer[i] != 0) && (buffer[i] != ' ')){
 		cmd[i] = buffer[i];
 		i++;
 	}
@@ -123,14 +123,14 @@ int readCommand(unsigned char buffer[],int * argumentsStart) {
 	}
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
-
-	if(strcmp("time",cmd) == 0)				return	TIME;
-	if(strcmp("help",cmd) == 0)				return	HELP;
+	
+	if(strcmp("time", cmd) == 0)				return	TIME;
+	if(strcmp("help", cmd) == 0)				return	HELP;
 	if(strncmp("quadratic", cmd, 14) == 0)		return	QUADRATIC;
-	if(strncmp("linear",cmd,11) == 0)			return	LINEAR;
-	if(strncmp("echo",cmd,4) == 0)			return	ECHO;
-	if(strcmp("exit",cmd) == 0)				return	EXIT;
-	if(strncmp("test",cmd,4) == 0)			return	TEST;
+	if(strncmp("linear", cmd, 11) == 0)		return	LINEAR;
+	if(strncmp("echo", cmd, 4) == 0)			return	ECHO;
+	if(strcmp("exit", cmd) == 0)				return	EXIT;
+	if(strncmp("test", cmd, 4) == 0)			return	TEST;
 	if(strncmp("clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
 	if(strncmp("semaphore", cmd, 9) == 0)   	return  SEMAPHORE;
 	if(strncmp("ps", cmd, 2) == 0)			return  PROCESS_LIST;
