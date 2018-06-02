@@ -158,7 +158,7 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    		return  PRODUCTOR_CONSUMER;
 	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   		return  TERMINATE_PROCESS;
 	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return  ECHO;
-	if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
+	//if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
 
 
 	return INVALID;

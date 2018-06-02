@@ -78,6 +78,9 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		case TERMINATE_PROCESS_BY_ID:
 			terminateAProcessByPid(rsi);
 			return 0;
+		case CREATE_PIPE:
+			return createPipe((char *)rsi, (uint32_t) rdx, (uint8_t) rcx, getProcessId());
+			
 	}
 	return 0;
 }

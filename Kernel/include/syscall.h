@@ -11,6 +11,7 @@
 #include <messageQueue.h>
 #include <mutualExclusion.h>
 #include <semaphore.h>
+#include <pipe.h>
 
 /* Read and Write */
 #define WRITE 					 0
@@ -33,11 +34,11 @@
 #define TERMINATE_PROCESS 		 7
 #define SLEEP_PROCESS 			 8
 #define WAIT_CHILD_PROCESS 		 9
-#define WAKE_UP_PROCESS 		10
+#define WAKE_UP_PROCESS 		     10
 #define CREATE_PROCESS 			11
 #define GET_PID 				12
-#define PRINT_ALL_PROCESS       29
-#define TERMINATE_PROCESS_BY_ID 30
+#define PRINT_ALL_PROCESS          29
+#define TERMINATE_PROCESS_BY_ID    30
 
 /* Mailbox */
 #define SEND_MAILBOX       		13
@@ -57,11 +58,14 @@
 #define TERMINATE_MUTEX			23
 
 /* Semaphore */
-#define CREATE_SEMAPHORE		24
+#define CREATE_SEMAPHORE		     24
 #define SEMAPHORE_WAIT			25
 #define SEMAPHORE_POST			26
 #define SEMAPHORE_TRY_WAIT		27
 #define TERMIANTE_SEMAPHORE		28
+
+/* Pipes */
+#define CREATE_PIPE                31
 
 uint64_t syscall_dispatcher(uint64_t rax, uint64_t rbx, uint64_t rcx, uint64_t rdx);
 
