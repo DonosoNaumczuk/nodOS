@@ -1,3 +1,4 @@
+#include <kernel.h>
 #include <stdint.h>
 #include <lib.h>
 #include <moduleLoader.h>
@@ -10,6 +11,7 @@
 #include <scheduler.h>
 #include <semaphore.h>
 #include <messageQueue.h>
+#include <interrupts.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -22,6 +24,7 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
+
 
 typedef int (*EntryPoint)();
 
