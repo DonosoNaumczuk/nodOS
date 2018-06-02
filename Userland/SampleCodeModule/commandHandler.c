@@ -356,12 +356,9 @@ int terminate(int argumentQuantity, void ** argumentVector) {
 }
 
 int echo(int argumentQuantity, void ** argumentVector) {
-	unsigned char *buffer = (unsigned char*)(*argumentVector);
+	unsigned char *buffer = (unsigned char * ) (*argumentVector);
 	if(*buffer != 0) {
 		buffer++;
-	}
-	else {
-		return ARGS_ERROR;
 	}
 	printf("%s\n", buffer);
 	return 0;
