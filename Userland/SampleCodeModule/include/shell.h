@@ -4,6 +4,8 @@
 #include <stdint.h>
 
 #define MAX_CMD_LONG          100
+#define MAX_VALID_CMD_LONG          18
+
 
 #define	EXIT_CMD	         -1
 #define	VALID_CMD 		0
@@ -37,6 +39,7 @@ void sendTest2();
 void receiveTest2();
 void sendTest3();
 void receiveTest3();
-
-
+int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFlag);
+void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag);
+void validateCommand(unsigned char *buffer, unsigned int, unsigned int *exitFlag);
 #endif

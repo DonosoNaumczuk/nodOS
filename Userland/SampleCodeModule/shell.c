@@ -44,7 +44,7 @@ int shell() {
 		changeFontColor(LIGHT_GREY);
 		printf(PROMPT);
 		changeFontColor(WHITE);
-		while((currentChar = getchar()) != '\n' && currentChar != '|') {
+		while((currentChar = getchar()) != '\n') {
 
 			if(currentChar == '\b') {	/* BACKSPACE */
 			
@@ -97,27 +97,13 @@ int shell() {
 				}
 			}
 		}
-		if(currentChar == '\n') {
 			printf("\n");
+		
+		if(!lookForPipes(buffer, index, &exitFlag)) {
+			validateCommand(buffer, index, &exitFlag);
 		}
-		else {
-			putChar(currentChar);
-			printf("\n");
-
-
-			if(index >= 1 && buffer[index - 1] != ' '){
-				//printf(INVALID_COMMAND_STR);
-			}
-			index--;
-			buffer[index] = 0;
-			//makePipe();
-		}
-		switch (commandInterpreter(buffer, index)) {
-			case INVALID_CMD: 	printf(INVALID_COMMAND_STR);	break;
-			case ERROR_CMD: 	printf(COMMAND_EXECUTED_WITH_ERROR_STR);	break;
-			case ARGS_ERROR:	printf(COMMAND_NOT_EXECUTED_ARGS_STR);	break;
-			case EXIT_CMD:		exitFlag = 1;	break;
-			case VALID_CMD:		break;
+		if(exitFlag == 1) {
+			break;
 		}
 
 		if(histCurrentIndex >= HIST_LONG) {
@@ -137,4 +123,50 @@ int shell() {
 	}
 
 	return 0;
+}
+
+int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFlag) {
+	unsigned int i;
+	unsigned char command[MAX_VALID_CMD_LONG];
+	int pipesFound = 0, beginning = 0;
+	for(i = 0; i < index; i ++) {
+		if(buffer[i] == '|') {
+			if(index < i + 2) {
+				//error
+			}
+			pipesFound++;
+			strncpy(command, buffer, beginning, i);
+			callWithPipes(command, i - beginning, exitFlag);
+			if(*exitFlag == 1) {
+				return pipesFound;
+			}
+			beginning = i + 2;
+		}
+	}
+	if(pipesFound > 0) {
+		strncpy(command, buffer, beginning, i);
+		validateCommand(command, i, exitFlag);
+	}
+	return pipesFound;
+}
+
+void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag) {
+	//makePipe();
+
+	if(index >= 1 && command[index - 1] != ' ') {
+		printf(INVALID_COMMAND_STR);
+	}
+	index--;
+	command[index] = 0;
+	validateCommand(command, index, exitFlag);
+}
+
+void validateCommand(unsigned char *buffer, unsigned int index, unsigned int *exitFlag) {
+	switch (commandInterpreter(buffer, index)) {
+		case INVALID_CMD: 	printf(INVALID_COMMAND_STR);	break;
+			case ERROR_CMD: 	printf(COMMAND_EXECUTED_WITH_ERROR_STR);	break;
+			case ARGS_ERROR:	printf(COMMAND_NOT_EXECUTED_ARGS_STR);	break;
+			case EXIT_CMD:		*exitFlag = 1;	break;
+			case VALID_CMD:		break;
+	}
 }
