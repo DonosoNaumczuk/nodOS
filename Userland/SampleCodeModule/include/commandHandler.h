@@ -48,5 +48,6 @@ int ps(int argumentQuantity, void ** argumentVector);
 int culoSucio(int argumentQuantity, void ** argumentVector);
 int terminate(int argumentQuantity, void ** argumentVector);
 uint64_t stringToPid(unsigned char *pidString);
+int echo(int argumentQuantity, void ** argumentVector);
 
 #endif

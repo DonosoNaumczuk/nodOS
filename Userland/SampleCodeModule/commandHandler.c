@@ -106,6 +106,16 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int length){
 				return 0;
 			}
 
+		case ECHO:
+			setArguments(argVector, arguments, &processType, "echo");
+			processId = createProcess(&echo, 3, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+		
 	}
 	return 1;
 }
@@ -137,6 +147,7 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	if(strncmp((unsigned char *) "ps", cmd, 2) == 0)				return  PROCESS_LIST;
 	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    		return  PRODUCTOR_CONSUMER;
 	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   		return  TERMINATE_PROCESS;
+	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return  ECHO;
 
 	return INVALID;
 }
@@ -227,6 +238,8 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * ps : lists all proces information\n");
 	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
 	printf("          * terminate processID: terminate the process with the given id \n");
+	printf("          * echo string: prints the given string on the screen \n");
+
 	return VALID_CMD;
 }
 
@@ -342,3 +355,11 @@ int terminate(int argumentQuantity, void ** argumentVector) {
 	return 0;
 }
 
+int echo(int argumentQuantity, void ** argumentVector) {
+	unsigned char *buffer = (unsigned char * ) (*argumentVector);
+	if(*buffer != 0) {
+		buffer++;
+	}
+	printf("%s\n", buffer);
+	return 0;
+}
