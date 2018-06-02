@@ -74,19 +74,19 @@ int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	}
 
 	pipe_t pipe;
-	char *id						= pipeId;
-	uint8_t isNonBlocking			= isNonBlocking;
-	uint32_t byteSize				= byteSize;
-	void *buffer					= allocateMemory(byteSize);
-	uint32_t readIndex				= 0;
-	uint32_t writeIndex				= 0;
-	listObject_t waitingForRead		= newList();
-	listObject_t waitingForWrite	= newList();
-	char *mutex						= getMutexListId(pipeId);
-	char *writeMutex				= getMutexWriteId(pipeId);
-	char *readMutex					= getMutexReadId(pipeId);
-	char *fullSemaphore				= getSemaphoreFullId(pipeId);
-	char *emptySemaphore			= getSemaphoreEmptyId(pipeId);
+	pipe.id					= pipeId;
+	pipe.isNonBlocking		= isNonBlocking;
+	pipe.byteSize			= byteSize;
+	pipe.buffer				= allocateMemory(byteSize);
+	pipe.readIndex			= 0;
+	pipe.writeIndex			= 0;
+	pipe.waitingForRead		= newList();
+	pipe.waitingForWrite	= newList();
+	pipe.mutex				= getMutexListId(pipeId);
+	pipe.writeMutex			= getMutexWriteId(pipeId);
+	pipe.readMutex			= getMutexReadId(pipeId);
+	pipe.fullSemaphore		= getSemaphoreFullId(pipeId);
+	pipe.emptySemaphore		= getSemaphoreEmptyId(pipeId);
 
 	createMutualExclusion(pipe.mutex, processId);
 	createMutualExclusion(pipe.writeMutex, processId);
@@ -97,6 +97,8 @@ int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	addElement(pipes, (void *) &pipe, sizeof(pipe_t));
 
 	unlock(MUTEX_PIPE_MASTER_ID, processId);
+
+	return OK_STATE;
 }
 
 int writeOnPipe(char *pipeId, void *data, uint32_t byteSize,
@@ -215,8 +217,8 @@ static void removePipe(char *pipeId, uint64_t processId) {
 	terminateMutualExclusion(pipe->writeMutex, processId);
 	terminateMutualExclusion(pipe->readMutex, processId);
 
-	terminateSemaphore(pipe->fullSemaphore);
-	terminateSemaphore(pipe->emptySemaphore);
+	terminateSemaphore(pipe->fullSemaphore, processId);
+	terminateSemaphore(pipe->emptySemaphore, processId);
 
 	removeAndFreeFirstElementByCriteria(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
 }
