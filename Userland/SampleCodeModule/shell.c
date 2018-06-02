@@ -129,21 +129,26 @@ int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFl
 	unsigned int i;
 	unsigned char command[MAX_VALID_CMD_LONG];
 	int pipesFound = 0, beginning = 0;
+	//char *stdin = NULL; evans
+	//char *stdout = NULL; evans
 	for(i = 0; i < index; i ++) {
 		if(buffer[i] == '|') {
 			if(index < i + 2) {
-				//error
+				printf(INVALID_COMMAND_STR);
 			}
 			pipesFound++;
 			strncpy(command, buffer, beginning, i);
+			//stdout = nuevoPipe; evans
 			callWithPipes(command, i - beginning, exitFlag);
 			if(*exitFlag == 1) {
 				return pipesFound;
 			}
+			//stdin = stdout; evans
 			beginning = i + 2;
 		}
 	}
 	if(pipesFound > 0) {
+		//stdout = NULL; evans;
 		strncpy(command, buffer, beginning, i);
 		validateCommand(command, i, exitFlag);
 	}
@@ -151,7 +156,6 @@ int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFl
 }
 
 void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag) {
-	//makePipe();
 
 	if(index >= 1 && command[index - 1] != ' ') {
 		printf(INVALID_COMMAND_STR);
@@ -164,9 +168,9 @@ void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exi
 void validateCommand(unsigned char *buffer, unsigned int index, unsigned int *exitFlag) {
 	switch (commandInterpreter(buffer, index)) {
 		case INVALID_CMD: 	printf(INVALID_COMMAND_STR);	break;
-			case ERROR_CMD: 	printf(COMMAND_EXECUTED_WITH_ERROR_STR);	break;
-			case ARGS_ERROR:	printf(COMMAND_NOT_EXECUTED_ARGS_STR);	break;
-			case EXIT_CMD:		*exitFlag = 1;	break;
-			case VALID_CMD:		break;
+		case ERROR_CMD: 	printf(COMMAND_EXECUTED_WITH_ERROR_STR);	break;
+		case ARGS_ERROR:	printf(COMMAND_NOT_EXECUTED_ARGS_STR);	break;
+		case EXIT_CMD:		*exitFlag = 1;	break;
+		case VALID_CMD:		break;
 	}
 }
