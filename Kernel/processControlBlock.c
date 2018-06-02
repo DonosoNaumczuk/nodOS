@@ -1,47 +1,41 @@
 #include <processControlBlock.h>
 
-typedef struct {
-	uint64_t gs;
-	uint64_t fs;
-	uint64_t r15;
-	uint64_t r14;
-	uint64_t r13;
-	uint64_t r12;
-	uint64_t r11;
-	uint64_t r10;
-	uint64_t r9;
-	uint64_t r8;
-	uint64_t rsi;
-	uint64_t rdi;
-	uint64_t rbp;
-	uint64_t rdx;
-	uint64_t rcx;
-	uint64_t rbx;
-	uint64_t rax;
-	uint64_t rip;
-	uint64_t cs;
-	uint64_t rflags;
-	uint64_t rsp;
-	uint64_t ss;
-	uint64_t base;
-} stackFrame_t;
-
 typedef struct processControlBlock_t {
     uint64_t pid;
-    uint8_t state;
     struct processControlBlock_t *parent;
     processControlBlockListPtr_t childs;
 	char *name;
 	int returnValue;
 	int foreground;
-    void *stackPointer;
+	taskControlBlockPtr_t mainTask;
+	listObject_t othertasks;
+    //list with heap evans
 } processControlBlock_t;
 
 static long int pidCounter = 1;
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
-	processControlBlock_t *newPCB = initializePCB(parent, codeAddress, argsQuantity, processArgs);
-	addProcessToScheduler(newPCB);
+	processControlBlock_t *newPCB = allocateMemory(sizeof(processControlBlock_t));
+	newPCB->pid = pidCounter;
+	pidCounter++;
+	newPCB->parent = parent;
+	newPCB->childs = initializePCBList();
+	newPCB->name = (char *)(processArgs[1]);
+
+	newPCB->mainTask = createTask(newPCB, codeAddress, argsQuantity-2, processArgs+2);
+	newPCB->othertasks = newList();
+
+	if(parent != NULL) {
+		addPCBToList(parent->childs, newPCB);
+	}
+
+	if(*((uint64_t *)(*processArgs)) != FALSE && isForeground(parent)) {
+		newPCB->foreground = TRUE;
+	}
+	else {
+		newPCB->foreground = FALSE;
+	}
+
 	return newPCB;
 }
 
@@ -61,77 +55,17 @@ processControlBlockListPtr_t getSons(processControlBlockPtr_t pcb) {
 	return pcb->childs;
 }
 
-processControlBlockPtr_t initializePCB(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
-    processControlBlock_t *newPCB = allocateMemory(sizeof(processControlBlock_t));
-    newPCB->pid = pidCounter;
-    pidCounter++;
-    newPCB->parent = parent;
-    newPCB->childs = initializePCBList();
-    newPCB->stackPointer = allocateMemory(SIZE_OF_STACK);
-    newPCB->state = PROCESS_READY;
-	newPCB->name = (char *)(processArgs[1]);
-
-    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity-2, processArgs+2);
-
-	if(parent != NULL) {
-		addPCBToList(parent->childs, newPCB);
-	}
-
-	if(*((uint64_t *)(*processArgs)) != FALSE && isForeground(parent)) {
-		newPCB->foreground = TRUE;
-	}
-	else {
-		newPCB->foreground = FALSE;
-	}
-
-    return newPCB;
-}
-
-void freeStack(processControlBlockPtr_t pcb) {
-	freeMemory(pcb->stackPointer);
-}
-
-void * getStackPointer(processControlBlockPtr_t pcb) {
-    return pcb->stackPointer;
+taskControlBlockPtr_t getMainTask(processControlBlockPtr_t pcb) {
+	return pcb->mainTask;
 }
 
 processControlBlockPtr_t getFather(processControlBlockPtr_t pcb) {
 	return pcb->parent;
 }
 
-void setStackPointer(processControlBlockPtr_t pcb, void * stackPointer) {
-    pcb->stackPointer = stackPointer;
-}
-
 int isThisPid(processControlBlockPtr_t pcb, long int pid) {
     return pcb->pid == pid;
 }
-
-int isTerminate(processControlBlockPtr_t pcb) {
-    return pcb->state == PROCESS_TERMINATE;
-}
-
-int isWaiting(processControlBlockPtr_t pcb) {
-    return pcb->state == PROCESS_WAITING;
-}
-
-int isBlockedByPCB(processControlBlockPtr_t pcb) {
-    return pcb->state == PROCESS_BLOCKED;
-}
-
-int isReady(processControlBlockPtr_t pcb) {
-	return pcb->state == PROCESS_READY;
-}
-
-void setState(processControlBlockPtr_t pcb, int state) {
-	pcb->state = state;
-}
-
-void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
-    int returnValue = ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
-	terminateCurrentProcess(returnValue);
-}
-
 
 void giveChildsToFather(processControlBlockPtr_t pcb) {
 	pcb->parent->childs = concatenatePCBList(pcb->parent->childs, pcb->childs);
@@ -145,41 +79,35 @@ int getReturnValue(processControlBlockPtr_t son) {
 	return son->returnValue;
 }
 
-void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
-                 void ** processArgs) {
-	stackFrame_t * stackFrame = (stackFrame_t *)(stackBaseAddress + SIZE_OF_STACK -
-                                 sizeof(stackFrame_t) - 1);
+void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
+    processControlBlockPtr_t currentPCBFather = getFather(pcb);
+    processControlBlockPtr_t PCBCleaner = getPCBByPid(2);
+    PCBCleaner->parent->childs = concatenatePCBList(PCBCleaner->childs, pcb->childs);
 
-    stackFrame->gs 		=	0x000;
-    stackFrame->fs 		=	0x000;
-    stackFrame->r15		=	0x000;
-    stackFrame->r14		=	0x000;
-    stackFrame->r13		=	0x000;
-    stackFrame->r12		=	0x000;
-    stackFrame->r11		=	0x000;
-    stackFrame->r10		=	0x000;
-    stackFrame->r9 		=	0x000;
-    stackFrame->r8 		=	0x000;
-    stackFrame->rsi		=	processArgs;
-    stackFrame->rdi		=	argsQuantity;
-    stackFrame->rbp		=	stackBaseAddress;
-    stackFrame->rdx		=	codeAddress;
-    stackFrame->rcx		=	0x000;
-    stackFrame->rbx		=	0x000;
-    stackFrame->rax		=	0x000;
+	if(isWaiting(currentPCBFather->mainTask)) {
+		wakeUp(getTaskIdOf(currentPCBFather->mainTask));
+	}
+	for(int i = 0; i < size(currentPCBFather->othertasks); i++) {
+		taskControlBlockPtr_t aux;
+		getElementOnIndex(currentPCBFather->othertasks, &aux, i);
+	    if(isWaiting(aux)) {
+	        wakeUp(getTaskIdOf(aux));
+	    }
+	}
 
-    /* Interupt Return Hook */
-    stackFrame->rip 	=	(uint64_t) &startProcess;
-    stackFrame->cs  	=	0x008;
-    stackFrame->rflags 	= 	0x202;
-    stackFrame->rsp 	=	(uint64_t) &(stackFrame->base);
-    stackFrame->ss  	= 	0x000;
-    stackFrame->base 	=	0x000;
+    setReturnValue(pcb, returnValue);
 
-    return (void *)stackFrame;
+	terminateATask(pcb->mainTask);
+	for(int i = 0; i < size(pcb->othertasks); i++) {
+		taskControlBlockPtr_t aux;
+		getElementOnIndex(pcb->othertasks, &aux, i);
+	    terminateATask(aux);
+	}
+
+    _force_context_switch();
 }
 
-void printPCB(processControlBlockPtr_t pcb) {
+/*void printPCB(processControlBlockPtr_t pcb) {
 
      if(pcb != NULL) {
 		char * aux = pcb->name;
@@ -220,4 +148,4 @@ void printPCB(processControlBlockPtr_t pcb) {
 		}
 		newLine();
 	}
-}
+}*/

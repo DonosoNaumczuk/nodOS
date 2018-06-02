@@ -1,23 +1,21 @@
 #include <scheduler.h>
 
 typedef struct scheduler_t {
-   processControlBlockListPtr_t ready;
-   processControlBlockListPtr_t waiting;
-   processControlBlockListPtr_t terminated;
+   listObject_t ready;
+   listObject_t waiting;
+   listObject_t terminated;
 } scheduler_t;
 
 void _force_context_switch(void);
-int mutex_lock(uint8_t * arg);
-
 
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
 static int isFirst = TRUE;
 
 void initializeScheduler() {
-    scheduler.ready = initializePCBList();
-    scheduler.waiting = initializePCBList();
-    scheduler.terminated = initializePCBList();
+    scheduler.ready = newList();
+    scheduler.waiting = newList();
+    scheduler.terminated = newList();
     createMutualExclusion(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
     lockIfUnlocked(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
 }
@@ -39,30 +37,37 @@ void * schedule(void * currentProcessStackPointer) {
             isFirst = FALSE;
         }
         else {
-            nextProcess(currentProcessStackPointer);
+            nextTask(currentProcessStackPointer);
         }
-        aux = getStackPointer(getCurrentPCB());
+        aux = getStackPointer(getCurrentTCB());
         unlock(SCHEDULER_MUTEX_ID, SCHEDULER_PROCESS_ID);
     }
 
 	return aux;
 }
 
-void nextProcess(void * currentProcessStackPointer) {
-    processControlBlockPtr_t pcb = removeFirstPCBFromList(scheduler.ready);
-    setStackPointer(pcb, currentProcessStackPointer);
+void nextTask(void * currentProcessStackPointer) {
+    taskControlBlockPtr_t tcb;
+    getFirstElement(scheduler.ready, &tcb);
+    removeAndFreeFirst(scheduler.ready);
+    setStackPointer(tcb, currentProcessStackPointer);
     addProcessToScheduler(pcb);
 }
 
-void addProcessToScheduler(processControlBlockPtr_t pcb) {
-    if(isReady(pcb)) {
-        addPCBToList(scheduler.ready, pcb);
+void addProcessToScheduler(taskControlBlockPtr_t tcb) {
+    if(isReady(tcb)) {
+        addElement(scheduler.ready, tcb, sizeof(tcb));
     }
-	else if(isWaiting(pcb) || isBlockedByPCB(pcb)) {
-        addPCBToList(scheduler.waiting, pcb);
+	else if(isWaiting(tcb) || isBlockedByPCB(pcb)) {
+        addElement(scheduler.waiting, tcb, sizeof(tcb));
     }
-    else if(isTerminate(pcb)) {
-        addPCBToList(scheduler.terminated, pcb);
+    else if(isTerminate(tcb)) {
+        if(isMainTask(tcb)) {
+            addElement(scheduler.terminated, tcb, sizeof(tcb));
+        }
+        else {
+            freeMemory(tcb);
+        }
     }
 }
 
@@ -70,59 +75,63 @@ void terminateCurrentProcess(int returnValue) {
     terminateAProcess(returnValue, getCurrentPCB());
 }
 
-void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
-    processControlBlockPtr_t currentPCB = pcb;
-    processControlBlockPtr_t currentPCBFather = getFather(currentPCB);
-    processControlBlockPtr_t PCBCleaner = getPCBByPid(2);
-    giveChildsToFather(PCBCleaner);
-    addProcessToScheduler(PCBCleaner);
-    if(isWaiting(currentPCBFather)) {
-        wakeUp(getProcessIdOf(getFather(currentPCB)));
-    }
-    setReturnValue(currentPCB, returnValue);
-    freeStack(currentPCB);
-    setState(currentPCB, PROCESS_TERMINATE);
-    _force_context_switch();
-}
-
 void terminateAProcessByPid(uint64_t pid) {
     if(pid != 1 && pid != 2) {
         processControlBlockPtr_t pcb = getPCBByPid(pid);
         if(pcb != NULL) {
-            if(getProcessIdOf(pcb) != getProcessId()) {
-                addPCBToList(scheduler.terminated, pcb);
-            }
             terminateAProcess(-1, pcb);
         }
     }
 }
 
 processControlBlockPtr_t getPCBByPid(uint64_t pid) {
-    processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.ready, pid);
-    if(pcb == NULL) {
-        pcb = PCBFromListByPID(scheduler.waiting, pid);
+    taskControlBlockPtr_t tcb;
+    if(getFirstElementByCriteria(scheduler.ready, &TCBComparatorByPID, pid, &tcb) == ELEMENT_DOESNT_EXIST) {
+        if(getFirstElementByCriteria(scheduler.waiting, &TCBComparatorByPID, pid, &tcb) == ELEMENT_DOESNT_EXIST) {
+            return NULL;
+        }
     }
-    return pcb;
+    return getPCBOf(tcb);
 }
 
-int isBlocked(uint64_t pid) {
-    processControlBlockPtr_t pcb = getPCBByPid(pid);
+static TCBComparatorByPID(void * pid, void * tcb) {
+    taskControlBlockPtr_t tcbPointer = tcb;
+    return getProcessIdOf(getPCBOf(tcb)) == *((uint64_t *)pid);
+}
+
+taskControlBlockPtr_t getTCBByTid(uint64_t tid) {
+    taskControlBlockPtr_t tcb;
+    if(getFirstElementByCriteria(scheduler.ready, &TCBComparatorByTID, tid, &tcb) == ELEMENT_DOESNT_EXIST) {
+        if(getFirstElementByCriteria(scheduler.waiting, &TCBComparatorByTID, tid, &tcb) == ELEMENT_DOESNT_EXIST) {
+            return NULL;
+        }
+    }
+    return tcb;
+}
+
+static TCBComparatorByTID(void * tid, void * tcb) {
+    taskControlBlockPtr_t tcbPointer = tcb;
+    return getTaskIdOf(tcb) == *((uint64_t *)pid)
+}
+
+int isBlocked(uint64_t tid) {
+    taskControlBlockPtr_t tcb = getTCBByTid(tid);
     if(pcb == NULL) {
         return 0;
     }
-    addProcessToScheduler(pcb);
-    return isBlockedByPCB(pcb);
+    return isBlockedByTCB(pcb);
 }
 
 void sleepCurrent(int condition) {
-    processControlBlockPtr_t currentPCB = getCurrentPCB();
+    taskControlBlockPtr_t currentTCB = getCurrentTCB();
     setState(currentPCB, condition);
     _force_context_switch();
 }
 
-void wakeUp(uint64_t pid) {
-    processControlBlockPtr_t pcb = PCBFromListByPID(scheduler.waiting, pid);
-    if(pcb != NULL) {
+void wakeUp(uint64_t tid) {
+    taskControlBlockPtr_t tcb;
+    if(getFirstElementByCriteria(scheduler.waiting, &TCBComparatorByTID, tid, &tcb) != ELEMENT_DOESNT_EXIST) {
+        removeAndFreeFirstElementByCriteria(scheduler.waiting, &TCBComparatorByTID, pid, &tcb);
         setState(pcb, PROCESS_READY);
         addProcessToScheduler(pcb);
     }
@@ -132,13 +141,16 @@ int waitChild(uint64_t pid) {
     processControlBlockPtr_t father = getCurrentPCB();
     processControlBlockPtr_t son = PCBFromListByPID(getSons(father), pid);
     if(son != NULL) {
-        while (!isTerminate(son)) {
+        while (!isProcessTerminate(son)) {
             sleepCurrent(PROCESS_WAITING);
         }
     }
-    PCBFromListByPID(scheduler.terminated, pid);
+
+    flag = removeAndFreeFirstElementByCriteria(scheduler.terminated, &TCBComparatorByPID, pid);
+
+    int aux = getReturnValue(son);
     freeMemory(son);
-    return getReturnValue(son);
+    return aux;
 }
 
 processControlBlockPtr_t getASonOfCurrentProcess() {
@@ -148,21 +160,27 @@ processControlBlockPtr_t getASonOfCurrentProcess() {
 }
 
 processControlBlockPtr_t getCurrentPCB() {
-    return consultFirstPCBFromList(scheduler.ready);
+    return getPCBOf(getCurrentTCB());
+}
+
+taskControlBlockPtr_t getCurrentTCB() {
+    taskControlBlockPtr_t tcb;
+    getFirstElement(scheduler.ready, &tcb);
+    return tcb;
 }
 
 uint64_t getProcessId() {
-    return getProcessIdOf(consultFirstPCBFromList(scheduler.ready));
+    return getProcessIdOf(getCurrentPCB());
 }
 
 int isCurrentForeground() {
     return isForeground(getCurrentPCB());
 }
 
-void printAllProcess() {
+/*void printAllProcess() {
     printWithColor("N A M E             |   I D    |     M O D E      |  S T A T E\n", 63, 0x0F);
     printWithColor("--------------------------------------------------------------\n", 63, 0x0F);
     printList(scheduler.ready);
     printList(scheduler.waiting);
     printList(scheduler.terminated);
-}
+}*/
