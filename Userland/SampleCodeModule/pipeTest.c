@@ -1,10 +1,9 @@
 #include <pipeTest.h>
 #include <stdint.h>
 #include <syscall.h>
+#include <pipe.h>
 #include <lib.h>
 #include <string.h>
-
-
 
 int pipe(int argumentQuantity, void **argumentVector) {
      uint64_t pid[2];

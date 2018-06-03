@@ -57,6 +57,7 @@ void * initializeKernelBinary() {
 	initializeMemoryAllocator(getStackBase());
 	initMutualExclusion();
 	initSemaphores(SCHEDULER_PROCESS_ID);
+	initPipes(SCHEDULER_PROCESS_ID);
 	initMessageQueue();
 	initializeScheduler();
 	load_idt();
