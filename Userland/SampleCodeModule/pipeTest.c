@@ -15,9 +15,9 @@ int pipe(int argumentQuantity, void **argumentVector) {
      argument[0] = &mode;
      argument[1] = (void * ) "writePipe";
      pid[0] = createProcess(&writePipe, 2, argument);
+     waitChild(pid[0]);
      argument[1] = (void * ) "readPipe";
      pid[1] = createProcess(&readPipe, 5, argument);
-     waitChild(pid[0]);
      waitChild(pid[1]);
      terminatePipe(PIPE_NAME);
      return 0;
