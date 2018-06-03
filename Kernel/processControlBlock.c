@@ -8,6 +8,8 @@ typedef struct processControlBlock_t {
 	int returnValue;
 	int foreground;
 	taskControlBlockPtr_t mainTask;
+    char *readSource;
+    char *writeSource;
 	listObject_t othertasks;
     listObject_t heap;
 } processControlBlock_t;
@@ -26,8 +28,10 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	newPCB->parent = parent;
 	newPCB->childs = initializePCBList();
 	newPCB->name = (char *)(processArgs[1]);
+    newPCB->readSource = (char *)(processArgs[2]);
+    newPCB->writeSource = (char *)(processArgs[3]);
 
-	newPCB->mainTask = createTask(newPCB, codeAddress, argsQuantity-2, processArgs+2);
+	newPCB->mainTask = createTask(newPCB, codeAddress, argsQuantity-4, processArgs+4);
 	newPCB->othertasks = newList();
     newPCB->heap = newList();
 
@@ -48,12 +52,21 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 uint64_t addTaskToProcess(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs) {
     taskControlBlockPtr_t newTCB = createTask(pcb, codeAddress, argsQuantity, processArgs);
     addElement(pcb->othertasks, &newTCB, sizeof(newTCB));
+    return getTaskId(newTCB);
 }
 
 void * addMemoryToHeap(processControlBlockPtr_t pcb, uint64_t size) {
     void * address = allocateMemory(size);
     addElement(pcb->heap, &address, sizeof(address));
     return address;
+}
+
+char *getWriteSource(processControlBlockPtr_t pcb) {
+    return pcb->writeSource;
+}
+
+char *getReadSource(processControlBlockPtr_t pcb) {
+    return pcb->readSource;
 }
 
 int freeMemoryFromHeap(processControlBlockPtr_t pcb, void * address) {

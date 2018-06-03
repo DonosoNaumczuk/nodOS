@@ -20,6 +20,8 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 uint64_t addTaskToProcess(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs);
 void * addMemoryToHeap(processControlBlockPtr_t pcb, uint64_t size);
 int freeMemoryFromHeap(processControlBlockPtr_t pcb, void * address);
+char *getWriteSource(processControlBlockPtr_t pcb);
+char *getReadSource(processControlBlockPtr_t pcb);
 void setForeground(processControlBlockPtr_t pcb);
 int isForeground(processControlBlockPtr_t pcb);
 uint64_t getProcessIdOf(processControlBlockPtr_t pcb);

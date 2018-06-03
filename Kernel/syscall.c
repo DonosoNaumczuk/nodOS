@@ -86,7 +86,14 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			return readFromPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
 		case TERMINATE_PIPE:
 			return terminatePipe((char *)rsi, getProcessId());
-
+		case CREATE_TASK:
+			return addTaskToProcess(getCurrentPCB(), (void *)rsi, rdx, (void **)rcx);
+		case TERMINATE_TASK:
+			terminateATaskByTid(rsi);
+			return 0;
+		case WAIT_TASK:
+			waitTask(rsi);
+			return 0;
 	}
 
 	return 0;
