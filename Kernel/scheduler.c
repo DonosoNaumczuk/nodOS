@@ -65,12 +65,7 @@ void addProcessToScheduler(taskControlBlockPtr_t tcb) {
         addElement(scheduler.waiting, &tcb, sizeof(tcb));
     }
     else if(isTerminate(tcb)) {
-        if(isMainTask(tcb)) {
-            addElement(scheduler.terminated, &tcb, sizeof(tcb));
-        }
-        else {
-            freeMemory(tcb);
-        }
+        addElement(scheduler.terminated, &tcb, sizeof(tcb));
     }
 }
 
@@ -189,7 +184,7 @@ processControlBlockPtr_t getCurrentPCB() {
 }
 
 taskControlBlockPtr_t getCurrentTCB() {
-    taskControlBlockPtr_t tcb;
+    taskControlBlockPtr_t tcb = NULL;
     getFirstElement(scheduler.ready, &tcb);
     return tcb;
 }
@@ -203,8 +198,7 @@ uint64_t getTaskId() {
 }
 
 int isCurrentForeground() {
-    return 1;//evans
-    //return isForeground(getCurrentPCB());
+    return isForeground(getCurrentPCB());;
 }
 
 void printAllProcess() {

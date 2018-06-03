@@ -18,6 +18,8 @@ typedef struct processControlBlock_t * processControlBlockPtr_t;
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs);
 uint64_t addTaskToProcess(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs);
+void * addMemoryToHeap(processControlBlockPtr_t pcb, uint64_t size);
+int freeMemoryFromHeap(processControlBlockPtr_t pcb, void * address);
 void setForeground(processControlBlockPtr_t pcb);
 int isForeground(processControlBlockPtr_t pcb);
 uint64_t getProcessIdOf(processControlBlockPtr_t pcb);
@@ -29,6 +31,7 @@ void giveChildsToFather(processControlBlockPtr_t pcb);
 void setReturnValue(processControlBlockPtr_t pcb, int returnValue);
 int getReturnValue(processControlBlockPtr_t son);
 void terminateAProcess(int returnValue, processControlBlockPtr_t pcb);
+void wakeUpAPCB(processControlBlockPtr_t pcb);
 void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb);
 int isProcessTerminate(processControlBlockPtr_t pcb);
 taskControlBlockPtr_t getTaskByTid(processControlBlockPtr_t pcb, uint64_t tid);

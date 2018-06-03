@@ -9,11 +9,12 @@ typedef struct processControlBlock_t {
 	int foreground;
 	taskControlBlockPtr_t mainTask;
 	listObject_t othertasks;
-    //list with heap evans
+    listObject_t heap;
 } processControlBlock_t;
 
 static int tcbComparator(void * tcb1, void * tcb2);
 static int TCBComparatorByTID(void * tid, void * tcb);
+static int addressComparator(void * address1, void * address2);
 
 static long int pidCounter = 1;
 
@@ -28,6 +29,7 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 
 	newPCB->mainTask = createTask(newPCB, codeAddress, argsQuantity-2, processArgs+2);
 	newPCB->othertasks = newList();
+    newPCB->heap = newList();
 
 	if(parent != NULL) {
 		addPCBToList(parent->childs, newPCB);
@@ -48,11 +50,29 @@ uint64_t addTaskToProcess(processControlBlockPtr_t pcb, void *codeAddress, int a
     addElement(pcb->othertasks, &newTCB, sizeof(newTCB));
 }
 
+void * addMemoryToHeap(processControlBlockPtr_t pcb, uint64_t size) {
+    void * address = allocateMemory(size);
+    addElement(pcb->heap, &address, sizeof(address));
+    return address;
+}
+
+int freeMemoryFromHeap(processControlBlockPtr_t pcb, void * address) {
+    removeAndFreeFirstElementByCriteria(pcb->heap, &addressComparator, &address);
+    return freeMemory(address);
+}
+
+static int addressComparator(void * address1, void * address2) {
+    return *((void**) address1) != *((void**) address1);
+}
+
 void setForeground(processControlBlockPtr_t pcb) {
 	pcb->foreground = TRUE;
 }
 
 int isForeground(processControlBlockPtr_t pcb) {
+    if(pcb == NULL) {
+        return FALSE;
+    }
 	return pcb->foreground;
 }
 
@@ -93,17 +113,7 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
     processControlBlockPtr_t PCBCleaner = getPCBByPid(2);
     PCBCleaner->parent->childs = concatenatePCBList(PCBCleaner->childs, pcb->childs);
 
-	if(isWaiting(currentPCBFather->mainTask)) {
-		wakeUp(getTaskIdOf(currentPCBFather->mainTask));
-	}
-	for(int i = 0; i < size(currentPCBFather->othertasks); i++) {
-		taskControlBlockPtr_t aux;
-		getElementOnIndex(currentPCBFather->othertasks, &aux, i);
-	    if(isWaiting(aux)) {
-	        wakeUp(getTaskIdOf(aux));
-	    }
-	}
-
+    wakeUpAPCB(currentPCBFather);
     setReturnValue(pcb, returnValue);
 
 	terminateATask(pcb->mainTask);
@@ -114,6 +124,19 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
 	}
 
     _force_context_switch();
+}
+
+void wakeUpAPCB(processControlBlockPtr_t pcb) {
+    if(isWaiting(pcb->mainTask)) {
+        wakeUp(getTaskIdOf(pcb->mainTask));
+    }
+    for(int i = 0; i < size(pcb->othertasks); i++) {
+        taskControlBlockPtr_t aux;
+        getElementOnIndex(pcb->othertasks, &aux, i);
+        if(isWaiting(aux)) {
+            wakeUp(getTaskIdOf(aux));
+        }
+    }
 }
 
 void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb) {
