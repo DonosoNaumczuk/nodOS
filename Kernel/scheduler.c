@@ -7,6 +7,7 @@ typedef struct scheduler_t {
 } scheduler_t;
 
 void _force_context_switch(void);
+void _context_switch(void);
 static int TCBComparatorByPID(void * pid, void * tcb);
 static int TCBComparatorByTID(void * tid, void * tcb);
 
@@ -98,7 +99,7 @@ processControlBlockPtr_t getPCBByPid(uint64_t pid) {
 
 static int TCBComparatorByPID(void * pid, void * tcb) {
     taskControlBlockPtr_t tcbPointer = tcb;
-    return getProcessIdOf(getPCBOf(tcb)) == *((uint64_t *)pid);
+    return getProcessIdOf(getPCBOf(*((taskControlBlockPtr_t *)tcb))) != *((uint64_t *)pid);
 }
 
 taskControlBlockPtr_t getTCBByTid(uint64_t tid) {
@@ -112,7 +113,7 @@ taskControlBlockPtr_t getTCBByTid(uint64_t tid) {
 }
 
 static int TCBComparatorByTID(void * tid, void * tcb) {
-    return getTaskIdOf(tcb) == *((uint64_t *)tid);
+    return getTaskIdOf(*((taskControlBlockPtr_t *)tcb)) != *((uint64_t *)tid);
 }
 
 int isBlocked(uint64_t tid) {
@@ -131,7 +132,7 @@ void sleepCurrent(int condition) {
 
 void wakeUp(uint64_t tid) {
     taskControlBlockPtr_t tcb;
-    if(getFirstElementByCriteria(scheduler.waiting, &TCBComparatorByTID, tid, &tcb) != ELEMENT_DOESNT_EXIST) {
+    if(getFirstElementByCriteria(scheduler.waiting, &TCBComparatorByTID, &tid, &tcb) != ELEMENT_DOESNT_EXIST) {
         removeAndFreeFirstElementByCriteria(scheduler.waiting, &TCBComparatorByTID, &tid);
         setState(tcb, PROCESS_READY);
         addProcessToScheduler(tcb);

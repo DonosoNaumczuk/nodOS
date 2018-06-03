@@ -7,7 +7,7 @@ int semaphoreShow(int argumentQuantity, void **argumentVector) {
 	char *hackerManSem = "hackerMan";
 	void ** argument = allocateMemory(sizeof(void*) * 3);
 	int mode = 1;
-	
+
 	createSemaphore(relatorSem, 0);
 	createSemaphore(kungFurySem, 0);
 	createSemaphore(hackerManSem, 0);

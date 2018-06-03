@@ -140,15 +140,16 @@ int getFirstElementByCriteria(listObject_t list, int (*compareTo)(const void*, c
 	}else {
 		aux = list->head;
 		while (aux != NULL) {
-			if((*compareTo)(reference, aux->element) == 0){
+			if((*compareTo)(reference, aux->element) == 0) {
 				return copyElement(buffer,aux->element,aux->size);
 			}
+            aux = aux->next;
 		}
 	}
 	return ELEMENT_DOESNT_EXIST;
 }
 
-void *getFirstElementReferenceByCriteria(listObject_t list, 
+void *getFirstElementReferenceByCriteria(listObject_t list,
 	int (*compareTo)(const void * , const void * ), const void *reference) {
 
 	if(list == NULL) return NULL;
@@ -164,7 +165,7 @@ void *getFirstElementReferenceByCriteria(listObject_t list,
 	return NULL;
 }
 
-int removeAndFreeFirstElementByCriteria(listObject_t list, 
+int removeAndFreeFirstElementByCriteria(listObject_t list,
 	int (*compareTo)(const void * , const void  *), const void *reference) {
 
 	node_t aux;

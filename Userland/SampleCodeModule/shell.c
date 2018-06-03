@@ -1,7 +1,6 @@
 #include	<lib.h>
 #include	<string.h>
 #include	<commandHandler.h>
-#include <null.h>
 
 
 void clearLine(unsigned int lineLong) {
@@ -39,7 +38,7 @@ int shell() {
 	unsigned int histSize = 0;
 
 	clearBuffer(buffer);
-	clearHist(hist);
+//	clearHist(hist);
 
 	while(!exitFlag) {
 		changeFontColor(LIGHT_GREY);
@@ -48,17 +47,17 @@ int shell() {
 		while((currentChar = getchar()) != '\n') {
 
 			if(currentChar == '\b') {	/* BACKSPACE */
-			
+
 				if(index > 0) {
 					buffer[--index] = 0;
 					printf("\b");
 				}
 			}
-			
+
 			else if(currentChar == UP_ARROW || currentChar == DOWN_ARROW) {		/* ANY ARROW */
 
 				if(currentChar == UP_ARROW) {
-			
+
 					if(histAccessIndex > 0)	{
 						histAccessIndex--;
 					}
@@ -69,7 +68,7 @@ int shell() {
 				}
 
 				else {
-				
+
 					if(histAccessIndex < (histSize - 1)) {
 						histAccessIndex++;
 					}
@@ -78,20 +77,20 @@ int shell() {
 						histAccessIndex = 0;
 					}
 				}
-				
+
 				clearLine(index);
 				clearBuffer(buffer);
 				index = 0;
 				while(hist[histAccessIndex][index] != 0) {
 					index++;
 				}
-				
+
 				strcpy(buffer,hist[histAccessIndex]);
 				printf("%s",buffer);
 			}
 
 			else {	//ANY CHARACTER
-				
+
 				if(index < MAX_CMD_LONG) {
 					buffer[index++] = currentChar;
 					putChar(currentChar);
@@ -99,7 +98,7 @@ int shell() {
 			}
 		}
 			printf("\n");
-		
+
 		if(!lookForPipes(buffer, index, &exitFlag)) {
 			validateCommand(buffer, index, &exitFlag);
 		}
@@ -110,14 +109,14 @@ int shell() {
 		if(histCurrentIndex >= HIST_LONG) {
 			histCurrentIndex = 0;
 		}
-		
+
 		strcpy(hist[histCurrentIndex],buffer);
 		histCurrentIndex++;
-		
+
 		if(histSize != HIST_LONG) {
 			histSize++;
 		}
-		
+
 		histAccessIndex = histCurrentIndex;
 		clearBuffer(buffer);
 		index = 0;
