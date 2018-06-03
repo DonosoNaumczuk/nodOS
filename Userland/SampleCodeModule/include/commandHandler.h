@@ -43,8 +43,8 @@ int graphLinear(int argumentQuantity, void ** argumentVector);
 int test(int argumentQuantity, void ** argumentVector);
 int printHelp(int argumentQuantity, void **argumentVector);
 int exit_(unsigned char *arguments);
-void setArguments(void ** argVector, unsigned char *arguments,
- 						uint64_t *processType, char *processName);
+void setArguments(void ** argVector, unsigned char *arguments, uint64_t *processType,
+                    char *processName, char *stdin, char *stdout);
 int isBackground(char *arguments);
 int getStartOfBackgroundParameter(char *arguments);
 void printExitMessage();
@@ -54,5 +54,6 @@ int terminate(int argumentQuantity, void ** argumentVector);
 uint64_t stringToPid(unsigned char *pidString);
 int echo(int argumentQuantity, void ** argumentVector);
 int grepchar(int argumentQuantity, void ** argumentVector);
+
 
 #endif

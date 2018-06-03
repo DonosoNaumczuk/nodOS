@@ -19,7 +19,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 	uint64_t processType;
 	switch(cmdID) {
 		case TIME:
-			setArguments(argVector, arguments, &processType, "time");
+			setArguments(argVector, arguments, &processType, "time", stdin, stdout);
 			processId = createProcess(&printTime, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -30,7 +30,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 		case EXIT:
 		return	exit_(arguments);
 		case QUADRATIC:
-			setArguments(argVector, arguments, &processType, "quadratic");
+			setArguments(argVector, arguments, &processType, "quadratic", stdin, stdout);
 			processId = createProcess(&graphQuadratic, 7, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -40,7 +40,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			}
 
 		case LINEAR:
-			setArguments(argVector, arguments, &processType, "linear");
+			setArguments(argVector, arguments, &processType, "linear", stdin, stdout);
 			processId = createProcess(&graphLinear, 6, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -49,7 +49,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 				return 0;
 			}
 		case HELP:
-			setArguments(argVector, arguments, &processType, "help");
+			setArguments(argVector, arguments, &processType, "help", stdin, stdout);
 			processId = createProcess(&printHelp, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -59,7 +59,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			}
 
 		case TEST:
-			setArguments(argVector, arguments, &processType, "test");
+			setArguments(argVector, arguments, &processType, "test", stdin, stdout);
 			processId = createProcess(&test, 3, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -73,7 +73,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			return 0;
 
 		case SEMAPHORE:
-			setArguments(argVector, arguments, &processType, "semaphore");
+			setArguments(argVector, arguments, &processType, "semaphore", stdin, stdout);
 			processId = createProcess(&semaphoreShow, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -82,7 +82,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 				return 0;
 			}
 		case PROCESS_LIST:
-			setArguments(argVector, arguments, &processType, "ps");
+			setArguments(argVector, arguments, &processType, "ps", stdin, stdout);
 			processId = createProcess(&ps, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -92,7 +92,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			}
 		
 		case PRODUCTOR_CONSUMER:
-			setArguments(argVector, arguments, &processType, "prodcons");
+			setArguments(argVector, arguments, &processType, "prodcons", stdin, stdout);
 			processId = createProcess(&prodcons, 2, argVector);
 			if(processType == FOREGROUND) {
 				cleanScreen();
@@ -102,7 +102,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 				return 0;
 			}
 		case TERMINATE_PROCESS:
-			setArguments(argVector, arguments, &processType, "terminate");
+			setArguments(argVector, arguments, &processType, "terminate", stdin, stdout);
 			processId = createProcess(&terminate, 3, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -112,7 +112,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			}
 
 		case ECHO:
-			setArguments(argVector, arguments, &processType, "echo");
+			setArguments(argVector, arguments, &processType, "echo", stdin, stdout);
 			processId = createProcess(&echo, 3, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -121,7 +121,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 				return 0;
 			}
 		case PIPE:
-			setArguments(argVector, arguments, &processType, "pipe");
+			setArguments(argVector, arguments, &processType, "pipe", stdin, stdout);
 			processId = createProcess(&pipe, 2, argVector);
 			if(processType == FOREGROUND) {
 				return	waitChild(processId);
@@ -321,8 +321,8 @@ changeFontColor(WHITE);
 printf("finished succesfully. See you soon!\n");
 }
 
-void setArguments(void ** argVector, unsigned char *arguments,
- 						uint64_t *processType,	char *processName) {
+void setArguments(void ** argVector, unsigned char *arguments, uint64_t *processType,
+				char *processName, char *stdin, char *stdout) {
 	*processType = FOREGROUND;
 
 	if(isBackground((char *) arguments)) {
@@ -330,7 +330,9 @@ void setArguments(void ** argVector, unsigned char *arguments,
 	}
 	*argVector = processType;
 	*(argVector + 1) = processName;
-	*(argVector + 2) = arguments;
+	*(argVector + 2) = stdin;
+	*(argVector + 3) = stdout;
+	*(argVector + 4) = arguments;
 	return;
 }
 

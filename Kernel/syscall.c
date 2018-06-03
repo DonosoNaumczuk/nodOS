@@ -1,13 +1,30 @@
 #include <syscall.h>
+#include <null.h>
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx) {
 	switch(rdi) {
-		case WRITE:
-			printWithColor((char*)rsi,rdx,(char)rcx);
+		case WRITE: {
+			processControlBlockPtr_t current = getCurrentPCB();
+			char * writeSource = getWriteSource(current);
+			if(writeSource == 0 ) {
+				printWithColor((char *) rsi, rdx ,(char) rcx);
+			}
+			else {
+				writeOnPipe(writeSource, (char *) rsi, rdx, getProcessId());
+			}
 			return 0;
-		case READ:
-			read((int)rsi, (unsigned char*)rdx, (int)rcx);
+		}
+		case READ: {
+			processControlBlockPtr_t current = getCurrentPCB();
+			char * readSource = getReadSource(current);
+			if(readSource == NULL ) {
+				read((int) rsi, (unsigned char *) rdx, (int) rcx);
+			}
+			else {
+				readFromPipe(readSource, (char *) rdx, (int) rcx, getProcessId());
+			}			
 			return 0;
+		}
 		case WRITE_PIXEL:
 			printPixel((uint32_t)rsi,(uint32_t)rdx,(char)rcx);
 			return 0;
@@ -79,9 +96,9 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			terminateAProcessByPid(rsi);
 			return 0;
 		case CREATE_PIPE:
-			return createPipe((char *)rsi, (uint32_t) rdx, (uint8_t) rcx, getProcessId());
+			return createPipe((char *) rsi, (uint32_t) rdx, (uint8_t) rcx, getProcessId());
 		case WRITE_PIPE:
-			return writeOnPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
+			return writeOnPipe((char *) rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
 		case READ_PIPE:
 			return readFromPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
 		case TERMINATE_PIPE:

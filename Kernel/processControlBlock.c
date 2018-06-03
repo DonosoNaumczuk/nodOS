@@ -20,7 +20,8 @@ static int addressComparator(void * address1, void * address2);
 
 static long int pidCounter = 1;
 
-processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
+processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress,
+                                        int argsQuantity, void ** processArgs) {
 	processControlBlock_t *newPCB = allocateMemory(sizeof(processControlBlock_t));
 	newPCB->pid = pidCounter;
 	pidCounter++;
@@ -28,8 +29,9 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	newPCB->parent = parent;
 	newPCB->childs = initializePCBList();
 	newPCB->name = (char *)(processArgs[1]);
-    newPCB->readSource = (char *)(processArgs[2]);
-    newPCB->writeSource = (char *)(processArgs[3]);
+     newPCB->readSource = (char *)(processArgs[2]);
+     newPCB->writeSource = (char *)(processArgs[3]);
+
 
 	newPCB->mainTask = createTask(newPCB, codeAddress, argsQuantity-4, processArgs+4);
 	newPCB->othertasks = newList();

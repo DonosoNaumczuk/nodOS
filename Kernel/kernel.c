@@ -94,9 +94,9 @@ void cleaner(int cant, void ** args) {
 
 int main() {
 	int foreground = 0;
-	void * initargs[] = {&foreground, "init"};
-	void * cleanerargs[] = {&foreground, "cleaner"};
-	void * shellargs[] = {&foreground, "shell"};
+	void * initargs[] = {&foreground, "init", NULL, NULL};
+	void * cleanerargs[] = {&foreground, "cleaner", NULL, NULL};
+	void * shellargs[] = {&foreground, "shell", NULL, NULL};
 	processControlBlockPtr_t initPCB = createProcess(NULL, &init, 2, initargs);
 	processControlBlockPtr_t cleanerPCB = createProcess(initPCB, &cleaner, 1, cleanerargs);
 	processControlBlockPtr_t shellPCB = createProcess(cleanerPCB, sampleCodeModuleAddress, 1, shellargs);
