@@ -205,10 +205,6 @@ static void removePipe(char *pipeId, uint64_t processId) {
 	removeAndFreeFirstElementByCriteria(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
 }
 
-// static char *getMutexListId(char *pipeId) {
-// 	return stringConcatenation(LIST_MUTEX_PREFIX, pipeId);
-// }
-
 static char *getMutexWriteId(char *pipeId) {
 	return stringConcatenation(WRITE_MUTEX_PREFIX, pipeId);
 }
