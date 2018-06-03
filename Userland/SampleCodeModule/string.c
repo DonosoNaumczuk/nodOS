@@ -52,3 +52,17 @@ int strLength(unsigned char *string) {
 	}
 	return i;
 }
+
+void reverseString(unsigned char *string) {
+	int i = strLength(string) - 1;
+	int limit = i / 2;
+	int beginning = 0;
+	unsigned char aux;
+	while( i > limit) {
+		aux = string[beginning];
+		string[beginning] = string[i];
+		string[i] = aux;
+		i--;
+		beginning++; 
+	}
+}

@@ -1,6 +1,7 @@
 #include	<lib.h>
 #include	<string.h>
 #include	<commandHandler.h>
+#include  <null.h>
 
 
 void clearLine(unsigned int lineLong) {
@@ -129,8 +130,9 @@ int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFl
 	unsigned int i;
 	unsigned char command[MAX_VALID_CMD_LONG];
 	int pipesFound = 0, beginning = 0;
-	//char *stdin = NULL; evans
-	//char *stdout = NULL; evans
+	char *stdin = NULL;
+	char *stdout = NULL;
+	char *pipes[MAX_PIPES_QUANTITY_ON_COMMAND];
 	for(i = 0; i < index; i ++) {
 		if(buffer[i] == '|') {
 			if(index < i + 2) {

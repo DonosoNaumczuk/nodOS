@@ -244,6 +244,21 @@ int	charToInt(unsigned char* string) {
 	return res;
 }
 
+void intToString(unsigned char *destination, int number) {
+	int i = 0;
+	if(number == 0) {
+		destination[0] = '0';
+		destination[1] = 0;
+	}
+	while(number > 0) {
+		destination[i] = (number % 10) + '0';
+		i++;
+		number = number / 10;
+	}
+	destination[i] = 0;
+	reverseString(destination);
+}
+
 void changeFontColor(int newColor) {
 	color = newColor;
 }

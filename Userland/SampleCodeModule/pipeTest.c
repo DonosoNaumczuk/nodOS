@@ -8,15 +8,14 @@
 int pipe(int argumentQuantity, void **argumentVector) {
      uint64_t pid[2];
      void ** argument = allocateMemory(sizeof(void*) * 2);
-
      createPipe(PIPE_NAME, 4096, 0);
      int mode = 1;
      argument[0] = &mode;
      argument[1] = (void * ) "writePipe";
      pid[0] = createProcess(&writePipe, 2, argument);
-     waitChild(pid[0]);
      argument[1] = (void * ) "readPipe";
      pid[1] = createProcess(&readPipe, 5, argument);
+     waitChild(pid[0]);
      waitChild(pid[1]);
      terminatePipe(PIPE_NAME);
      return 0;

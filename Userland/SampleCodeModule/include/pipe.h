@@ -9,6 +9,7 @@
 #define EMPTY_BUFFER 			-2
 #define NON_BLOCKING 			 1
 #define WITH_BLOCKING 			 0
+#define PIPE_PREFIX                 "__Pipe__"
 
 int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking);
 

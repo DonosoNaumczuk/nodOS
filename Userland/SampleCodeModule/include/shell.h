@@ -3,8 +3,9 @@
 
 #include <stdint.h>
 
-#define MAX_CMD_LONG          100
-#define MAX_VALID_CMD_LONG          18
+#define MAX_CMD_LONG                    100
+#define MAX_VALID_CMD_LONG              18
+#define MAX_PIPES_QUANTITY_ON_COMMAND   20
 
 
 #define	EXIT_CMD	         -1

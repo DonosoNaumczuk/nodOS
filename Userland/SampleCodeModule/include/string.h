@@ -6,5 +6,6 @@ void strncpy(unsigned char *s1, unsigned char *s2, unsigned int beginning, unsig
 int strcmp(unsigned char* s1, unsigned char* s2);
 int strncmp(unsigned char* s1,unsigned char* s2,unsigned int n);
 int strLength(unsigned char *string);
+void reverseString(unsigned char *string);
 
 #endif
