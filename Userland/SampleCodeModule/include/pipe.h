@@ -3,6 +3,8 @@
 #define PIPE_H
 
 #include <stdint.h>
+#include <syscall.h>
+
 
 #define EMPTY_BUFFER 			-2
 #define NON_BLOCKING 			 1

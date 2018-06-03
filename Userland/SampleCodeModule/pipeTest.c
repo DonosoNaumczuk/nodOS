@@ -35,7 +35,7 @@ int writePipe(int argumentQuantity, void ** argumentVector) {
      }
      message[i] = 0;
      putChar('\n');
-     writeOnPipe(PIPE_NAME, message, strLength(message));
+     writeOnPipe(PIPE_NAME, message, strLength(message) + 1);
      printf("Message written on pipe.\n");
      return 0;
 }
@@ -44,6 +44,6 @@ int writePipe(int argumentQuantity, void ** argumentVector) {
 int readPipe(int argumentQuantity, void ** argumentVector) {
      unsigned char buffer[MESSAGE_LENGTH];
      readFromPipe(PIPE_NAME, buffer, MESSAGE_LENGTH);
-     printf("The message read from pipe was:\n%s", buffer);
+     printf("The message read from pipe was:\n%s\n", buffer);
      return 0;
 }
