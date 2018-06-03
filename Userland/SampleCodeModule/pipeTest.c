@@ -4,14 +4,17 @@
 #include <pipe.h>
 #include <lib.h>
 #include <string.h>
+#include <null.h>
 
 int pipe(int argumentQuantity, void **argumentVector) {
      uint64_t pid[2];
-     void ** argument = allocateMemory(sizeof(void*) * 2);
+     void ** argument = allocateMemory(sizeof(void *) * 4);
      createPipe(PIPE_NAME, 4096, 0);
      int mode = 1;
      argument[0] = &mode;
      argument[1] = (void * ) "writePipe";
+     argument[2] = NULL;
+     argument[3] = NULL;
      pid[0] = createProcess(&writePipe, 2, argument);
      argument[1] = (void * ) "readPipe";
      pid[1] = createProcess(&readPipe, 5, argument);
@@ -19,7 +22,6 @@ int pipe(int argumentQuantity, void **argumentVector) {
      waitChild(pid[1]);
      terminatePipe(PIPE_NAME);
      return 0;
-
 }
 
 int writePipe(int argumentQuantity, void ** argumentVector) {

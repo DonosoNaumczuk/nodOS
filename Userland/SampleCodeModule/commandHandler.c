@@ -129,15 +129,15 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			else {
 				return 0;
 			}
-		// case GREP:
-		// 	setArguments(argVector, arguments, &processType, "grep");
-		// 	processId = createProcess(&echo, 3, argVector);
-		// 	if(processType == FOREGROUND) {
-		// 		return	waitChild(processId);
-		// 	}
-		// 	else {
-		// 		return 0;
-		// 	}
+		case GREP:
+			setArguments(argVector, arguments, &processType, "grep", stdin, stdout);
+			processId = createProcess(&grepChar, 3, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 		
 		
 	}
@@ -174,7 +174,7 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return  ECHO;
 	if(strncmp((unsigned char *) "pipe", cmd, 4) == 0)			return  PIPE;
 
-	//if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
+	if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
 
 
 	return INVALID;
@@ -269,7 +269,7 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * echo string: prints the given string on the screen \n");
 	printf("          * pipe: shows the use of pipes \n");
 
-//	printf("          * grep c: reads from input until enter and highlights the given char c \n");
+	printf("          * grep c: reads from input until enter and highlights the given char c \n");
 
 
 	return VALID_CMD;
@@ -398,26 +398,27 @@ int echo(int argumentQuantity, void ** argumentVector) {
 	return 0;
 }
 
-// int grepchar(int argumentQuantity, void ** argumentVector) {
-// 	unsigned char *buffer = (unsigned char * ) (*argumentVector);
-// 	char c, readChar;
+int grepChar(int argumentQuantity, void ** argumentVector) {
+	unsigned char *buffer = (unsigned char * ) (*argumentVector);
+	char c, readChar;
 
-// 	if(*buffer != 0) {
-// 		buffer++;
-// 		c = buffer[0];
-// 	}
-// 	else {
-// 		return ARGS_ERROR;
-// 	}
-// 	while((readChar = getchar()) != '\n' ) {
-// 		if(readChar == c) {
-// 			changeFontColor(GREEN);
-// 			putChar(c);
-// 			changeFontColor(WHITE);
-// 		}
-// 		else {
-// 			putChar(c);
-// 		}
-// 	}
-// 	return 0;
-// }
+	if(*buffer != 0) {
+		buffer++;
+		c = buffer[0];
+	}
+	else {
+		return ARGS_ERROR;
+	}
+	while((readChar = getchar()) != '\n' ) {
+		if(readChar == c) {
+			changeFontColor(GREEN);
+			putChar(c);
+			changeFontColor(WHITE);
+		}
+		else {
+			putChar(readChar);
+		}
+	}
+	putChar('\n');
+	return 0;
+}
