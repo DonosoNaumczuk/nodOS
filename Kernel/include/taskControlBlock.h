@@ -17,8 +17,8 @@ typedef struct taskControlBlock_t * taskControlBlockPtr_t;
 #define SIZE_OF_STACK 4096 /* 4K */
 
 taskControlBlockPtr_t createTask(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs);
-taskControlBlockPtr_t initializeTCB(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs) {
-void setStackPointer(taskControlBlockPtr_t tcp, void * stackPointer) {
+taskControlBlockPtr_t initializeTCB(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs);
+void setStackPointer(taskControlBlockPtr_t tcp, void * stackPointer);
 void * getStackPointer(taskControlBlockPtr_t tcp);
 int isTerminate(taskControlBlockPtr_t tcb);
 int isWaiting(taskControlBlockPtr_t tcb);
@@ -29,6 +29,6 @@ processControlBlockPtr_t getPCBOf(taskControlBlockPtr_t tcb);
 uint64_t getTaskIdOf(taskControlBlockPtr_t tcb);
 void setState(taskControlBlockPtr_t tcb, int state);
 void terminateATask(taskControlBlockPtr_t tcb);
-void startProcess(int argsQuantity, void ** processArgs, void * codeAddress);
+void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity, void ** processArgs);
 
 #endif

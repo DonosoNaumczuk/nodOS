@@ -15,7 +15,7 @@ static int existMailbox(char *mailboxId, mailbox_t mailbox);
 
 void initMessageQueue() {
 	 mailboxList = newList();
-	 createMutualExclusion(MUTEX_NAME, getProcessId());
+	 createMutualExclusion(MUTEX_NAME, 0);
 }
 
 int createMailbox(const char *mailboxId) {
@@ -40,7 +40,7 @@ void *receive(const char *mailboxId) {
 	semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
 	lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
 
-	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList, 
+	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,
 						(int (*)(void *, void *)) &existMailbox,mailboxId);
 	void *reference = getFirstElementReferece(mailbox->messageQueue);
 	removeFirst(mailbox->messageQueue);
@@ -53,10 +53,10 @@ void closeMailbox(const char *mailboxId) {
 	lock(MUTEX_NAME,getProcessId());
 	lock(stringConcatenation(MUTEX_NAME,mailboxId), getProcessId());
 
-	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList, 
+	mailbox_t mailbox = getFirstElementReferenceByCriteria(mailboxList,
 						(int (*)(void *, void *)) &existMailbox,mailboxId);
 	removeAndFreeAllElements(mailbox->messageQueue);
-	removeAndFreeFirstElementByCriteria(mailboxList, 
+	removeAndFreeFirstElementByCriteria(mailboxList,
 			(int (*)(void *, void *)) &existMailbox,mailboxId);
 
 	unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());

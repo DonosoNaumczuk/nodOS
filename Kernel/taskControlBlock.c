@@ -36,20 +36,20 @@ typedef struct taskControlBlock_t {
 static long int tidCounter = 1;
 
 taskControlBlockPtr_t createTask(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs) {
-    taskControlBlockPtr_t newTCP = initializeTCB(pcb, codeAddress, argsQuantity, processArgs);
-    addProcessToScheduler(newTCP);
-    return newTCP;
+    taskControlBlockPtr_t newTCB = initializeTCB(pcb, codeAddress, argsQuantity, processArgs);
+    addProcessToScheduler(newTCB);
+    return newTCB;
 }
 
 taskControlBlockPtr_t initializeTCB(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs) {
-    taskControlBlockPtr_t newTCP = allocateMemory(sizeof(taskControlBlock_t);
-    newTCP->tid = tidCounter;
+    taskControlBlockPtr_t newTCB = allocateMemory(sizeof(taskControlBlock_t));
+    newTCB->tid = tidCounter;
     tidCounter++;
-    newTCP->state = TASK_READY;
-    newTCP->pcb = pcb;
-    newTCP->stackPointer = allocateMemory(SIZE_OF_STACK);
-    newPCB->stackPointer = startStack(codeAddress, newPCB->stackPointer, argsQuantity, processArgs);
-    return newTCP;
+    newTCB->state = TASK_READY;
+    newTCB->pcb = pcb;
+    newTCB->stackPointer = allocateMemory(SIZE_OF_STACK);
+    newTCB->stackPointer = startStack(codeAddress, newTCB->stackPointer, argsQuantity, processArgs);
+    return newTCB;
 }
 
 void setStackPointer(taskControlBlockPtr_t tcp, void * stackPointer) {
@@ -61,19 +61,19 @@ void * getStackPointer(taskControlBlockPtr_t tcp) {
 }
 
 int isTerminate(taskControlBlockPtr_t tcb) {
-    return pcb->state == TASK_TERMINATE;
+    return tcb->state == TASK_TERMINATE;
 }
 
 int isWaiting(taskControlBlockPtr_t tcb) {
-    return pcb->state == TASK_WAITING;
+    return tcb->state == TASK_WAITING;
 }
 
 int isBlockedByTCB(taskControlBlockPtr_t tcb) {
-    return pcb->state == TASK_BLOCKED;
+    return tcb->state == TASK_BLOCKED;
 }
 
 int isReady(taskControlBlockPtr_t tcb) {
-	return pcb->state == TASK_READY;
+	return tcb->state == TASK_READY;
 }
 
 int isMainTask(taskControlBlockPtr_t tcb) {
@@ -89,21 +89,26 @@ uint64_t getTaskIdOf(taskControlBlockPtr_t tcb) {
 }
 
 void setState(taskControlBlockPtr_t tcb, int state) {
-	pcb->state = state;
+	tcb->state = state;
 }
 
 void terminateATask(taskControlBlockPtr_t tcb) {
     freeMemory(tcb->stackPointer);
+	removeTCBFromPCB(tcb->pcb, tcb);
     tcb->state = TASK_TERMINATE;
 }
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
     int returnValue = ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
-	terminateCurrentTask(returnValue);
+	if(isMainTask(getCurrentTCB())) {
+		terminateCurrentProcess(returnValue);
+	}
+	else {
+		terminateATask(getCurrentTCB());
+	}
 }
 
-void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
-                 void ** processArgs) {
+void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity, void ** processArgs) {
 	stackFrame_t * stackFrame = (stackFrame_t *)(stackBaseAddress + SIZE_OF_STACK -
                                  sizeof(stackFrame_t) - 1);
 

@@ -53,25 +53,25 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		case FREE:
 			return freeMemory((void *)rsi);
 	 	case CREATE_MUTEX:
-			return createMutualExclusion((char *)rsi, getProcessId());
+			return createMutualExclusion((char *)rsi, getTaskId());
 	 	case LOCK_MUTEX:
-			return lock((char *)rsi, getProcessId());
+			return lock((char *)rsi, getTaskId());
 	 	case UNLOCK_MUTEX:
-			return unlock((char *)rsi, getProcessId());
+			return unlock((char *)rsi, getTaskId());
 	 	case LOCK_IF_UNLOCKED_MUTEX:
-			return lockIfUnlocked((char *)rsi, getProcessId());
+			return lockIfUnlocked((char *)rsi, getTaskId());
 	 	case TERMINATE_MUTEX:
-			return terminateMutualExclusion((char *)rsi, getProcessId());
+			return terminateMutualExclusion((char *)rsi, getTaskId());
 	 	case CREATE_SEMAPHORE:
-			return createSemaphore((char *)rsi, rdx, getProcessId());
+			return createSemaphore((char *)rsi, rdx, getTaskId());
 	 	case SEMAPHORE_WAIT:
-			return semaphoreWait((char *)rsi, getProcessId());
+			return semaphoreWait((char *)rsi, getTaskId());
 	 	case SEMAPHORE_POST:
-			return semaphorePost((char *)rsi, getProcessId());
+			return semaphorePost((char *)rsi, getTaskId());
 	 	case SEMAPHORE_TRY_WAIT:
-			return semaphoreTryWait((char *)rsi, getProcessId());
+			return semaphoreTryWait((char *)rsi, getTaskId());
 	 	case TERMIANTE_SEMAPHORE:
-			return terminateSemaphore((char *)rsi, getProcessId());
+			return terminateSemaphore((char *)rsi, getTaskId());
 		case PRINT_ALL_PROCESS:
 			printAllProcess();
 			return 0;

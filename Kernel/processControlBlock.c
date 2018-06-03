@@ -12,12 +12,15 @@ typedef struct processControlBlock_t {
     //list with heap evans
 } processControlBlock_t;
 
+static int tcbComparator(void * tcb1, void * tcb2);
+
 static long int pidCounter = 1;
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs) {
 	processControlBlock_t *newPCB = allocateMemory(sizeof(processControlBlock_t));
 	newPCB->pid = pidCounter;
 	pidCounter++;
+
 	newPCB->parent = parent;
 	newPCB->childs = initializePCBList();
 	newPCB->name = (char *)(processArgs[1]);
@@ -107,8 +110,20 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
     _force_context_switch();
 }
 
-/*void printPCB(processControlBlockPtr_t pcb) {
+void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb) {
+    removeAndFreeFirstElementByCriteria(pcb->othertasks, &tcbComparator,tcb);
+}
 
+static int tcbComparator(void * tcb1, void * tcb2) {
+    return getTaskIdOf(tcb1) == getTaskIdOf(tcb2);
+}
+
+int isProcessTerminate(processControlBlockPtr_t pcb) {
+    return isTerminate(pcb->mainTask);
+}
+
+void printPCB(processControlBlockPtr_t pcb) {
+/*
      if(pcb != NULL) {
 		char * aux = pcb->name;
 		int i = 0;
@@ -147,5 +162,5 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
 			printWithColor("Terminated", 10, 0x0F);
 		}
 		newLine();
-	}
-}*/
+	}*/
+}

@@ -75,7 +75,7 @@ int getFirstElement(listObject_t list, void * buffer) {
 	if(list == NULL) {
 		return NULL_LIST_ERROR;
 	}
-    	
+
     	if(list->head == NULL) {
     		return EMPTY_LIST_ERROR;
     	}

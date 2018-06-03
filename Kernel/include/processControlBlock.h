@@ -8,6 +8,13 @@ typedef struct processControlBlock_t * processControlBlockPtr_t;
 #include <processControlBlockLib.h>
 #include <scheduler.h>
 #include <taskControlBlock.h>
+#include <listADT.h>
+
+#define PROCESS_READY 0
+#define PROCESS_TERMINATE 1
+#define PROCESS_NEW 2
+#define PROCESS_WAITING 3
+#define PROCESS_BLOCKED 4
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs);
 void setForeground(processControlBlockPtr_t pcb);
@@ -21,5 +28,7 @@ void giveChildsToFather(processControlBlockPtr_t pcb);
 void setReturnValue(processControlBlockPtr_t pcb, int returnValue);
 int getReturnValue(processControlBlockPtr_t son);
 void terminateAProcess(int returnValue, processControlBlockPtr_t pcb);
+void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb);
+int isProcessTerminate(processControlBlockPtr_t pcb);
 
 #endif
