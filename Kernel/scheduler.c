@@ -156,13 +156,26 @@ int waitChild(uint64_t pid) {
         while (!isProcessTerminate(son)) {
             sleepCurrent(PROCESS_WAITING);
         }
+        removeAndFreeFirstElementByCriteria(scheduler.terminated, &TCBComparatorByPID, &pid);
+        freeMemory(son);
     }
 
-    removeAndFreeFirstElementByCriteria(scheduler.terminated, &TCBComparatorByPID, &pid);
-
     int aux = getReturnValue(son);
-    freeMemory(son);
+
     return aux;
+}
+
+void waitTask(uint64_t tid) {
+    processControlBlockPtr_t pcb = getCurrentPCB();
+    taskControlBlockPtr_t task = getTaskByTid(pcb, tid);
+
+    if(task != NULL) {
+        while (!isTerminate(task)) {
+            sleepCurrent(PROCESS_WAITING);
+        }
+        removeAndFreeFirstElementByCriteria(scheduler.terminated, &TCBComparatorByTID, &tid);
+        freeMemory(task);
+    }
 }
 
 processControlBlockPtr_t getASonOfCurrentProcess() {

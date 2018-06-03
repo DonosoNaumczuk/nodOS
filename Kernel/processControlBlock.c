@@ -13,6 +13,7 @@ typedef struct processControlBlock_t {
 } processControlBlock_t;
 
 static int tcbComparator(void * tcb1, void * tcb2);
+static int TCBComparatorByTID(void * tid, void * tcb);
 
 static long int pidCounter = 1;
 
@@ -125,6 +126,16 @@ static int tcbComparator(void * tcb1, void * tcb2) {
 
 int isProcessTerminate(processControlBlockPtr_t pcb) {
     return isTerminate(pcb->mainTask);
+}
+
+taskControlBlockPtr_t getTaskByTid(processControlBlockPtr_t pcb, uint64_t tid) {
+    taskControlBlockPtr_t tcb;
+    getFirstElementByCriteria(pcb->othertasks, &TCBComparatorByTID, &tid, &tcb);
+    return tcb;
+}
+
+static int TCBComparatorByTID(void * tid, void * tcb) {
+    return getTaskIdOf(*((taskControlBlockPtr_t *)tcb)) != *((uint64_t *)tid);
 }
 
 void printPCB(processControlBlockPtr_t pcb) {

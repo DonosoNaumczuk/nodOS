@@ -28,6 +28,7 @@ int isBlocked(uint64_t tid);
 void sleepCurrent(int condition);
 void wakeUp(uint64_t tid);
 int waitChild(uint64_t pid);
+void waitTask(uint64_t tid);
 processControlBlockPtr_t getASonOfCurrentProcess();
 processControlBlockPtr_t getCurrentPCB();
 taskControlBlockPtr_t getCurrentTCB();

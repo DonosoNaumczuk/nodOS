@@ -31,5 +31,6 @@ int getReturnValue(processControlBlockPtr_t son);
 void terminateAProcess(int returnValue, processControlBlockPtr_t pcb);
 void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb);
 int isProcessTerminate(processControlBlockPtr_t pcb);
+taskControlBlockPtr_t getTaskByTid(processControlBlockPtr_t pcb, uint64_t tid);
 
 #endif
