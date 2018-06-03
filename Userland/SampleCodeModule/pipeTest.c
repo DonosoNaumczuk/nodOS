@@ -4,10 +4,7 @@
 #include <lib.h>
 #include <string.h>
 
-#define PIPE_NAME   "__pipeTest"
-#define MESSAGE_LENGTH 100
-int readPipe(int argumentQuantity, void ** argumentVector);
-int writePipe(int argumentQuantity, void ** argumentVector);
+
 
 int pipe(int argumentQuantity, void **argumentVector) {
      uint64_t pid[2];
