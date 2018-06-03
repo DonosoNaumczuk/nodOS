@@ -115,6 +115,15 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int length){
 			else {
 				return 0;
 			}
+		case PIPE:
+			setArguments(argVector, arguments, &processType, "pipe");
+			processId = createProcess(&pipe, 2, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
 		// case GREP:
 		// 	setArguments(argVector, arguments, &processType, "grep");
 		// 	processId = createProcess(&echo, 3, argVector);
@@ -158,6 +167,8 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    		return  PRODUCTOR_CONSUMER;
 	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   		return  TERMINATE_PROCESS;
 	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return  ECHO;
+	if(strncmp((unsigned char *) "pipe", cmd, 4) == 0)			return  PIPE;
+
 	//if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
 
 
@@ -251,6 +262,8 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
 	printf("          * terminate processID: terminate the process with the given id \n");
 	printf("          * echo string: prints the given string on the screen \n");
+	printf("          * pipe: shows the use of pipes \n");
+
 //	printf("          * grep c: reads from input until enter and highlights the given char c \n");
 
 
