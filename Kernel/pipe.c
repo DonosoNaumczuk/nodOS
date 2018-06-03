@@ -154,24 +154,19 @@ int readFromPipe(char *pipeId, void * buffer, uint32_t byteSize,
 		}
 	}
 
-	uint32_t i;
+	uint32_t i = 0;
 
- 	for(i = 0; i < byteSize; i++) {
-		if(!semaphoreTryWait(pipe->emptySemaphore, processId)) {
-			unlock(pipe->readMutex, processId);
-			return i;
-		}
+	do {
+		semaphorePost(pipe->fullSemaphore, processId);
 
- 		semaphorePost(pipe->fullSemaphore, processId);
-
- 		((char *) buffer)[i] = ((char *) (pipe->buffer))[pipe->readIndex];
+ 		((char *) buffer)[i++] = ((char *) (pipe->buffer))[pipe->readIndex];
 
  		pipe->readIndex = (pipe->readIndex + 1) % pipe->byteSize;
- 	}
+	} while(i < byteSize && semaphoreTryWait(pipe->emptySemaphore, processId));
 
- 	unlock(pipe->writeMutex, processId);
+	unlock(pipe->readMutex, processId);
 
- 	return i;
+	return i;
 }
 
 static uint32_t existPipe(char *pipeId) {
