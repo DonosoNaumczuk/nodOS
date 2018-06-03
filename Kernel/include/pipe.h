@@ -13,7 +13,6 @@
 #define EMPTY_SEM_PREFIX  		"__pipe__empty__sem__"
 #define WRITE_MUTEX_PREFIX 		"__pipe__write__mutex__"
 #define READ_MUTEX_PREFIX 		"__pipe__read__mutex__"
-#define LIST_MUTEX_PREFIX 		"__pipe__list__mutex__"
 
 #define NON_BLOCKING 			 1
 #define WITH_BLOCKING 			 0

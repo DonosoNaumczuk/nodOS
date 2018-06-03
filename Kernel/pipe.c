@@ -29,9 +29,6 @@ typedef struct {
 	void *buffer;
 	uint32_t readIndex; /* buffer index to read */
 	uint32_t writeIndex; /* buffer index to write */
-	listObject_t waitingForRead; /* sleeping until can read */
-	listObject_t waitingForWrite; /* sleeping until can write */
-	char *mutex; /* Mutex id for listObject_t atomic operations */
 	char *writeMutex; /* Mutex id for atomic write operations */
 	char *readMutex; /* Mutex id for atomic read operations */
 	char *fullSemaphore; /* Semaphore id for full buffer block */
@@ -80,15 +77,11 @@ int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking,
 	pipe.buffer				= allocateMemory(byteSize);
 	pipe.readIndex			= 0;
 	pipe.writeIndex			= 0;
-	pipe.waitingForRead		= newList();
-	pipe.waitingForWrite	= newList();
-	pipe.mutex				= getMutexListId(pipeId);
 	pipe.writeMutex			= getMutexWriteId(pipeId);
 	pipe.readMutex			= getMutexReadId(pipeId);
 	pipe.fullSemaphore		= getSemaphoreFullId(pipeId);
 	pipe.emptySemaphore		= getSemaphoreEmptyId(pipeId);
 
-	createMutualExclusion(pipe.mutex, processId);
 	createMutualExclusion(pipe.writeMutex, processId);
 	createMutualExclusion(pipe.readMutex, processId);
 	createSemaphore(pipe.fullSemaphore, pipe.byteSize, processId);
@@ -203,12 +196,6 @@ static void removePipe(char *pipeId, uint64_t processId) {
 
 	freeMemory(pipe->buffer);
 
-	removeAndFreeAllElements(pipe->waitingForRead);
-	removeAndFreeAllElements(pipe->waitingForWrite);
-	freeList(pipe->waitingForRead);
-	freeList(pipe->waitingForWrite);
-
-	terminateMutualExclusion(pipe->mutex, processId);
 	terminateMutualExclusion(pipe->writeMutex, processId);
 	terminateMutualExclusion(pipe->readMutex, processId);
 
