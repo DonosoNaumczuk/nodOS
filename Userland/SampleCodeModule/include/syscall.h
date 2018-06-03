@@ -109,12 +109,4 @@ int printAllProcess();
 
 void terminateProcess(uint64_t pid);
 
-int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking);
-
-int writeOnPipe(char *pipeId, void *data, uint32_t byteSize);
-
-int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize);
-
-int terminatePipe(char *pipeId);
-
 #endif
