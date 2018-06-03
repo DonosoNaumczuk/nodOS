@@ -49,9 +49,9 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 			closeMailbox((char*)rsi);
 			return 0;
 		case ALLOCATE_MEMORY:
-			return (uint64_t)allocateMemory(rsi);
+			return (uint64_t)addMemoryToHeap(getCurrentPCB(), rsi);
 		case FREE:
-			return freeMemory((void *)rsi);
+			return freeMemoryFromHeap(getCurrentPCB(), (void *)rsi);
 	 	case CREATE_MUTEX:
 			return createMutualExclusion((char *)rsi, getTaskId());
 	 	case LOCK_MUTEX:
@@ -83,10 +83,17 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		case WRITE_PIPE:
 			return writeOnPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
 		case READ_PIPE:
-			return readFromPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());		
+			return readFromPipe((char *)rsi, (void * ) rdx, (uint32_t) rcx, getProcessId());
 		case TERMINATE_PIPE:
 			return terminatePipe((char *)rsi, getProcessId());
-
+		case CREATE_TASK:
+			return addTaskToProcess(getCurrentPCB(), (void *)rsi, rdx, (void **)rcx);
+		case TERMINATE_TASK:
+			terminateATaskByTid(rsi);
+			return 0;
+		case WAIT_TASK:
+			waitTask(rsi);
+			return 0;
 	}
 
 	return 0;

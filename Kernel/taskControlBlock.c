@@ -81,6 +81,9 @@ int isMainTask(taskControlBlockPtr_t tcb) {
 }
 
 processControlBlockPtr_t getPCBOf(taskControlBlockPtr_t tcb) {
+	if(tcb == NULL) {
+		return FALSE;
+	}
     return tcb->pcb;
 }
 
@@ -96,6 +99,7 @@ void terminateATask(taskControlBlockPtr_t tcb) {
     freeMemory(tcb->stackPointer);
 	removeTCBFromPCB(tcb->pcb, tcb);
     tcb->state = TASK_TERMINATE;
+	wakeUpAPCB(tcb->pcb);
 }
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {

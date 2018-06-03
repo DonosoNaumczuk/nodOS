@@ -70,6 +70,12 @@
 #define READ_PIPE                  33
 #define TERMINATE_PIPE             34
 
+/*task*/
+
+#define CREATE_TASK            35
+#define TERMINATE_TASK         36
+#define WAIT_TASK              37
+
 uint64_t syscall_dispatcher(uint64_t rax, uint64_t rbx, uint64_t rcx, uint64_t rdx);
 
 #endif
