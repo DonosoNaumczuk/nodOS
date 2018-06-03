@@ -12,6 +12,7 @@
 #include  <semaphore.h>
 #include  <semaphoreTest.h>
 #include  <prodcons.h>
+#include  <pipeTest.h>
 
 #define   INVALID            -1
 #define   EXIT                0
@@ -26,6 +27,8 @@
 #define   PROCESS_LIST	     9
 #define	PRODUCTOR_CONSUMER 10
 #define	TERMINATE_PROCESS  11
+#define   PIPE               12
+//#define   GREP               12
 
 #define   FOREGROUND	  1
 #define	BACKGROUND	  0
@@ -48,5 +51,7 @@ int ps(int argumentQuantity, void ** argumentVector);
 int culoSucio(int argumentQuantity, void ** argumentVector);
 int terminate(int argumentQuantity, void ** argumentVector);
 uint64_t stringToPid(unsigned char *pidString);
+int echo(int argumentQuantity, void ** argumentVector);
+int grepchar(int argumentQuantity, void ** argumentVector);
 
 #endif

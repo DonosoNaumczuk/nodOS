@@ -1,4 +1,5 @@
 #include <commandHandler.h>
+#include <lib.h>
 
 void printArgs(int *args, int size);
 
@@ -6,7 +7,7 @@ void printArgs(int *args, int size);
 int  commandInterpreter(unsigned char buffer[],	unsigned int length){
 	unsigned int argumentsStart;
 	int cmdID;
-	cmdID = readCommand(buffer, &argumentsStart, length);
+	cmdID = readCommand(buffer, (int *) &argumentsStart, length);
 	unsigned char* arguments = buffer + argumentsStart;
 	void ** argVector = allocateMemory(sizeof(void*) * 3);
 	uint64_t processId;
@@ -105,6 +106,35 @@ int  commandInterpreter(unsigned char buffer[],	unsigned int length){
 				return 0;
 			}
 
+		case ECHO:
+			setArguments(argVector, arguments, &processType, "echo");
+			processId = createProcess(&echo, 3, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+		case PIPE:
+			setArguments(argVector, arguments, &processType, "pipe");
+			processId = createProcess(&pipe, 2, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+		// case GREP:
+		// 	setArguments(argVector, arguments, &processType, "grep");
+		// 	processId = createProcess(&echo, 3, argVector);
+		// 	if(processType == FOREGROUND) {
+		// 		return	waitChild(processId);
+		// 	}
+		// 	else {
+		// 		return 0;
+		// 	}
+		
+		
 	}
 	return 1;
 }
@@ -124,18 +154,23 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
 	
-	if(strcmp("time", cmd) == 0)				return	TIME;
-	if(strcmp("help", cmd) == 0)				return	HELP;
-	if(strncmp("quadratic", cmd, 14) == 0)		return	QUADRATIC;
-	if(strncmp("linear", cmd, 11) == 0)		return	LINEAR;
-	if(strncmp("echo", cmd, 4) == 0)			return	ECHO;
-	if(strcmp("exit", cmd) == 0)				return	EXIT;
-	if(strncmp("test", cmd, 4) == 0)			return	TEST;
-	if(strncmp("clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
-	if(strncmp("semaphore", cmd, 9) == 0)   	return  SEMAPHORE;
-	if(strncmp("ps", cmd, 2) == 0)			return  PROCESS_LIST;
-	if(strncmp("prodcons", cmd, 8) == 0)    	return  PRODUCTOR_CONSUMER;
-	if(strncmp("terminate", cmd, 9) == 0)   	return  TERMINATE_PROCESS;
+	if(strcmp((unsigned char *) "time", cmd) == 0)				return	TIME;
+	if(strcmp((unsigned char *) "help", cmd) == 0)				return	HELP;
+	if(strncmp((unsigned char *) "quadratic", cmd, 14) == 0)		return	QUADRATIC;
+	if(strncmp((unsigned char *) "linear", cmd, 11) == 0)			return	LINEAR;
+	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return	ECHO;
+	if(strcmp((unsigned char *) "exit", cmd) == 0)				return	EXIT;
+	if(strncmp((unsigned char *) "test", cmd, 4) == 0)			return	TEST;
+	if(strncmp((unsigned char *) "clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
+	if(strncmp((unsigned char *) "semaphore", cmd, 9) == 0)   		return  SEMAPHORE;
+	if(strncmp((unsigned char *) "ps", cmd, 2) == 0)				return  PROCESS_LIST;
+	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    		return  PRODUCTOR_CONSUMER;
+	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   		return  TERMINATE_PROCESS;
+	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return  ECHO;
+	if(strncmp((unsigned char *) "pipe", cmd, 4) == 0)			return  PIPE;
+
+	//if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
+
 
 	return INVALID;
 }
@@ -208,8 +243,8 @@ int test(int argumentQuantity, void ** argumentVector) {
 	if(*buffer != 0)	buffer++;
 	else return ARGS_ERROR;
 	int cmpRes = 0;
-	if((cmpRes = strcmp("zerodiv", buffer)) == 0)		divide0();
-	else if ((cmpRes = strcmp("opcode", buffer)) == 0)	invalidop();
+	if((cmpRes = strcmp((unsigned char *) "zerodiv", buffer)) == 0)		divide0();
+	else if ((cmpRes = strcmp((unsigned char *) "opcode", buffer)) == 0)	invalidop();
 	return	(cmpRes == 0?	VALID_CMD:ARGS_ERROR);
 }
 
@@ -226,6 +261,12 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * ps : lists all proces information\n");
 	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
 	printf("          * terminate processID: terminate the process with the given id \n");
+	printf("          * echo string: prints the given string on the screen \n");
+	printf("          * pipe: shows the use of pipes \n");
+
+//	printf("          * grep c: reads from input until enter and highlights the given char c \n");
+
+
 	return VALID_CMD;
 }
 
@@ -279,7 +320,7 @@ void setArguments(void ** argVector, unsigned char *arguments,
  						uint64_t *processType,	char *processName) {
 	*processType = FOREGROUND;
 
-	if(isBackground(arguments)) {
+	if(isBackground((char *) arguments)) {
 		*processType = BACKGROUND;
 	}
 	*argVector = processType;
@@ -293,7 +334,7 @@ int isBackground(char * arguments) {
 	if(index == -1) {
 		return 0;
 	}
-	return strncmp(arguments + index, "-b", strLength("-b")) == 0;
+	return strncmp((unsigned char *) (arguments + index), (unsigned char *) "-b", strLength((unsigned char *) "-b")) == 0;
 }
 
 int getStartOfBackgroundParameter(char * arguments) {
@@ -304,8 +345,8 @@ int getStartOfBackgroundParameter(char * arguments) {
 		while(i > 0 && arguments[i] == ' ') {
 			i--;
 		}
-		if(i >= (strLength("-b") - 1)) {
-			i = i - (strLength("-b") - 1);
+		if(i >= (strLength((unsigned char *) "-b") - 1)) {
+			i = i - (strLength((unsigned char *) "-b") - 1);
 			return i;
 		}
 
@@ -337,5 +378,39 @@ int terminate(int argumentQuantity, void ** argumentVector) {
 	uint64_t pid = stringToPid(pidString);
 	
 	terminateProcess(pid);
+
+	return 0;
 }
 
+int echo(int argumentQuantity, void ** argumentVector) {
+	unsigned char *buffer = (unsigned char * ) (*argumentVector);
+	if(*buffer != 0) {
+		buffer++;
+	}
+	printf("%s\n", buffer);
+	return 0;
+}
+
+// int grepchar(int argumentQuantity, void ** argumentVector) {
+// 	unsigned char *buffer = (unsigned char * ) (*argumentVector);
+// 	char c, readChar;
+
+// 	if(*buffer != 0) {
+// 		buffer++;
+// 		c = buffer[0];
+// 	}
+// 	else {
+// 		return ARGS_ERROR;
+// 	}
+// 	while((readChar = getchar()) != '\n' ) {
+// 		if(readChar == c) {
+// 			changeFontColor(GREEN);
+// 			putChar(c);
+// 			changeFontColor(WHITE);
+// 		}
+// 		else {
+// 			putChar(c);
+// 		}
+// 	}
+// 	return 0;
+// }

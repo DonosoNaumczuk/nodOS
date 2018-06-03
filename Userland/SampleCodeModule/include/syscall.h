@@ -11,17 +11,17 @@
 #define WRITE_PIXEL 			 2
 
 /* Get Resolution */
-#define GET_RESOLUTION_X		 3
+#define GET_RESOLUTION_X		      3
 #define GET_RESOLUTION_Y 		 4
 
 /* Time */
-#define TIME 					 5
+#define TIME_SYSCALL			 5
 
 /* Clear */
 #define CLEAR 					 6
 
 /* Process */
-#define TERMINATE_PROCESS 		 7
+#define TERMINATE_CURRENT_PROCESS   7
 #define SLEEP_PROCESS 			 8
 #define WAIT_CHILD_PROCESS 		 9
 #define WAKE_UP_PROCESS 		     10
@@ -54,6 +54,13 @@
 /* ps*/
 #define PRINT_ALL_PROCESS          29
 #define TERMINATE_PROCESS_BY_ID    30
+
+/* Pipes */
+#define CREATE_PIPE                31
+#define WRITE_PIPE                 32
+#define READ_PIPE                  33
+#define TERMINATE_PIPE             34
+
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -102,5 +109,12 @@ int printAllProcess();
 
 void terminateProcess(uint64_t pid);
 
+int createPipe(char *pipeId, uint32_t byteSize, uint8_t isNonBlocking);
+
+int writeOnPipe(char *pipeId, void *data, uint32_t byteSize);
+
+int readFromPipe(char *pipeId, void *buffer, uint32_t byteSize);
+
+int terminatePipe(char *pipeId);
 
 #endif

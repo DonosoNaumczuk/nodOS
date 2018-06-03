@@ -1,6 +1,7 @@
 #include	<lib.h>
 #include	<string.h>
 #include	<commandHandler.h>
+#include <null.h>
 
 
 void clearLine(unsigned int lineLong) {

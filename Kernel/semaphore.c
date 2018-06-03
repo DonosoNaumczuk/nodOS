@@ -169,13 +169,13 @@ static void removeSemaphore(char *semaphoreId, uint64_t processId) {
 
 	freeList(semaphore->sleepingProcessesId);
 
-	removeAndFreeFirstElementByCriteria(semaphores, (int (*)(void *, void*)) &semaphoreCompare,
+	removeAndFreeFirstElementByCriteria(semaphores, (int (*)(const void *, const void*)) &semaphoreCompare,
 		 								semaphoreId);
 }
 
 static semaphore_t *getSemaphore(char *semaphoreId) {
 	return (semaphore_t *) getFirstElementReferenceByCriteria(semaphores,
-		   (int (*)(void *, void*)) &semaphoreCompare, semaphoreId);
+		   (int (*)(const void *, const void *)) &semaphoreCompare, semaphoreId);
 }
 
 static char *getMutexId(char *semaphoreId) {
@@ -183,7 +183,7 @@ static char *getMutexId(char *semaphoreId) {
 }
 
 static uint32_t existSemaphore(char *semaphoreId) {
-	return contains(semaphores, (int (*)(const void *, const void*)) &semaphoreCompare, semaphoreId);
+	return contains(semaphores, (int (*)(const void *, const void *)) &semaphoreCompare, semaphoreId);
 }
 
 static uint64_t dequeueProcessId(listObject_t processQueue) {

@@ -130,7 +130,7 @@ int contains(listObject_t list, int (*compareTo)(const void*, const void*), cons
 	return FALSE;
 }
 
-int getFirstElementByCriteria(listObject_t list,int (*compareTo)(const void*, const void*),const void *reference,void *buffer) {
+int getFirstElementByCriteria(listObject_t list, int (*compareTo)(const void*, const void*), const void *reference,void *buffer) {
 	if(list == NULL) return NULL_LIST_ERROR;
 	if(compareTo == NULL) return NULL_FUNCTION_POINTER;
 
@@ -148,7 +148,9 @@ int getFirstElementByCriteria(listObject_t list,int (*compareTo)(const void*, co
 	return ELEMENT_DOESNT_EXIST;
 }
 
-void *getFirstElementReferenceByCriteria(listObject_t list, int (*compareTo)(void * ,void * ), const void *reference) {
+void *getFirstElementReferenceByCriteria(listObject_t list, 
+	int (*compareTo)(const void * , const void * ), const void *reference) {
+
 	if(list == NULL) return NULL;
 	if(compareTo == NULL) return NULL;
 
@@ -162,7 +164,9 @@ void *getFirstElementReferenceByCriteria(listObject_t list, int (*compareTo)(voi
 	return NULL;
 }
 
-int removeAndFreeFirstElementByCriteria(listObject_t list, int (*compareTo)(void*,void*), const void *reference) {
+int removeAndFreeFirstElementByCriteria(listObject_t list, 
+	int (*compareTo)(const void * , const void  *), const void *reference) {
+
 	node_t aux;
 	node_t auxPrev;
 	node_t aux2;
@@ -195,7 +199,8 @@ int removeAndFreeFirstElementByCriteria(listObject_t list, int (*compareTo)(void
 	}
 }
 
-int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(void*,void*),const void *reference) {
+int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(const void * , const void * ),
+															const void *reference) {
 	node_t aux;
 	node_t auxPrev;
 	node_t aux2;
