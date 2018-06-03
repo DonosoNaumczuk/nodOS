@@ -12,6 +12,7 @@
 #include <semaphore.h>
 #include <messageQueue.h>
 #include <interrupts.h>
+#include <pipe.h>
 
 extern uint8_t text;
 extern uint8_t rodata;

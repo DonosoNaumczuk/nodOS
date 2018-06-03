@@ -39,7 +39,6 @@ static uint32_t existPipe(char *pipeId);
 static int pipeCompare(char *pipeId, pipe_t *pipe);
 static pipe_t *getPipe(char *pipeId);
 static void removePipe(char *pipeId, uint64_t processId);
-static char *getMutexListId(char *pipeId);
 static char *getMutexWriteId(char *pipeId);
 static char *getMutexReadId(char *pipeId);
 static char *getSemaphoreFullId(char *pipeId);
