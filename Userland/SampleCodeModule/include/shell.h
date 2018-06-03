@@ -6,6 +6,7 @@
 #define MAX_CMD_LONG                    100
 #define MAX_VALID_CMD_LONG              18
 #define MAX_PIPES_QUANTITY_ON_COMMAND   20
+#define MAX_PIPE_LENGTH_NAME            100
 
 
 #define	EXIT_CMD	         -1
@@ -40,6 +41,12 @@ void receiveTest2();
 void sendTest3();
 void receiveTest3();
 int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFlag);
-void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag);
-void validateCommand(unsigned char *buffer, unsigned int, unsigned int *exitFlag);
+void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag,
+                    char *stdin, char *stdout);
+void validateCommand(unsigned char *buffer, unsigned int index, unsigned int *exitFlag,
+                         char *stdin, char *stdout);
+void generatePipeName(char pipes[MAX_PIPES_QUANTITY_ON_COMMAND][MAX_PIPE_LENGTH_NAME],
+                          int pipesFound);
+void terminateAllPipes(char pipes[MAX_PIPES_QUANTITY_ON_COMMAND][MAX_PIPE_LENGTH_NAME],
+                          int pipesFound);
 #endif

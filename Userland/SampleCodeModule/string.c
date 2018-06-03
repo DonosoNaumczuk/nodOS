@@ -1,4 +1,6 @@
-void strcpy(unsigned char* s1,unsigned char* s2){
+#include <string.h>
+
+void strcpy(unsigned char *s1, unsigned char *s2){
 	while(*s2 != 0){
 		*s1 = *s2;
 		s1++;
@@ -58,7 +60,7 @@ void reverseString(unsigned char *string) {
 	int limit = i / 2;
 	int beginning = 0;
 	unsigned char aux;
-	while( i > limit) {
+	while(i > limit) {
 		aux = string[beginning];
 		string[beginning] = string[i];
 		string[i] = aux;

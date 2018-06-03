@@ -1,10 +1,15 @@
 #include <commandHandler.h>
 #include <lib.h>
+#include <null.h>
 
 void printArgs(int *args, int size);
 
 
-int  commandInterpreter(unsigned char buffer[],	unsigned int length){
+int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
+					char *stdout) {
+	// printf("command: %s",buffer);//evans
+	// printf("\nstdin :%s\n", (stdin != NULL) ? stdin : "NULL"); //evans
+	// printf("\nstdout :%s\n", (stdout != NULL) ? stdout : "NULL");//evans
 	unsigned int argumentsStart;
 	int cmdID;
 	cmdID = readCommand(buffer, (int *) &argumentsStart, length);

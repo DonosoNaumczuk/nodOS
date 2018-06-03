@@ -250,12 +250,14 @@ void intToString(unsigned char *destination, int number) {
 		destination[0] = '0';
 		destination[1] = 0;
 	}
-	while(number > 0) {
-		destination[i] = (number % 10) + '0';
-		i++;
-		number = number / 10;
+	else {
+		while(number > 0) {
+			destination[i] = (number % 10) + '0';
+			i++;
+			number = number / 10;
+		}
+		destination[i] = 0;
 	}
-	destination[i] = 0;
 	reverseString(destination);
 }
 

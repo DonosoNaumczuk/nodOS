@@ -33,7 +33,8 @@
 #define   FOREGROUND	  1
 #define	BACKGROUND	  0
 
-int  commandInterpreter(unsigned char buffer[], unsigned int size);
+int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
+                         char *stdout);
 int printTime(int argumentQuantity, void ** argumentVector);
 int readCommand(unsigned char buffer[], int *argumentsStart, unsigned int length);
 unsigned int getIntArguments(unsigned char buffer[], int args[], unsigned int total);
