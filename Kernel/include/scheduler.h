@@ -21,6 +21,7 @@ void nextTask(void * currentProcessStackPointer);
 void addProcessToScheduler(taskControlBlockPtr_t tcb);
 void terminateCurrentProcess(int returnValue);
 void terminateAProcessByPid(uint64_t pid);
+void terminateATaskByTid(uint64_t tid);
 processControlBlockPtr_t getPCBByPid(uint64_t pid);
 taskControlBlockPtr_t getTCBByTid(uint64_t tid);
 int isBlocked(uint64_t tid);

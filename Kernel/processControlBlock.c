@@ -42,6 +42,11 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	return newPCB;
 }
 
+uint64_t addTaskToProcess(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs) {
+    taskControlBlockPtr_t newTCB = createTask(pcb, codeAddress, argsQuantity, processArgs);
+    addElement(pcb->othertasks, &newTCB, sizeof(newTCB));
+}
+
 void setForeground(processControlBlockPtr_t pcb) {
 	pcb->foreground = TRUE;
 }
@@ -111,11 +116,11 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
 }
 
 void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb) {
-    removeAndFreeFirstElementByCriteria(pcb->othertasks, &tcbComparator,tcb);
+    removeAndFreeFirstElementByCriteria(pcb->othertasks, &tcbComparator, &tcb);
 }
 
 static int tcbComparator(void * tcb1, void * tcb2) {
-    return getTaskIdOf(tcb1) == getTaskIdOf(tcb2);
+    return getTaskIdOf(*((taskControlBlockPtr_t *)tcb1)) == getTaskIdOf(*((taskControlBlockPtr_t *)tcb2));
 }
 
 int isProcessTerminate(processControlBlockPtr_t pcb) {

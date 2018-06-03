@@ -87,6 +87,15 @@ void terminateAProcessByPid(uint64_t pid) {
     }
 }
 
+void terminateATaskByTid(uint64_t tid) {
+    if(tid != 1 && tid != 2) {
+        taskControlBlockPtr_t tcb = getTCBByTid(tid);
+        if(tcb != NULL) {
+            terminateATask(tcb);
+        }
+    }
+}
+
 processControlBlockPtr_t getPCBByPid(uint64_t pid) {
     taskControlBlockPtr_t tcb;
     if(getFirstElementByCriteria(scheduler.ready, &TCBComparatorByPID, &pid, &tcb) == ELEMENT_DOESNT_EXIST) {

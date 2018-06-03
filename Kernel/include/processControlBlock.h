@@ -17,6 +17,7 @@ typedef struct processControlBlock_t * processControlBlockPtr_t;
 #define PROCESS_BLOCKED 4
 
 processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *codeAddress, int argsQuantity, void ** processArgs);
+uint64_t addTaskToProcess(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs);
 void setForeground(processControlBlockPtr_t pcb);
 int isForeground(processControlBlockPtr_t pcb);
 uint64_t getProcessIdOf(processControlBlockPtr_t pcb);
