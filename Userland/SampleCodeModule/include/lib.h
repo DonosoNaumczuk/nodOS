@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <syscall.h>
+#include <string.h>
 
 int printf(const char* c, ...);
 int getchar();
@@ -16,5 +17,6 @@ int toBase(int n, char *pnt, int base);
 int copyString(char* string, char* to);
 int getNumber(int * dir, char * buffer, int * j);
 int isNumber(char n);
+void intToString(unsigned char *destination, int number);
 
 #endif
