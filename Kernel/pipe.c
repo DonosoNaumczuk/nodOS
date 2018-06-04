@@ -39,7 +39,6 @@ static uint32_t existPipe(char *pipeId);
 static int pipeCompare(char *pipeId, pipe_t *pipe);
 static pipe_t *getPipe(char *pipeId);
 static void removePipe(char *pipeId, uint64_t processId);
-static char *getMutexListId(char *pipeId);
 static char *getMutexWriteId(char *pipeId);
 static char *getMutexReadId(char *pipeId);
 static char *getSemaphoreFullId(char *pipeId);
@@ -108,7 +107,7 @@ int writeOnPipe(char *pipeId, void * data, uint32_t byteSize,
 		if(pipe->isNonBlocking) {
 			if(!semaphoreTryWait(pipe->fullSemaphore, processId)) {
 				unlock(pipe->writeMutex, processId);
-				return byteSize - i;
+				return i;
 			}
 		}
 		else {
@@ -204,10 +203,6 @@ static void removePipe(char *pipeId, uint64_t processId) {
 
 	removeAndFreeFirstElementByCriteria(pipes, (int (*)(const void *, const void *)) &pipeCompare, pipeId);
 }
-
-// static char *getMutexListId(char *pipeId) {
-// 	return stringConcatenation(LIST_MUTEX_PREFIX, pipeId);
-// }
 
 static char *getMutexWriteId(char *pipeId) {
 	return stringConcatenation(WRITE_MUTEX_PREFIX, pipeId);
