@@ -6,17 +6,17 @@ Operative System developed for OS ITBA Subject. Based on Computer Architecture s
 
 You need Ubuntu 16.04 LTS.
 
-* Install the following packages:
+##### Install the following packages:
 
-    nasm qemu gcc make
+    `nasm qemu gcc make`
 
-* Clone repository:
+##### Clone repository:
 
-    git clone https://github.com/DonosoNaumczuk/nodOS.git
+    `git clone https://github.com/DonosoNaumczuk/nodOS.git`
 
-* Then execute the following commands:
+##### Then execute the following commands:
 
-    cd nodOS/Toolchain/  
-    make all  
-    cd ..  
-    ./run.sh  
+    `cd nodOS/Toolchain/`  
+    `make all`  
+    `cd ..`  
+    `./run.sh`  
