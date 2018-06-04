@@ -96,10 +96,15 @@ void setState(taskControlBlockPtr_t tcb, int state) {
 }
 
 void terminateATask(taskControlBlockPtr_t tcb) {
-    freeMemory(tcb->stackPointer);
-	removeTCBFromPCB(tcb->pcb, tcb);
-    tcb->state = TASK_TERMINATE;
-	wakeUpAPCB(tcb->pcb);
+	if(isMainTask(tcb)) {
+		terminateAProcess(tcb->pcb);
+	}
+	else {
+	    freeMemory(tcb->stackPointer);
+		removeTCBFromPCB(tcb->pcb, tcb);
+	    tcb->state = TASK_TERMINATE;
+		wakeUpAPCB(tcb->pcb);
+	}
 }
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
