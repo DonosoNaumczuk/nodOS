@@ -8,7 +8,7 @@ You need Ubuntu 16.04 LTS.
 
 ##### Install the following packages:
 
-    nasm qemu gcc make
+    nasm qemu gcc make git
 
 ##### Clone repository:
 
