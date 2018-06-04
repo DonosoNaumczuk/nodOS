@@ -112,14 +112,3 @@ processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t sta
     }
     return aux;
 }
-
-void printList(processControlBlockListPtr_t list) {
-    if(list != NULL && list->first != NULL) {
-        printPCB(list->first->value);
-        processControlBlockNode *current = list->first;
-        while(current->next != NULL) {
-            printPCB(current->next->value);
-            current = current->next;
-        }
-    }
-}

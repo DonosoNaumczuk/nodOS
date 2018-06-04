@@ -29,8 +29,8 @@ processControlBlockPtr_t createProcess(processControlBlockPtr_t parent, void *co
 	newPCB->parent = parent;
 	newPCB->childs = initializePCBList();
 	newPCB->name = (char *)(processArgs[1]);
-     newPCB->readSource = (char *)(processArgs[2]);
-     newPCB->writeSource = (char *)(processArgs[3]);
+    newPCB->readSource = (char *)(processArgs[2]);
+    newPCB->writeSource = (char *)(processArgs[3]);
 
 
 	newPCB->mainTask = createTask(newPCB, codeAddress, argsQuantity-4, processArgs+4);
@@ -141,8 +141,10 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
 
 	terminateATask(pcb->mainTask);
 	for(int i = 0; i < size(pcb->othertasks); i++) {
-		taskControlBlockPtr_t aux;
-		getElementOnIndex(pcb->othertasks, &aux, i);
+        taskControlBlockPtr_t aux;
+        getFirstElement(pcb->othertasks, &aux);
+        removeAndFreeFirst(pcb->othertasks);
+        addElement(pcb->othertasks, &aux, sizeof(aux));
 	    terminateATask(aux);
 	}
 
@@ -155,7 +157,9 @@ void wakeUpAPCB(processControlBlockPtr_t pcb) {
     }
     for(int i = 0; i < size(pcb->othertasks); i++) {
         taskControlBlockPtr_t aux;
-        getElementOnIndex(pcb->othertasks, &aux, i);
+        getFirstElement(pcb->othertasks, &aux);
+        removeAndFreeFirst(pcb->othertasks);
+        addElement(pcb->othertasks, &aux, sizeof(aux));
         if(isWaiting(aux)) {
             wakeUp(getTaskIdOf(aux));
         }
@@ -185,7 +189,6 @@ static int TCBComparatorByTID(void * tid, void * tcb) {
 }
 
 void printPCB(processControlBlockPtr_t pcb) {
-/*
      if(pcb != NULL) {
 		char * aux = pcb->name;
 		int i = 0;
@@ -210,19 +213,5 @@ void printPCB(processControlBlockPtr_t pcb) {
 		else {
 			printWithColor("Background", 10, 0x0F);
 		}
-		printWithColor("    |    ", 9, 0x0F);
-		if(pcb->state == PROCESS_READY) {
-			printWithColor("Ready     ", 10, 0x0F);
-		}
-		else if(pcb->state == PROCESS_BLOCKED) {
-			printWithColor("Block     ", 10, 0x0F);
-		}
-		else if(pcb->state == PROCESS_WAITING) {
-			printWithColor("Waiting   ", 10, 0x0F);
-		}
-		else if(pcb->state == PROCESS_TERMINATE) {
-			printWithColor("Terminated", 10, 0x0F);
-		}
-		newLine();
-	}*/
+	}
 }

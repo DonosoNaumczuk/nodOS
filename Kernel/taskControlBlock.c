@@ -42,7 +42,7 @@ taskControlBlockPtr_t createTask(processControlBlockPtr_t pcb, void *codeAddress
 }
 
 taskControlBlockPtr_t initializeTCB(processControlBlockPtr_t pcb, void *codeAddress, int argsQuantity, void ** processArgs) {
-    taskControlBlockPtr_t newTCB = allocateMemory(sizeof(taskControlBlock_t));
+	taskControlBlockPtr_t newTCB = allocateMemory(sizeof(taskControlBlock_t));
     newTCB->tid = tidCounter;
     tidCounter++;
     newTCB->state = TASK_READY;
@@ -143,4 +143,26 @@ void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity,
     stackFrame->base 	=	0x000;
 
     return (void *)stackFrame;
+}
+
+void printATask(taskControlBlockPtr_t tcb) {
+	printPCB(tcb->pcb);
+	printWithColor("    |    ", 9, 0x0F);
+	if(tcb->state == TASK_READY) {
+		printWithColor("Ready     ", 10, 0x0F);
+	}
+	else if(tcb->state == TASK_BLOCKED) {
+		printWithColor("Block     ", 10, 0x0F);
+	}
+	else if(tcb->state == TASK_WAITING) {
+		printWithColor("Waiting   ", 10, 0x0F);
+	}
+	else if(tcb->state == TASK_TERMINATE) {
+		printWithColor("Terminated", 10, 0x0F);
+	}
+	printWithColor("|    ", 5, 0x0F);
+	if(tcb->tid < 10) {
+		printDecimal(0);
+	}
+	printDecimal(tcb->tid);
 }

@@ -15,6 +15,5 @@ processControlBlockPtr_t PCBFromListByPID(processControlBlockListPtr_t list,
                                           long int pid);
 processControlBlockListPtr_t concatenatePCBList(processControlBlockListPtr_t start,
                                                 processControlBlockListPtr_t end);
-void printList(processControlBlockListPtr_t list);
 
 #endif

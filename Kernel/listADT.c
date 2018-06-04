@@ -182,6 +182,7 @@ int removeAndFreeFirstElementByCriteria(listObject_t list,
 
 		while (aux != NULL) {
 			if((*compareTo)(reference,aux->element) == 0) {
+                list->size--;
 				aux2 = aux->next;
 				freeMemory(aux->element);
 				freeMemory(aux);
@@ -216,6 +217,7 @@ int removeFirstElementByCriteria(listObject_t list,int (*compareTo)(const void *
 
 		while (aux != NULL) {
 			if((*compareTo)(reference,aux->element) == 0) {
+                list->size--;
 				aux2 = aux->next;
 				freeMemory(aux);
 				if(firstLoop == 1){

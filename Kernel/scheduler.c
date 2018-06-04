@@ -8,6 +8,7 @@ typedef struct scheduler_t {
 
 void _force_context_switch(void);
 void _context_switch(void);
+static printList(listObject_t list);
 static int TCBComparatorByPID(void * pid, void * tcb);
 static int TCBComparatorByTID(void * tid, void * tcb);
 
@@ -202,9 +203,22 @@ int isCurrentForeground() {
 }
 
 void printAllProcess() {
-    /*printWithColor("N A M E             |   I D    |     M O D E      |  S T A T E\n", 63, 0x0F);
-    printWithColor("--------------------------------------------------------------\n", 63, 0x0F);
+    printWithColor("N A M E             |  P I D   |     M O D E      |  S T A T E   | T I D \n", 74, 0x0F);
+    printWithColor("-------------------------------------------------------------------------\n", 74, 0x0F);
     printList(scheduler.ready);
     printList(scheduler.waiting);
-    printList(scheduler.terminated);*/
+    printList(scheduler.terminated);
+}
+
+static printList(listObject_t list) {
+    if(isCurrentForeground()) {
+        for(int i = 0; i < size(list); i++) {
+    		taskControlBlockPtr_t aux;
+            getFirstElement(list, &aux);
+            removeAndFreeFirst(list);
+            addProcessToScheduler(aux);
+    	    printATask(aux);
+            newLine();
+    	}
+    }
 }

@@ -98,9 +98,9 @@ int main() {
 	void * initargs[] = {&foreground, "init", NULL, NULL};
 	void * cleanerargs[] = {&foreground, "cleaner", NULL, NULL};
 	void * shellargs[] = {&foreground, "shell", NULL, NULL};
-	processControlBlockPtr_t initPCB = createProcess(NULL, &init, 2, initargs);
-	processControlBlockPtr_t cleanerPCB = createProcess(initPCB, &cleaner, 1, cleanerargs);
-	processControlBlockPtr_t shellPCB = createProcess(cleanerPCB, sampleCodeModuleAddress, 1, shellargs);
+	processControlBlockPtr_t initPCB = createProcess(NULL, &init, 4, initargs);
+	processControlBlockPtr_t cleanerPCB = createProcess(initPCB, &cleaner, 4, cleanerargs);
+	processControlBlockPtr_t shellPCB = createProcess(cleanerPCB, sampleCodeModuleAddress, 4, shellargs);
 	setForeground(shellPCB);
 	startScheduler();
 	return 0;
