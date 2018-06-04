@@ -107,7 +107,7 @@ int writeOnPipe(char *pipeId, void * data, uint32_t byteSize,
 		if(pipe->isNonBlocking) {
 			if(!semaphoreTryWait(pipe->fullSemaphore, processId)) {
 				unlock(pipe->writeMutex, processId);
-				return byteSize - i;
+				return i;
 			}
 		}
 		else {
