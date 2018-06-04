@@ -96,14 +96,16 @@ void incrementProducer(prodcons_t *producerStruct) {
 		return;
 	}
 
-	void ** arguments = allocateMemory(sizeof(void*) * 4);
+	void ** arguments = allocateMemory(sizeof(void*) * 6);
 	int mode = FOREGROUND;
 	int *id = allocateMemory(sizeof(*id));
 	*id = getNullId(producerStruct);
 	arguments[0] = &mode;
 	arguments[1] = "producer";
-	arguments[2] = producerStruct;
-	arguments[3] = id;
+	arguments[2] = NULL;
+	arguments[3] = NULL;
+	arguments[4] = producerStruct;
+	arguments[5] = id;
 	producerStruct->list[*id] = createProcess(&producer, 4, arguments);
 	(*size)++;
 	unlock(MUTEX_PROD);
@@ -142,14 +144,16 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 		return;
 	}
 
-	void ** arguments = allocateMemory(sizeof(void*) * 4);;
+	void ** arguments = allocateMemory(sizeof(void*) * 6);;
 	int mode = FOREGROUND;
 	int *id = allocateMemory(sizeof(*id));
 	*id = getNullId(consumerStruct);
 	arguments[0] = &mode;
 	arguments[1] = "consumer";
-	arguments[2] = consumerStruct;
-	arguments[3] = id;
+	arguments[2] = NULL;
+	arguments[3] = NULL;
+	arguments[4] = consumerStruct;
+	arguments[5] = id;
 	consumerStruct->list[*id] = createProcess(&consumer, 4, arguments);
 	(*size)++;
 	unlock(MUTEX_CONS);

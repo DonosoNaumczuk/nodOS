@@ -111,6 +111,16 @@ uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r
 		case WAIT_TASK:
 			waitTask(rsi);
 			return 0;
+		case SET_READ_SOURCE: {
+			processControlBlockPtr_t pcb = getCurrentPCB();
+			setReadSource(pcb, (char *)rsi);
+			return 0;
+		}
+		case SET_WRITE_SOURCE: {
+			processControlBlockPtr_t pcb = getCurrentPCB();
+			setWriteSource(pcb, (char *)rsi);
+			return 0;
+		}
 	}
 
 	return 0;

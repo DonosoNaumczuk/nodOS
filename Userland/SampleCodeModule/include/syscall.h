@@ -61,6 +61,10 @@
 #define READ_PIPE                  33
 #define TERMINATE_PIPE             34
 
+/*Read and Write Source*/
+#define SET_READ_SOURCE            38
+#define SET_WRITE_SOURCE           39
+
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -108,5 +112,9 @@ void closeMailbox(const char *mailboxId);
 int printAllProcess();
 
 void terminateProcess(uint64_t pid);
+
+void setReadSource(char *readSource);
+
+void setWriteSource(char *writeSource);
 
 #endif

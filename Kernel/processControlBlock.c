@@ -71,6 +71,14 @@ char *getReadSource(processControlBlockPtr_t pcb) {
     return pcb->readSource;
 }
 
+void setReadSource(processControlBlockPtr_t pcb, char *readSource) {
+     pcb->readSource = readSource;
+}
+
+void setWriteSource(processControlBlockPtr_t pcb, char *writeSource) {
+     pcb->writeSource = writeSource;
+}
+
 int freeMemoryFromHeap(processControlBlockPtr_t pcb, void * address) {
     removeAndFreeFirstElementByCriteria(pcb->heap, &addressComparator, &address);
     return freeMemory(address);

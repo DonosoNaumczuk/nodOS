@@ -21,7 +21,7 @@
 #define WRITE_PIXEL 			 2
 
 /* Get Resolution */
-#define GET_RESOLUTION_X		 3
+#define GET_RESOLUTION_X		      3
 #define GET_RESOLUTION_Y 		 4
 
 /* Time */
@@ -70,11 +70,15 @@
 #define READ_PIPE                  33
 #define TERMINATE_PIPE             34
 
-/*task*/
+/*Task*/
 
-#define CREATE_TASK            35
-#define TERMINATE_TASK         36
-#define WAIT_TASK              37
+#define CREATE_TASK                35
+#define TERMINATE_TASK             36
+#define WAIT_TASK                  37
+
+/*Read and Write Source*/
+#define SET_READ_SOURCE            38
+#define SET_WRITE_SOURCE           39
 
 uint64_t syscall_dispatcher(uint64_t rax, uint64_t rbx, uint64_t rcx, uint64_t rdx);
 

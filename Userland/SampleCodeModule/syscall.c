@@ -68,3 +68,11 @@ int printAllProcess() {
 void terminateProcess(uint64_t pid) {
      _int_80(TERMINATE_PROCESS_BY_ID, pid, 0, 0);
 }
+
+void setReadSource(char *readSource) {
+     _int_80(SET_READ_SOURCE, readSource, 0, 0);
+}
+
+void setWriteSource(char *writeSource) {
+     _int_80(SET_WRITE_SOURCE, writeSource, 0, 0);
+}
