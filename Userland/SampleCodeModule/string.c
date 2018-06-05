@@ -68,3 +68,11 @@ void reverseString(unsigned char *string) {
 		beginning++; 
 	}
 }
+
+int stringToInt(unsigned char *string) {
+	int res = 0, i = 0;
+	while(string[i] >= '0' && string[i] <= '9') {
+		res = res * 10 + string[i]-'0';
+	}
+	return res;
+}

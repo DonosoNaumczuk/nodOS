@@ -71,7 +71,6 @@
 #define TERMINATE_PIPE             34
 
 /*Task*/
-
 #define CREATE_TASK                35
 #define TERMINATE_TASK             36
 #define WAIT_TASK                  37

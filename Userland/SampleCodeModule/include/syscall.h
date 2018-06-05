@@ -65,6 +65,12 @@
 #define SET_READ_SOURCE            38
 #define SET_WRITE_SOURCE           39
 
+/*Task*/
+#define CREATE_TASK                35
+#define TERMINATE_TASK             36
+#define WAIT_TASK                  37
+
+
 
 #define KEYBOARD_IN_ID			 0
 #define SCREEN_IN_ID 		 	 1
@@ -116,5 +122,11 @@ void terminateProcess(uint64_t pid);
 void setReadSource(char *readSource);
 
 void setWriteSource(char *writeSource);
+
+uint64_t createTask(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector);
+
+void waitTask(uint64_t tid);
+
+void terminateTask(uint64_t tid);
 
 #endif
