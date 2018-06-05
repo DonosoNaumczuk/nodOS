@@ -140,12 +140,13 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
     setReturnValue(pcb, returnValue);
 
 	terminateATask(pcb->mainTask);
-	for(int i = 0; i < size(pcb->othertasks); i++) {
+    int top = size(pcb->othertasks);
+	for(int i = 0; i < top; i++) {
         taskControlBlockPtr_t aux;
         getFirstElement(pcb->othertasks, &aux);
-        removeAndFreeFirst(pcb->othertasks);
-        addElement(pcb->othertasks, &aux, sizeof(aux));
-	    terminateATask(aux);
+        printDecimal(getTaskIdOf(aux));
+        newLine();
+        terminateATask(aux);
 	}
 
     _force_context_switch();
@@ -155,7 +156,8 @@ void wakeUpAPCB(processControlBlockPtr_t pcb) {
     if(isWaiting(pcb->mainTask)) {
         wakeUp(getTaskIdOf(pcb->mainTask));
     }
-    for(int i = 0; i < size(pcb->othertasks); i++) {
+    int top = size(pcb->othertasks);
+    for(int i = 0; i < top; i++) {
         taskControlBlockPtr_t aux;
         getFirstElement(pcb->othertasks, &aux);
         removeAndFreeFirst(pcb->othertasks);
@@ -171,7 +173,7 @@ void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb) {
 }
 
 static int tcbComparator(void * tcb1, void * tcb2) {
-    return getTaskIdOf(*((taskControlBlockPtr_t *)tcb1)) == getTaskIdOf(*((taskControlBlockPtr_t *)tcb2));
+    return getTaskIdOf(*((taskControlBlockPtr_t *)tcb1)) != getTaskIdOf(*((taskControlBlockPtr_t *)tcb2));
 }
 
 int isProcessTerminate(processControlBlockPtr_t pcb) {

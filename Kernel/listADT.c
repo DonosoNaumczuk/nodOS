@@ -46,7 +46,7 @@ int addElement(listObject_t list, const void *element, const unsigned int size) 
 			aux = aux->next;
 		}
 
-        	newNode->index = aux->index + 1;
+        newNode->index = aux->index + 1;
 		aux->next = newNode;
     }
 
