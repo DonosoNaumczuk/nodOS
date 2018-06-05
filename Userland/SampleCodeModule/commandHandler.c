@@ -271,7 +271,6 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 
 	printf("          * grep c: reads from input until enter and highlights the given char c \n");
 
-	return -1; //evans troll
 	return VALID_CMD;
 }
 
