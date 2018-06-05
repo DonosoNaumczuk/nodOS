@@ -138,6 +138,21 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			else {
 				return 0;
 			}
+		case THREAD_TEST:
+			setArguments(argVector, arguments, &processType, "threadTest", stdin, stdout);
+			processId = createProcess(&threadTest, 3, argVector);
+			return 0;
+
+		case TERMINATE_THREAD:
+			setArguments(argVector, arguments, &processType, "terminateThread", stdin, stdout);
+			processId = createProcess(&terminateThreadCommand, 3, argVector);
+			if(processType == FOREGROUND) {
+				return	waitChild(processId);
+			}
+			else {
+				return 0;
+			}
+		
 
 
 	}
@@ -159,22 +174,26 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
 
-	if(strcmp((unsigned char *) "time", cmd) == 0)				return	TIME;
-	if(strcmp((unsigned char *) "help", cmd) == 0)				return	HELP;
-	if(strncmp((unsigned char *) "quadratic", cmd, 14) == 0)		return	QUADRATIC;
-	if(strncmp((unsigned char *) "linear", cmd, 11) == 0)			return	LINEAR;
-	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return	ECHO;
-	if(strcmp((unsigned char *) "exit", cmd) == 0)				return	EXIT;
-	if(strncmp((unsigned char *) "test", cmd, 4) == 0)			return	TEST;
-	if(strncmp((unsigned char *) "clean", cmd, 5) == 0) 	    		return	CLEAN_SCREEN;
-	if(strncmp((unsigned char *) "semaphore", cmd, 9) == 0)   		return  SEMAPHORE;
-	if(strncmp((unsigned char *) "ps", cmd, 2) == 0)				return  PROCESS_LIST;
-	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    		return  PRODUCTOR_CONSUMER;
-	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   		return  TERMINATE_PROCESS;
-	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)			return  ECHO;
-	if(strncmp((unsigned char *) "pipe", cmd, 4) == 0)			return  PIPE;
+	if(strcmp((unsigned char *) "time", cmd) == 0)					return	TIME;
+	if(strcmp((unsigned char *) "help", cmd) == 0)					return	HELP;
+	if(strncmp((unsigned char *) "quadratic", cmd, 14) == 0)			return	QUADRATIC;
+	if(strncmp((unsigned char *) "linear", cmd, 11) == 0)				return	LINEAR;
+	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)				return	ECHO;
+	if(strcmp((unsigned char *) "exit", cmd) == 0)					return	EXIT;
+	if(strncmp((unsigned char *) "test", cmd, 4) == 0)				return	TEST;
+	if(strncmp((unsigned char *) "clean", cmd, 5) == 0) 	    			return	CLEAN_SCREEN;
+	if(strncmp((unsigned char *) "semaphore", cmd, 9) == 0)   			return  SEMAPHORE;
+	if(strncmp((unsigned char *) "ps", cmd, 2) == 0)					return  PROCESS_LIST;
+	if(strncmp((unsigned char *) "prodcons", cmd, 8) == 0)    			return  PRODUCTOR_CONSUMER;
+	if(strncmp((unsigned char *) "terminateThread", cmd, 15) == 0)		return  TERMINATE_THREAD;
+	if(strncmp((unsigned char *) "terminate", cmd, 9) == 0)   			return  TERMINATE_PROCESS;
+	if(strncmp((unsigned char *) "echo", cmd, 4) == 0)				return  ECHO;
+	if(strncmp((unsigned char *) "pipe", cmd, 4) == 0)				return  PIPE;
+	if(strncmp((unsigned char *) "grep", cmd, 4) == 0)				return  GREP;
+	if(strncmp((unsigned char *) "threadTest", cmd, 10) == 0)			return  THREAD_TEST;
 
-	if(strncmp((unsigned char *) "grep", cmd, 4) == 0)			return  GREP;
+	
+	
 
 
 	return INVALID;
@@ -265,11 +284,12 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
 	printf("          * ps : lists all proces information\n");
 	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
-	printf("          * terminate processID: terminate the process with the given id \n");
+	printf("          * terminate processID: terminates the process with the given id \n");
 	printf("          * echo string: prints the given string on the screen \n");
 	printf("          * pipe: shows the use of pipes \n");
-
-	printf("          * grep c: reads from input until enter and highlights the given char c \n");
+	printf("          * grep c: reads from input until enter and highlights the given char c\n");
+	printf("          * terminateThread threadID: terminates the tread with the given id\n");
+	printf("          * threadTest: Creates 10 threads running in background\n");
 
 	return VALID_CMD;
 }
@@ -420,4 +440,29 @@ int grepChar(int argumentQuantity, void ** argumentVector) {
 	}
 	putChar('\n');
 	return 0;
+}
+
+int terminateThreadCommand(int argumentQuantity, void ** argumentVector) {
+	unsigned char *tidString = (unsigned char * ) (*argumentVector);
+	printf("tidString: %s\n", tidString);
+	uint64_t tid = stringToPid(tidString);
+	printf("\ntid : %d\n", tid);
+	terminateTask(tid);
+	return 0;
+	
+}
+
+int threadTest(int argumentQuantity, void ** argumentVector) {
+	unsigned char *buffer = (unsigned char*)(*argumentVector);
+	int i;;
+	for(i = 0; i < 10; i++) {
+		createTask(&loopThread, 0, NULL);
+	}
+	while(1);
+	return 0;
+
+}
+
+int loopThread(int argumentQuantity, void ** argumentVector) {
+	while(1);
 }

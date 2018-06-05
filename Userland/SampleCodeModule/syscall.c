@@ -76,3 +76,18 @@ void setReadSource(char *readSource) {
 void setWriteSource(char *writeSource) {
      _int_80(SET_WRITE_SOURCE, writeSource, 0, 0);
 }
+
+
+uint64_t createTask(void * codeAddress, uint32_t parametersQuantity, void ** parametersVector) {
+     return _int_80(CREATE_TASK, (uint64_t) codeAddress, parametersQuantity,
+                     (uint64_t) parametersVector);
+}
+
+void waitTask(uint64_t tid) {
+     _int_80(WAIT_TASK, tid, 0, 0);
+}
+
+void terminateTask(uint64_t tid) {
+     _int_80(TERMINATE_TASK, tid, 0, 0);
+}
+

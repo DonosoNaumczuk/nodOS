@@ -29,6 +29,8 @@
 #define	TERMINATE_PROCESS  11
 #define   PIPE               12
 #define   GREP               13
+#define   TERMINATE_THREAD   14
+#define   THREAD_TEST        15
 
 #define   FOREGROUND	  1
 #define	BACKGROUND	  0
@@ -54,6 +56,8 @@ int terminate(int argumentQuantity, void ** argumentVector);
 uint64_t stringToPid(unsigned char *pidString);
 int echo(int argumentQuantity, void ** argumentVector);
 int grepChar(int argumentQuantity, void ** argumentVector);
-
+int terminateThreadCommand(int argumentQuantity, void ** argumentVector);
+int threadTest(int argumentQuantity, void ** argumentVector);
+int loopThread(int argumentQuantity, void ** argumentVector);
 
 #endif
