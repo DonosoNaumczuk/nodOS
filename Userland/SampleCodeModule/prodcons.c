@@ -128,7 +128,6 @@ void decrementProducer(prodcons_t *producerStruct) {
 	changeFontColor(BLUE);
 	printf("You killed an inocent producer :(\n");
 	changeFontColor(WHITE);
-	printf("Producers quantity = %d\n\n", *(producerStruct->size));
 
 	unlock(MUTEX_PROD);
 }
@@ -176,7 +175,6 @@ void decrementConsumer(prodcons_t *consumerStruct) {
 	changeFontColor(BLUE);
 	printf("You killed an inocent consumer :(\n");
 	changeFontColor(WHITE);
-	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
 	unlock(MUTEX_CONS);
 }
@@ -206,7 +204,6 @@ int producer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new producer. I want to write %d!\n", id);
-	printf("Producers quantity= %d\n\n", *(producerStruct->size));
 	while(1) {
 		semaphoreWait(SEM_FULL);
 		lock(MUTEX_PROD);
@@ -239,7 +236,6 @@ int consumer(int argc, void ** args) {
 	int id = *(int *)args[1];
 
 	printf("Hello I'm a new consumer. I want to consume!\n");
-	printf("Consumers quantity = %d\n\n", *(consumerStruct->size));
 
 	while(1) {
 		semaphoreWait(SEM_EMPTY);
