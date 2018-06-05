@@ -96,25 +96,24 @@ void setState(taskControlBlockPtr_t tcb, int state) {
 }
 
 void terminateATask(taskControlBlockPtr_t tcb) {
+    freeMemory(tcb->stackPointer);
+	removeTCBFromPCB(tcb->pcb, tcb);
+    tcb->state = TASK_TERMINATE;
+	wakeUpAPCB(tcb->pcb);
+}
+
+void terminateATaskWrapper(taskControlBlockPtr_t tcb) {
 	if(isMainTask(tcb)) {
-		terminateAProcess(tcb->pcb);
+		terminateAProcess(-1, tcb->pcb);
 	}
 	else {
-	    freeMemory(tcb->stackPointer);
-		removeTCBFromPCB(tcb->pcb, tcb);
-	    tcb->state = TASK_TERMINATE;
-		wakeUpAPCB(tcb->pcb);
+		terminateATask(tcb);
 	}
 }
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
     int returnValue = ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
-	if(isMainTask(getCurrentTCB())) {
-		terminateCurrentProcess(returnValue);
-	}
-	else {
-		terminateATask(getCurrentTCB());
-	}
+	terminateATaskWrapper(getCurrentTCB());
 }
 
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity, void ** processArgs) {

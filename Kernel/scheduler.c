@@ -87,7 +87,7 @@ void terminateATaskByTid(uint64_t tid) {
     if(tid != 1 && tid != 2) {
         taskControlBlockPtr_t tcb = getTCBByTid(tid);
         if(tcb != NULL) {
-            terminateATask(tcb);
+            terminateATaskWrapper(tcb);
         }
     }
 }

@@ -123,7 +123,6 @@ int shell() {
 		clearBuffer(buffer);
 		index = 0;
 	}
-
 	return 0;
 }
 
@@ -188,7 +187,7 @@ void validateCommand(unsigned char *buffer, unsigned int index, unsigned int *ex
 
 void generatePipeName(char pipes[MAX_PIPES_QUANTITY_ON_COMMAND][MAX_PIPE_LENGTH_NAME],
 					 int pipesFound) {
-	unsigned char number[4]; 
+	unsigned char number[4];
 	intToString(number, pipesFound);
 	strcpy((unsigned char *) pipes[pipesFound], (unsigned char *)PIPE_PREFIX);
 	strcpy((unsigned char *) (pipes[pipesFound] + strLength(PIPE_PREFIX)),

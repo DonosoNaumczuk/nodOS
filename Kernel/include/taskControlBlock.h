@@ -29,6 +29,7 @@ processControlBlockPtr_t getPCBOf(taskControlBlockPtr_t tcb);
 uint64_t getTaskIdOf(taskControlBlockPtr_t tcb);
 void setState(taskControlBlockPtr_t tcb, int state);
 void terminateATask(taskControlBlockPtr_t tcb);
+void terminateATaskWrapper(taskControlBlockPtr_t tcb);
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity, void ** processArgs);
 
 #endif
