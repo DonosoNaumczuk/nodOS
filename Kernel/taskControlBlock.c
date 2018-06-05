@@ -113,7 +113,13 @@ void terminateATaskWrapper(taskControlBlockPtr_t tcb) {
 
 void startProcess(int argsQuantity, void ** processArgs, void * codeAddress) {
     int returnValue = ((int (*)(int, void**))(codeAddress))(argsQuantity, processArgs);
-	terminateATaskWrapper(getCurrentTCB());
+	taskControlBlockPtr_t tcb = getCurrentTCB();
+	if(isMainTask(tcb)) {
+		terminateAProcess(returnValue, tcb->pcb);
+	}
+	else {
+		terminateATask(tcb);
+	}
 }
 
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity, void ** processArgs) {
