@@ -14,9 +14,10 @@ typedef struct processControlBlock_t {
     listObject_t heap;
 } processControlBlock_t;
 
-static int tcbComparator(void * tcb1, void * tcb2);
-static int TCBComparatorByTID(void * tid, void * tcb);
-static int addressComparator(void * address1, void * address2);
+static int tcbComparator(const void * tcb1, const void * tcb2);
+static int TCBComparatorByTID(const void * tid, const void * tcb);
+static int addressComparator(const void * address1, const void * address2);
+void _force_context_switch(void);
 
 static long int pidCounter = 1;
 
@@ -84,7 +85,7 @@ int freeMemoryFromHeap(processControlBlockPtr_t pcb, void * address) {
     return freeMemory(address);
 }
 
-static int addressComparator(void * address1, void * address2) {
+static int addressComparator(const void * address1, const void * address2) {
     return *((void**) address1) != *((void**) address1);
 }
 
@@ -172,7 +173,7 @@ void removeTCBFromPCB(processControlBlockPtr_t pcb, taskControlBlockPtr_t tcb) {
     removeAndFreeFirstElementByCriteria(pcb->othertasks, &tcbComparator, &tcb);
 }
 
-static int tcbComparator(void * tcb1, void * tcb2) {
+static int tcbComparator(const void * tcb1, const void * tcb2) {
     return getTaskIdOf(*((taskControlBlockPtr_t *)tcb1)) != getTaskIdOf(*((taskControlBlockPtr_t *)tcb2));
 }
 
@@ -186,7 +187,7 @@ taskControlBlockPtr_t getTaskByTid(processControlBlockPtr_t pcb, uint64_t tid) {
     return tcb;
 }
 
-static int TCBComparatorByTID(void * tid, void * tcb) {
+static int TCBComparatorByTID(const void * tid, const void * tcb) {
     return getTaskIdOf(*((taskControlBlockPtr_t *)tcb)) != *((uint64_t *)tid);
 }
 

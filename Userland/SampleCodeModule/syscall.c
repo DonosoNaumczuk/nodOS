@@ -70,11 +70,11 @@ void terminateProcess(uint64_t pid) {
 }
 
 void setReadSource(char *readSource) {
-     _int_80(SET_READ_SOURCE, readSource, 0, 0);
+     _int_80(SET_READ_SOURCE, (uint64_t) readSource, 0, 0);
 }
 
 void setWriteSource(char *writeSource) {
-     _int_80(SET_WRITE_SOURCE, writeSource, 0, 0);
+     _int_80(SET_WRITE_SOURCE, (uint64_t) writeSource, 0, 0);
 }
 
 
@@ -90,4 +90,3 @@ void waitTask(uint64_t tid) {
 void terminateTask(uint64_t tid) {
      _int_80(TERMINATE_TASK, tid, 0, 0);
 }
-

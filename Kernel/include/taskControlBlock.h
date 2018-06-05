@@ -31,5 +31,6 @@ void setState(taskControlBlockPtr_t tcb, int state);
 void terminateATask(taskControlBlockPtr_t tcb);
 void terminateATaskWrapper(taskControlBlockPtr_t tcb);
 void * startStack(void * codeAddress, void * stackBaseAddress, int argsQuantity, void ** processArgs);
+void printATask(taskControlBlockPtr_t tcb);
 
 #endif

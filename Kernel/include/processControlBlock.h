@@ -39,5 +39,6 @@ int isProcessTerminate(processControlBlockPtr_t pcb);
 taskControlBlockPtr_t getTaskByTid(processControlBlockPtr_t pcb, uint64_t tid);
 void setReadSource(processControlBlockPtr_t pcb, char *readSource);
 void setWriteSource(processControlBlockPtr_t pcb, char *writeSource);
+void printPCB(processControlBlockPtr_t pcb);
 
 #endif

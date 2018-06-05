@@ -152,7 +152,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			else {
 				return 0;
 			}
-		
+
 
 
 	}
@@ -192,8 +192,8 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	if(strncmp((unsigned char *) "grep", cmd, 4) == 0)				return  GREP;
 	if(strncmp((unsigned char *) "threadTest", cmd, 10) == 0)			return  THREAD_TEST;
 
-	
-	
+
+
 
 
 	return INVALID;
@@ -449,12 +449,11 @@ int terminateThreadCommand(int argumentQuantity, void ** argumentVector) {
 	printf("\ntid : %d\n", tid);
 	terminateTask(tid);
 	return 0;
-	
+
 }
 
 int threadTest(int argumentQuantity, void ** argumentVector) {
-	unsigned char *buffer = (unsigned char*)(*argumentVector);
-	int i;;
+	int i;
 	for(i = 0; i < 10; i++) {
 		createTask(&loopThread, 0, NULL);
 	}

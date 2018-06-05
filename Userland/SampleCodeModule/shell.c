@@ -190,8 +190,8 @@ void generatePipeName(char pipes[MAX_PIPES_QUANTITY_ON_COMMAND][MAX_PIPE_LENGTH_
 	unsigned char number[4];
 	intToString(number, pipesFound);
 	strcpy((unsigned char *) pipes[pipesFound], (unsigned char *)PIPE_PREFIX);
-	strcpy((unsigned char *) (pipes[pipesFound] + strLength(PIPE_PREFIX)),
-			number);
+	strcpy((unsigned char *) (pipes[pipesFound] +
+		    strLength((unsigned char *)PIPE_PREFIX)), number);
 }
 
 void terminateAllPipes(char pipes[MAX_PIPES_QUANTITY_ON_COMMAND][MAX_PIPE_LENGTH_NAME],

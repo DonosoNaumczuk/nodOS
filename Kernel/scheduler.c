@@ -7,10 +7,9 @@ typedef struct scheduler_t {
 } scheduler_t;
 
 void _force_context_switch(void);
-void _context_switch(void);
-static printList(listObject_t list);
-static int TCBComparatorByPID(void * pid, void * tcb);
-static int TCBComparatorByTID(void * tid, void * tcb);
+static void printList(listObject_t list);
+static int TCBComparatorByPID(const void * pid, const void * tcb);
+static int TCBComparatorByTID(const void * tid, const void * tcb);
 
 static uint8_t ticksPassed = 0;
 static scheduler_t scheduler;
@@ -102,8 +101,7 @@ processControlBlockPtr_t getPCBByPid(uint64_t pid) {
     return getPCBOf(tcb);
 }
 
-static int TCBComparatorByPID(void * pid, void * tcb) {
-    taskControlBlockPtr_t tcbPointer = tcb;
+static int TCBComparatorByPID(const void * pid, const void * tcb) {
     return getProcessIdOf(getPCBOf(*((taskControlBlockPtr_t *)tcb))) != *((uint64_t *)pid);
 }
 
@@ -117,7 +115,7 @@ taskControlBlockPtr_t getTCBByTid(uint64_t tid) {
     return tcb;
 }
 
-static int TCBComparatorByTID(void * tid, void * tcb) {
+static int TCBComparatorByTID(const void * tid, const void * tcb) {
     return getTaskIdOf(*((taskControlBlockPtr_t *)tcb)) != *((uint64_t *)tid);
 }
 
@@ -210,7 +208,7 @@ void printAllProcess() {
     printList(scheduler.terminated);
 }
 
-static printList(listObject_t list) {
+static void printList(listObject_t list) {
     if(isCurrentForeground()) {
         for(int i = 0; i < size(list); i++) {
     		taskControlBlockPtr_t aux;

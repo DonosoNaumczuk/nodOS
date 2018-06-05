@@ -35,5 +35,6 @@ taskControlBlockPtr_t getCurrentTCB();
 uint64_t getProcessId();
 uint64_t getTaskId();
 int isCurrentForeground();
+void printAllProcess();
 
 #endif
