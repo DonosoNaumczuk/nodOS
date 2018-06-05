@@ -90,7 +90,7 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			else {
 				return 0;
 			}
-		
+
 		case PRODUCTOR_CONSUMER:
 			setArguments(argVector, arguments, &processType, "prodcons", stdin, stdout);
 			processId = createProcess(&prodcons, 2, argVector);
@@ -138,8 +138,8 @@ int commandInterpreter(unsigned char buffer[], unsigned int length, char *stdin,
 			else {
 				return 0;
 			}
-		
-		
+
+
 	}
 	return 1;
 }
@@ -158,7 +158,7 @@ int readCommand(unsigned char buffer[], int * argumentsStart, unsigned int lengt
 	}
 	cmd[i] = 0;
 	*argumentsStart = (unsigned int) i;
-	
+
 	if(strcmp((unsigned char *) "time", cmd) == 0)				return	TIME;
 	if(strcmp((unsigned char *) "help", cmd) == 0)				return	HELP;
 	if(strncmp((unsigned char *) "quadratic", cmd, 14) == 0)		return	QUADRATIC;
@@ -271,7 +271,7 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 
 	printf("          * grep c: reads from input until enter and highlights the given char c \n");
 
-
+	return -1; //evans troll
 	return VALID_CMD;
 }
 
@@ -381,9 +381,9 @@ uint64_t stringToPid(unsigned char *pidString) {
 
 int terminate(int argumentQuantity, void ** argumentVector) {
 	unsigned char *pidString = (unsigned char*)(*argumentVector);
-	
+
 	uint64_t pid = stringToPid(pidString);
-	
+
 	terminateProcess(pid);
 
 	return 0;
