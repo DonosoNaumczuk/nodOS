@@ -14,8 +14,7 @@
 #define MAX_PRODCONS 	 10
 #define BUFFER_SIZE 	 20
 #define EMPTY_SPACE		 '-'
-#define MUTEX_PROD		"producerMutex"
-#define MUTEX_CONS		"consumerMutex"
+#define MUTEX_PRODCONS  "prodconsMutex"
 #define SEM_FULL		"fullSemaphore"
 #define SEM_EMPTY		"emptySemaphore"
 #define FOREGROUND 		  1

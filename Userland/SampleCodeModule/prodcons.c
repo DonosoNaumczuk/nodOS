@@ -7,8 +7,7 @@ void terminateAll(prodcons_t *prodcons);
 
 void prodcons() {
 	printMenu();
-	createMutualExclusion(MUTEX_CONS);
-	createMutualExclusion(MUTEX_PROD);
+	createMutualExclusion(MUTEX_PRODCONS);
 	createSemaphore(SEM_FULL, BUFFER_SIZE);
 	createSemaphore(SEM_EMPTY, 0);
 	char criticalZone[BUFFER_SIZE + 1];
@@ -54,8 +53,7 @@ void prodcons() {
 
 	terminateAll(producerStruct);
 	terminateAll(consumerStruct);
-	terminateMutualExclusion(MUTEX_CONS);
-	terminateMutualExclusion(MUTEX_PROD);
+	terminateMutualExclusion(MUTEX_PRODCONS);
 	terminateSemaphore(SEM_FULL);
 	terminateSemaphore(SEM_EMPTY);
 	printf("Program finished with quit command succesfully\n");
@@ -86,20 +84,20 @@ void initCriticalZone(char *criticalZone) {
 }
 
 void incrementProducer(prodcons_t *producerStruct) {
-	lock(MUTEX_PROD);
+	lock(MUTEX_PRODCONS);
 	int *size = producerStruct->size;
 	if(*size >= MAX_PRODCONS) {
 		changeFontColor(RED);
 		printf("Produces already reach the max quantity\n");
 		changeFontColor(WHITE);
-		unlock(MUTEX_PROD);
+		unlock(MUTEX_PRODCONS);
 		return;
 	}
 
 	void ** arguments = allocateMemory(sizeof(void*) * 6);
 	int mode = FOREGROUND;
 	int *id = allocateMemory(sizeof(*id));
-	*id = getNullId(producerStruct);
+	*id = *size;
 	arguments[0] = &mode;
 	arguments[1] = "producer";
 	arguments[2] = NULL;
@@ -108,45 +106,46 @@ void incrementProducer(prodcons_t *producerStruct) {
 	arguments[5] = id;
 	producerStruct->list[*id] = createProcess(&producer, 4, arguments);
 	(*size)++;
-	unlock(MUTEX_PROD);
+	unlock(MUTEX_PRODCONS);
 }
 
 void decrementProducer(prodcons_t *producerStruct) {
-	lock(MUTEX_PROD);
+	lock(MUTEX_PRODCONS);
 	int *size = producerStruct->size;
 	if(*size == 0) {
 		changeFontColor(RED);
 		printf("Producers already reach the min quantity\n");
 		changeFontColor(WHITE);
-		unlock(MUTEX_PROD);
+		unlock(MUTEX_PRODCONS);
 		return;
 	}
 
-	terminateProcess(producerStruct->list[getNotNullId(producerStruct)]);
 	(*size)--;
+	terminateProcess(producerStruct->list[*size]);
+	producerStruct->list[*size] = 0;
 
 	changeFontColor(BLUE);
 	printf("You killed an inocent producer :(\n");
 	changeFontColor(WHITE);
 
-	unlock(MUTEX_PROD);
+	unlock(MUTEX_PRODCONS);
 }
 
 void incrementConsumer(prodcons_t *consumerStruct) {
-	lock(MUTEX_CONS);
+	lock(MUTEX_PRODCONS);
 	int *size = consumerStruct->size;
 	if(*size >= MAX_PRODCONS) {
 		changeFontColor(RED);
 		printf("Consumers already reach the max quantity\n");
 		changeFontColor(WHITE);
-		unlock(MUTEX_CONS);
+		unlock(MUTEX_PRODCONS);
 		return;
 	}
 
 	void ** arguments = allocateMemory(sizeof(void*) * 6);;
 	int mode = FOREGROUND;
 	int *id = allocateMemory(sizeof(*id));
-	*id = getNullId(consumerStruct);
+	*id = *size;
 	arguments[0] = &mode;
 	arguments[1] = "consumer";
 	arguments[2] = NULL;
@@ -155,28 +154,29 @@ void incrementConsumer(prodcons_t *consumerStruct) {
 	arguments[5] = id;
 	consumerStruct->list[*id] = createProcess(&consumer, 4, arguments);
 	(*size)++;
-	unlock(MUTEX_CONS);
+	unlock(MUTEX_PRODCONS);
 }
 
 void decrementConsumer(prodcons_t *consumerStruct) {
-	lock(MUTEX_CONS);
+	lock(MUTEX_PRODCONS);
 	int *size = consumerStruct->size;
 	if(*size == 0) {
 		changeFontColor(RED);
 		printf("Consumers already reach the min quantity\n");
 		changeFontColor(WHITE);
-		unlock(MUTEX_CONS);
+		unlock(MUTEX_PRODCONS);
 		return;
 	}
 
-	terminateProcess(consumerStruct->list[getNotNullId(consumerStruct)]);
 	(*size)--;
+	terminateProcess(consumerStruct->list[*size]);
 
 	changeFontColor(BLUE);
-	printf("You killed an inocent consumer :(\n");
+	printf("You killed an inocent consumer :()\n");
 	changeFontColor(WHITE);
+	consumerStruct->list[*size] = 0;
 
-	unlock(MUTEX_CONS);
+	unlock(MUTEX_PRODCONS);
 }
 
 int getNotNullId(prodcons_t *prodcons) {
@@ -201,66 +201,44 @@ int getNullId(prodcons_t *prodcons) {
 
 int producer(int argc, void ** args) {
 	prodcons_t *producerStruct = args[0];
-	int id = *(int *)args[1];
 
-	printf("Hello I'm a new producer. I want to write %d!\n", id);
+	printf("Hello I'm a new producer. I want to write!\n");
 	while(1) {
 		semaphoreWait(SEM_FULL);
-		lock(MUTEX_PROD);
-		lock(MUTEX_CONS);
+		lock(MUTEX_PRODCONS);
 
 		/* Write on critical zone my id */
 		int index = *producerStruct->index;
 		*producerStruct->index = index + 1;
 
-		producerStruct->criticalZone[index] = id + '0';
-
-		/* Terminate */
-		producerStruct->list[id] = 0;
-		(*(producerStruct->size)) = (*(producerStruct->size)) - 1;
-
-		// printf("I wrote %d! Goodbye!\n", id);
-		// printf("Producers quantity = %d\n", *(producerStruct->size));
+		producerStruct->criticalZone[index] = '0';
 
 		printCriticalZone(producerStruct->criticalZone);
 
-		unlock(MUTEX_CONS);
-		unlock(MUTEX_PROD);
 		semaphorePost(SEM_EMPTY);
+		unlock(MUTEX_PRODCONS);;
 	}
 	return 0;
 }
 
 int consumer(int argc, void ** args) {
 	prodcons_t *consumerStruct = args[0];
-	int id = *(int *)args[1];
 
 	printf("Hello I'm a new consumer. I want to consume!\n");
-
 	while(1) {
 		semaphoreWait(SEM_EMPTY);
-		lock(MUTEX_PROD);
-		lock(MUTEX_CONS);
+		lock(MUTEX_PRODCONS);
 
 		/* Read on critical zone writing it as empty */
 		int index = *consumerStruct->index;
-		index--;
-		*consumerStruct->index = index;
+		*consumerStruct->index = index - 1;
 		//int consumedInt = consumerStruct->criticalZone[index] - '0';
 		consumerStruct->criticalZone[index] = EMPTY_SPACE;
 
-		/* Terminate */
-		consumerStruct->list[id] = 0;
-		(*(consumerStruct->size)) = (*(consumerStruct->size)) - 1;
-
-		// printf("I consumed %d! Goodbye!\n", consumedInt);
-		// printf("Consumers quantity = %d\n", *(consumerStruct->size));
-
 		printCriticalZone(consumerStruct->criticalZone);
 
-		unlock(MUTEX_CONS);
-		unlock(MUTEX_PROD);
 		semaphorePost(SEM_FULL);
+		unlock(MUTEX_PRODCONS);
 	}
 }
 
