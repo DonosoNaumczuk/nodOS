@@ -5,6 +5,7 @@
 #include <lib.h>
 #include <string.h>
 #include <null.h>
+#include <colors.h>
 
 int pipe(int argumentQuantity, void **argumentVector) {
      uint64_t pid[2];
@@ -28,7 +29,9 @@ int writePipe(int argumentQuantity, void ** argumentVector) {
      unsigned char message[MESSAGE_LENGTH];
      unsigned char c;
      int i = 0;
+     changeFontColor(ORANGE);
      printf("Type a message of maximum length %d and press enter:\n", MESSAGE_LENGTH);
+     changeFontColor(WHITE);
      while((c = getchar()) != '\n' && i < MESSAGE_LENGTH) {
           putChar(c);
           message[i] = c;
@@ -37,7 +40,9 @@ int writePipe(int argumentQuantity, void ** argumentVector) {
      message[i] = 0;
      putChar('\n');
      writeOnPipe(PIPE_NAME, message, strLength(message) + 1);
+     changeFontColor(ORANGE);
      printf("Message written on pipe.\n");
+     changeFontColor(WHITE);
      return 0;
 }
 
@@ -45,6 +50,9 @@ int writePipe(int argumentQuantity, void ** argumentVector) {
 int readPipe(int argumentQuantity, void ** argumentVector) {
      unsigned char buffer[MESSAGE_LENGTH];
      readFromPipe(PIPE_NAME, buffer, MESSAGE_LENGTH);
-     printf("The message read from pipe was:\n%s\n", buffer);
+     changeFontColor(AQUAMARINE);
+     printf("The message read from pipe was:\n");
+     changeFontColor(WHITE);
+     printf("%s\n", buffer);
      return 0;
 }

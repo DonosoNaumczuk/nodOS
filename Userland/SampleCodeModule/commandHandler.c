@@ -284,12 +284,12 @@ int printHelp(int argumentQuantity, void ** argumentVector) {
 	printf("          * semaphore : shows the use of semaphores quoting a famous film dialogue\n");
 	printf("          * ps : lists all proces information\n");
 	printf("          * prodcons : executes a demo for the producer-consummer problem\n");
-	printf("          * terminate processID: terminates the process with the given id \n");
-	printf("          * echo string: prints the given string on the screen \n");
-	printf("          * pipe: shows the use of pipes \n");
-	printf("          * grep c: reads from input until enter and highlights the given char c\n");
-	printf("          * terminateThread threadID: terminates the tread with the given id\n");
-	printf("          * threadTest: Creates 10 threads running in background\n");
+	printf("          * terminate processID : terminates the process with the given id \n");
+	printf("          * echo string : prints the given string on the screen \n");
+	printf("          * pipe : shows the use of pipes \n");
+	printf("          * grep c : reads from input until enter and highlights the given char c\n");
+	printf("          * terminateThread threadID : terminates the tread with the given id\n");
+	printf("          * threadTest : Creates 10 threads running in background\n");
 
 	return VALID_CMD;
 }

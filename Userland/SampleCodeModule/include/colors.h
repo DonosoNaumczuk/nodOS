@@ -9,7 +9,7 @@
 #define BLUE		0x20
 #define YELLOW		0x2C
 #define ORANGE		0x2A
-#define VIOLET 		0x22
+#define VIOLET 	0x22
 #define PINK		0x3E
 #define AQUAMARINE 	0x33
 #define LIGHT_GREY	0x1C
