@@ -128,7 +128,7 @@ int shell() {
 
 int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFlag) {
 	unsigned int i;
-	unsigned char command[MAX_VALID_CMD_LONG];
+	unsigned char command[MAX_CMD_LONG];
 	int pipesFound = 0, beginning = 0;
 	char *stdin = NULL;
 	char *stdout = NULL;
@@ -146,7 +146,9 @@ int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFl
 			createPipe(pipes[pipesFound], 4096, 0);
 			stdout = pipes[pipesFound];
 			pipesFound++;
-			callWithPipes(command, i - beginning, exitFlag, stdin, stdout);
+			if(callWithPipes(command, i - beginning, exitFlag, stdin, stdout)) {
+				return pipesFound;
+			}
 			if(*exitFlag == 1) {
 				return pipesFound;
 			}
@@ -163,15 +165,19 @@ int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFl
 	return pipesFound;
 }
 
-void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag,
+int callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag,
 				char *stdin, char *stdout) {
 
 	if(index >= 1 && command[index - 1] != ' ') {
 		printf(INVALID_COMMAND_STR);
+		return 1;
 	}
-	index--;
-	command[index] = 0;
-	validateCommand(command, index, exitFlag, stdin, stdout);
+	else {
+		index--;
+		command[index] = 0;
+		validateCommand(command, index, exitFlag, stdin, stdout);
+	}
+	return 0;
 }
 
 void validateCommand(unsigned char *buffer, unsigned int index, unsigned int *exitFlag,

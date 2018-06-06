@@ -41,7 +41,7 @@ void receiveTest2();
 void sendTest3();
 void receiveTest3();
 int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFlag);
-void callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag,
+int callWithPipes(unsigned char *command, unsigned int index, unsigned int *exitFlag,
                     char *stdin, char *stdout);
 void validateCommand(unsigned char *buffer, unsigned int index, unsigned int *exitFlag,
                          char *stdin, char *stdout);
