@@ -12,7 +12,6 @@
 #define DOWN_ARROW              134
 #define LEFT_ARROW              135
 #define RIGHT_ARROW             136
-#define CONTROL                 137
 #define TRUE                    1
 #define FALSE                   0
 #define MAXCODE                 128

@@ -444,9 +444,12 @@ int grepChar(int argumentQuantity, void ** argumentVector) {
 
 int terminateThreadCommand(int argumentQuantity, void ** argumentVector) {
 	unsigned char *tidString = (unsigned char * ) (*argumentVector);
-	uint64_t tid = (uint64_t) stringToPid(tidString);
+	printf("tidString: %s\n", tidString);
+	uint64_t tid = stringToPid(tidString);
+	printf("\ntid : %d\n", tid);
 	terminateTask(tid);
 	return 0;
+
 }
 
 int threadTest(int argumentQuantity, void ** argumentVector) {

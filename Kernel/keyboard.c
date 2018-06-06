@@ -2,12 +2,11 @@
 #include <videoDriver.h>
 #include <portIO.h>
 #include <interrupts.h>
-#include <scheduler.h>
 
 unsigned char keycode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', /* INDEX: 0 - 9 */
     '9','0', '-', '=', BACKSPACE, '\t' /* Tab */,'q', 'w', 'e', 'r',	/* INDEX: 10 - 19 */
-  't', 'y', 'u', 'i', 'o', 'p', '[', ']', ENTER_KEY, CONTROL /* Control */, /* INDEX: 20 - 29 */
+  't', 'y', 'u', 'i', 'o', 'p', '[', ']', ENTER_KEY, 0 /* Control */, /* INDEX: 20 - 29 */
   'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',	/* INDEX: 30 - 39 */
  '\'', '`',  LEFT_SHIFT,'\\', 'z', 'x', 'c', 'v', 'b', 'n', /* INDEX: 40 - 49 */
   'm', ',', '.', '/', RIGHT_SHIFT,'*',0/* Alt */,' '/* Space bar */, CAPS_LOCK, 0 /* F1 */, /* INDEX: 50 - 59 */
@@ -20,7 +19,6 @@ unsigned char keycode_map[128] = {
 static int caps_lock = FALSE;
 static int left_shift = FALSE;
 static int right_shift = FALSE;
-static int control = FALSE;
 static unsigned char buffer[MAX_BUFF_SIZE];
 static unsigned int current_index;
 static unsigned int end_index;
@@ -35,17 +33,14 @@ void keyboard_handler() {
 	/* We want to read from data port only if lowest bit of status is 1 */
 	if(status & 0x01) {
 		keycode = read_port(KEYBOARD_DATA_PORT);
+
         /* Brake codes are negative */
         if(keycode < 0) {
-            if(keycode_map[keycode + MAXCODE] == RIGHT_SHIFT) {
+            if(keycode_map[keycode + MAXCODE] == RIGHT_SHIFT)
                 right_shift = FALSE;
-            }
-            else if(keycode_map[keycode + MAXCODE] == LEFT_SHIFT) {
+            else if(keycode_map[keycode + MAXCODE] == LEFT_SHIFT)
                 left_shift = FALSE;
-            }
-            else if(keycode_map[keycode + MAXCODE] == CONTROL) {//evans
-                control = FALSE;
-            }
+
             return;
         }
 
@@ -63,23 +58,12 @@ void keyboard_handler() {
             add('\n');
         else if(IS_ARROW(mapped_key))
             add(mapped_key);
-        else if(mapped_key == CONTROL) {
-            control = TRUE;
-        }
         else if(isAlpha(mapped_key)) {
-            // if((mapped_key == 'c' || mapped_key == 'C') && control) {
-
-            //     terminateAProcessByPid(getProcessId());
-            // }
-            // else 
-            if(IS_LOWERCASE) {
+            if(IS_LOWERCASE)
                 add(mapped_key);
-            }
-            else {
+            else
                 add(shiftedChar(mapped_key));
-            }
         }
-        
         else if(isNumber(mapped_key)) {
             if(SHIFT_PRESSED && ((mapped_key = shiftedChar(mapped_key)) != 0) )
                 add(mapped_key);
