@@ -145,8 +145,6 @@ void terminateAProcess(int returnValue, processControlBlockPtr_t pcb) {
 	for(int i = 0; i < top; i++) {
         taskControlBlockPtr_t aux;
         getFirstElement(pcb->othertasks, &aux);
-        printDecimal(getTaskIdOf(aux));
-        newLine();
         terminateATask(aux);
 	}
 
