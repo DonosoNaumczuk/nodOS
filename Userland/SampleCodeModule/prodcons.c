@@ -48,6 +48,8 @@ void prodcons() {
 			case DEC_CONS:
 				decrementConsumer(consumerStruct);
 				break;
+			default:
+				break;
 		}
 	}
 
