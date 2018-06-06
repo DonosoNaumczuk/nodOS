@@ -448,6 +448,7 @@ int terminateThreadCommand(int argumentQuantity, void ** argumentVector) {
 }
 
 int threadTest(int argumentQuantity, void ** argumentVector) {
+	if(*(unsigned char *)(*argumentVector) != 0)	return	ARGS_ERROR;
 	int i;
 	for(i = 0; i < 10; i++) {
 		createTask(&loopThread, 0, NULL);

@@ -6,8 +6,10 @@
 #include <string.h>
 #include <null.h>
 #include <colors.h>
+#include <shell.h>
 
 int pipe(int argumentQuantity, void **argumentVector) {
+     if(*(unsigned char *)(*argumentVector) != 0) return    ARGS_ERROR;
      uint64_t pid[2];
      void ** argument = allocateMemory(sizeof(void *) * 4);
      createPipe(PIPE_NAME, 4096, 0);

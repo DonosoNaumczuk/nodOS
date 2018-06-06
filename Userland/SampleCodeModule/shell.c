@@ -137,6 +137,7 @@ int lookForPipes(unsigned char *buffer, unsigned int index, unsigned int *exitFl
 		if(buffer[i] == '|') {
 			if(index < i + 2) {
 				printf(INVALID_COMMAND_STR);
+				return pipesFound + 1;
 			}
 			if(pipesFound > MAX_PIPES_QUANTITY_ON_COMMAND) {
 				return pipesFound;
